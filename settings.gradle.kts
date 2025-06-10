@@ -21,4 +21,13 @@ dependencyResolutionManagement {
 
 rootProject.name = "Sumory"
 include(":app")
- 
+
+include(":core:design")
+include(":core:model")
+include(":core:ui")
+
+include(":data:auth")
+include(":data:diary")
+
+include(":domain:auth")
+include(":domain:diary")
