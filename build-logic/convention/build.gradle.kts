@@ -11,4 +11,5 @@ dependencies {
     compileOnly(libs.gradle)
     compileOnly(libs.kotlin.gradle.plugin)
     compileOnly(libs.hilt.android.gradle.plugin)
+    compileOnly(libs.symbol.processing.gradle.plugin)
 }
