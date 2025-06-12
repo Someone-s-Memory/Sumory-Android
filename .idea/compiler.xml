@@ -2,8 +2,10 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="17">
+      <module name="Sumory.core.domain" target="21" />
       <module name="Sumory.data.auth" target="21" />
       <module name="Sumory.data.diary" target="21" />
+      <module name="Sumory.domain" target="21" />
       <module name="Sumory.domain.auth" target="21" />
       <module name="Sumory.domain.diary" target="21" />
     </bytecodeTargetLevel>
