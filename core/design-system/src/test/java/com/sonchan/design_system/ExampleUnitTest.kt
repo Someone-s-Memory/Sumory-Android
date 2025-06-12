@@ -1,4 +1,4 @@
-package com.sonchan.design
+package com.sonchan.design_system
 
 import org.junit.Test
 
