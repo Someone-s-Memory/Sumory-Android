@@ -5,7 +5,7 @@ import com.sumory.convention.com.sonchan.convention.libs
 import org.gradle.api.Project
 
 internal fun Project.configureAndroidCompose(
-    commonExtension: CommonExtension<*, *, *, *, *, *>
+    commonExtension: CommonExtension<*, *, *, *, *>
 ) {
     commonExtension.apply {
         buildFeatures.compose = true
