@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sumory.design"
+    namespace = "com.sumory.design-system"
 }
 
 dependencies {
