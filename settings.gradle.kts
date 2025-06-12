@@ -25,7 +25,7 @@ rootProject.name = "Sumory"
 include(":app")
 
 include(":core")
-include(":core:design")
+include(":core:design-system")
 include(":core:model")
 include(":core:ui")
 
