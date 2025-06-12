@@ -8,7 +8,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.sumory.`design-system`.R
 
-object JusicoolTypography {
+object SumoryTypography {
     private val pretendard = FontFamily(
         Font(R.font.pretendard_bold, FontWeight.Bold),
         Font(R.font.pretendard_extrabold, FontWeight.ExtraBold),
