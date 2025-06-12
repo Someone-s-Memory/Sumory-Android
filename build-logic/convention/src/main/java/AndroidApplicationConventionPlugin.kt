@@ -25,7 +25,6 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             extensions.configure<ApplicationExtension> {
                 // Apply common Kotlin Android settings
                 configureKotlinAndroid(this)
-
                 compileSdk = 35
 
                 // Configure default settings for the application
