@@ -28,11 +28,3 @@ include(":core")
 include(":core:design-system")
 include(":core:model")
 include(":core:ui")
-
-include(":data")
-include(":data:auth")
-include(":data:diary")
-
-include(":domain")
-include(":domain:auth")
-include(":domain:diary")
