@@ -30,3 +30,6 @@ include(":core:model")
 include(":core:ui")
 include(":core:domain")
 include(":core:data")
+
+include(":feature")
+include(":feature:main")

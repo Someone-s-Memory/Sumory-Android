@@ -8,6 +8,8 @@
       <module name="Sumory.domain" target="21" />
       <module name="Sumory.domain.auth" target="21" />
       <module name="Sumory.domain.diary" target="21" />
+      <module name="Sumory.feature.main" target="21" />
+      <module name="Sumory.main" target="21" />
       <module name="Sumory.mylibrary" target="21" />
     </bytecodeTargetLevel>
   </component>
