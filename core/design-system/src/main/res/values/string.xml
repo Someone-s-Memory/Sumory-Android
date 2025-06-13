@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="calendar_description">캘린더 아이콘</string>
+    <string name="diary_description">일기 모아보기 아이콘</string>
+    <string name="home_description">홈 아이콘</string>
+    <string name="profile_description">프로필 아이콘</string>
+    <string name="setting_description">설정 아이콘</string>
+    <string name="stat_description">통계 아이콘</string>
+</resources>
