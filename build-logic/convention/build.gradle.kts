@@ -8,6 +8,7 @@ java {
 }
 
 dependencies {
+    testImplementation(libs.junit.junit)
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.firebase.crashlytics.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
