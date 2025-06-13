@@ -1,4 +1,4 @@
-package com.sonchan.main.view
+package com.sonchan.home.view
 
 import androidx.compose.runtime.Composable
 import com.sonchan.design_system.theme.SumoryTheme

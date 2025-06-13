@@ -1,4 +1,4 @@
-package com.sonchan.main
+package com.sonchan.home
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

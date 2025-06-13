@@ -1,4 +1,4 @@
-package com.sonchan.main
+package com.sonchan.home
 
 import org.junit.Test
 
