@@ -2,7 +2,6 @@ package com.sumory.convention
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import com.sonchan.convention.configureKotlinJvm
 
 // Plugin class to configure JVM library projects with Kotlin, Lint, and KSP support
 class JvmLibraryConventionPlugin : Plugin<Project> {

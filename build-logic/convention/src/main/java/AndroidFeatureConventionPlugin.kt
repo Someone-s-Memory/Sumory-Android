@@ -3,7 +3,6 @@ package com.sumory.convention
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
-import com.sumory.convention.com.sonchan.convention.libs
 
 // Plugin class to configure Android feature modules with core, Compose, and Hilt dependencies
 class AndroidFeatureConventionPlugin : Plugin<Project> {

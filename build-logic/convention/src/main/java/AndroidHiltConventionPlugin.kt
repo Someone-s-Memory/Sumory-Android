@@ -1,6 +1,5 @@
 package com.sumory.convention
 
-import com.sumory.convention.com.sonchan.convention.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies

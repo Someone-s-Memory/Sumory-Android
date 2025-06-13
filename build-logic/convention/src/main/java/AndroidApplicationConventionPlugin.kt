@@ -1,8 +1,6 @@
 package com.sumory.convention
 
 import com.android.build.api.dsl.ApplicationExtension
-import com.sonchan.convention.configureKotlinAndroid
-import com.sumory.convention.com.sonchan.convention.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
