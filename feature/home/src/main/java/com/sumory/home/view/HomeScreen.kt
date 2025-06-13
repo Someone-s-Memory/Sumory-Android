@@ -18,7 +18,10 @@ fun HomeScreen(){
             .background(colors.white),
             contentAlignment = Alignment.Center
         ) {
-            Text("홈 화면")
+            Text(
+                text = "홈 화면",
+                color = colors.black
+            )
         }
     }
 }
