@@ -5,7 +5,7 @@ import com.sonchan.design_system.theme.SumoryTheme
 import com.sonchan.ui.DevicePreviews
 
 @Composable
-fun MainScreen(){
+fun HomeScreen(){
     SumoryTheme { colors, typography ->
 
     }
@@ -13,6 +13,6 @@ fun MainScreen(){
 
 @DevicePreviews
 @Composable
-fun MainScreenPreview(){
-    MainScreen()
+fun HomeScreenPreview(){
+    HomeScreen()
 }
