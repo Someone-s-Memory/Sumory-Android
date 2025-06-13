@@ -12,7 +12,7 @@ import com.sumory.`design-system`.R
 fun CalendarIcon(
     modifier: Modifier = Modifier,
     tint: Color = Color.Unspecified
-    ){
+){
     Icon(
         painter = painterResource(id = R.drawable.ic_calendar),
         contentDescription = stringResource(id = R.string.calendar_description),
