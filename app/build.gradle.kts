@@ -24,6 +24,8 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:ui"))
 
+    implementation(project(":feature:home"))
+
     implementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext)
     implementation(libs.app.update.ktx)

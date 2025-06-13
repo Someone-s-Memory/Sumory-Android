@@ -1,8 +1,8 @@
-package com.sonchan.design_system.theme
+package com.sumory.design_system.theme
 
 import androidx.compose.runtime.Composable
-import com.sonchan.design_system.theme.color.ColorTheme
-import com.sonchan.design_system.theme.color.SumoryColor
+import com.sumory.design_system.theme.color.ColorTheme
+import com.sumory.design_system.theme.color.SumoryColor
 
 @Composable
 fun SumoryTheme(

@@ -1,4 +1,4 @@
-package com.sonchan.design_system.theme.color
+package com.sumory.design_system.theme.color
 
 import androidx.compose.ui.graphics.Color
 

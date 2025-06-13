@@ -1,4 +1,4 @@
-package com.sonchan.design_system.theme
+package com.sumory.design_system.theme
 
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.text.TextStyle
@@ -6,7 +6,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.sumory.`design-system`.R
+import com.sumory.design_system.R
 
 object SumoryTypography {
     private val pretendard = FontFamily(

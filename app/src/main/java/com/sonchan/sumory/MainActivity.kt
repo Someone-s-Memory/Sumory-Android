@@ -1,4 +1,4 @@
-package com.sonchan.sumory
+package com.sumory
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

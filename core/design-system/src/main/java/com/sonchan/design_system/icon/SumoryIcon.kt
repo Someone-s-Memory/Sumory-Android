@@ -1,4 +1,4 @@
-package com.sonchan.design_system.icon
+package com.sumory.design_system.icon
 
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -6,7 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import com.sumory.`design-system`.R
+import com.sumory.design_system.R
 
 @Composable
 fun CalendarIcon(

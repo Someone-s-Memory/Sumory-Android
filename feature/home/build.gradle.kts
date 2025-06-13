@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sumory.feature.home"
+    namespace = "com.sumory.home"
 }
 
 dependencies {
