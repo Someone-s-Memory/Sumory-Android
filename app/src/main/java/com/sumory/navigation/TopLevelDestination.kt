@@ -13,4 +13,28 @@ enum class TopLevelDestination (
         iconText = "홈",
         routeName = homeRoute
     ),
+
+    Calendar(
+        unselectedIcon = R.drawable.ic_calendar,
+        iconText = "캘린더",
+        routeName = homeRoute
+    ),
+
+    Diary(
+        unselectedIcon = R.drawable.ic_diary,
+        iconText = "모아보기",
+        routeName = homeRoute
+    ),
+
+    Stat(
+        unselectedIcon = R.drawable.ic_stat,
+        iconText = "통계",
+        routeName = homeRoute
+    ),
+
+    Profile(
+        unselectedIcon = R.drawable.ic_profile,
+        iconText = "프로필",
+        routeName = homeRoute
+    ),
 }
