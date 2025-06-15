@@ -7,6 +7,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.sumory.home.homeRoute
+import com.sumory.navigation.TopLevelDestination
 import kotlinx.coroutines.CoroutineScope
 
 
@@ -36,5 +38,8 @@ class SumoryAppState(
     val navController: NavHostController, // 네비게이션 컨트롤러를 생성합니다.
     val coroutineScope: CoroutineScope // 코루틴 스코프를 생성합니다.
 ) {
-    /*navigateBar 함수 추가*/
+    val currentDestinationRoute: String
+        get() = navController.currentBackStackEntry?.destination?.route ?: homeRoute
+
+    val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().asList()
 }
