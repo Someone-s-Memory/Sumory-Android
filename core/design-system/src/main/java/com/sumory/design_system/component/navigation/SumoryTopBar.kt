@@ -44,7 +44,7 @@ fun SumoryTopBar(
                             modifier = modifier
                                 .padding(start = 4.dp, end = 8.dp)
                                 .clickable { onNavigateTo("storeRoute") },
-                            style = typography.bodyRegular1
+                            style = typography.captionRegular1
                         )
                         IconButton(onClick = { onNavigateTo("settingRoute") }) {
                             SettingIcon(tint = colors.black)
