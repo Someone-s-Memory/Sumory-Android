@@ -52,7 +52,7 @@ fun SumoryNavigationBar(
         Column {
             Divider(
                 thickness = 1.dp,
-                color = colors.gray200
+                color = colors.gray100
             )
             NavigationBar(
                 modifier = modifier,
