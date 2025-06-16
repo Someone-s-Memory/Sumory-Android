@@ -37,10 +37,12 @@ fun SumoryTopBar(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = "💰 $coinCount",
-                        modifier = modifier.padding(start = 4.dp, end = 8.dp),
+                        modifier = modifier
+                            .padding(start = 4.dp, end = 8.dp)
+                            .clickable { onNavigateTo("storeRoute") },
                         style = typography.bodyRegular1
                     )
-                    IconButton(onClick = {  }) {
+                    IconButton(onClick = { onNavigateTo("settingRoute") }) {
                         SettingIcon(tint = colors.black)
                     }
                 }
