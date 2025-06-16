@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.CompositionLocalProvider
-import com.sumory.sumory.ui.SumoryApp
+import com.sumory.ui.SumoryApp
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
