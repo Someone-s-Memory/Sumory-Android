@@ -36,6 +36,7 @@
             <option value="$PROJECT_DIR$/feature/diary" />
             <option value="$PROJECT_DIR$/feature/home" />
             <option value="$PROJECT_DIR$/feature/profile" />
+            <option value="$PROJECT_DIR$/feature/setting" />
             <option value="$PROJECT_DIR$/feature/stat" />
             <option value="$PROJECT_DIR$/feature/store" />
           </set>
