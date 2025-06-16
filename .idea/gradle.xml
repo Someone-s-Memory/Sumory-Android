@@ -33,6 +33,7 @@
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/calendar" />
+            <option value="$PROJECT_DIR$/feature/diary" />
             <option value="$PROJECT_DIR$/feature/home" />
           </set>
         </option>
