@@ -1,4 +1,4 @@
-package com.sumoryprofile
+package com.profile
 
 import org.junit.Test
 
