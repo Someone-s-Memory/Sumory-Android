@@ -8,6 +8,9 @@ const val homeRoute = "homeRoute"
 
 fun NavGraphBuilder.homeScreen() {
     composable(homeRoute) {
-        HomeScreen()
+        HomeScreen(
+            petName = "나의 펫",
+            affinity = 15
+        )
     }
 }
