@@ -33,3 +33,4 @@ include(":core:data")
 
 include(":feature")
 include(":feature:home")
+include(":feature:calendar")
