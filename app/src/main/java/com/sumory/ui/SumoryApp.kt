@@ -34,7 +34,7 @@ fun SumoryApp(
             topBar = {
                 if (shouldShowBars) {
                     SumoryTopBar(
-                        title = "일기 펫",
+                        title = "Sumory",
                         coinCount = 150,
                         currentRoute = currentRoute,
                         onNavigateTo = { route ->
