@@ -84,3 +84,16 @@ fun StatIcon(
         tint = tint
     )
 }
+
+@Composable
+fun CoinIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+){
+    Icon(
+        painter = painterResource(id = R.drawable.ic_coin),
+        contentDescription = stringResource(id = R.string.coin_description),
+        modifier = modifier,
+        tint = tint
+    )
+}

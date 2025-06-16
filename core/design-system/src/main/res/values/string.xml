@@ -6,4 +6,5 @@
     <string name="profile_description">프로필 아이콘</string>
     <string name="setting_description">설정 아이콘</string>
     <string name="stat_description">통계 아이콘</string>
+    <string name="coin_description">코인 아이콘</string>
 </resources>
