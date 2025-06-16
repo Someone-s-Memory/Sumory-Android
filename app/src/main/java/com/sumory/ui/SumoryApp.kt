@@ -1,4 +1,4 @@
-package com.sumory.sumory.ui
+package com.sumory.ui
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
@@ -16,8 +16,6 @@ import com.sumory.design_system.component.navigation.SumoryTopBar
 import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.navigation.SumoryNavHost
 import com.sumory.navigation.TopLevelDestination
-import com.sumory.ui.SumoryAppState
-import com.sumory.ui.rememberSumoryAppState
 
 @Composable
 fun SumoryApp(
