@@ -97,3 +97,29 @@ fun CoinIcon(
         tint = tint
     )
 }
+
+@Composable
+fun SearchIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+){
+    Icon(
+        painter = painterResource(id = R.drawable.ic_search),
+        contentDescription = stringResource(id = R.string.search_description),
+        modifier = modifier,
+        tint = tint
+    )
+}
+
+@Composable
+fun FilterIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+){
+    Icon(
+        painter = painterResource(id = R.drawable.ic_filter),
+        contentDescription = stringResource(id = R.string.filter_description),
+        modifier = modifier,
+        tint = tint
+    )
+}
