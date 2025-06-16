@@ -1,5 +1,6 @@
 package com.sumory.diary.view.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,7 +28,8 @@ fun DiaryItem(
     SumoryTheme { colors, typography ->
         Card(
             shape = RoundedCornerShape(12.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
+            colors = CardDefaults.cardColors(containerColor = colors.white),
             modifier = modifier.fillMaxWidth()
         ) {
             Column(modifier = modifier.padding(16.dp)) {
@@ -37,6 +39,7 @@ fun DiaryItem(
                 ) {
                     Text(
                         text = item.title,
+                        color = colors.black,
                         style = MaterialTheme.typography.titleMedium
                     )
                     Row {
