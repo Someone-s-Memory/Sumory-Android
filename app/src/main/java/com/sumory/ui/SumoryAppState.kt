@@ -34,12 +34,29 @@ fun rememberSumoryAppState(
 
 @Stable
 class SumoryAppState(
-    val windowSizeClass: WindowSizeClass, // 화면 크기 분류 정보를 받습니다.
-    val navController: NavHostController, // 네비게이션 컨트롤러를 생성합니다.
-    val coroutineScope: CoroutineScope // 코루틴 스코프를 생성합니다.
+    val windowSizeClass: WindowSizeClass,
+    val navController: NavHostController,
+    val coroutineScope: CoroutineScope
 ) {
+    // 현재 목적지 route
     val currentDestinationRoute: String
         get() = navController.currentBackStackEntry?.destination?.route ?: homeRoute
 
-    val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().asList()
+    // BottomBar에서 사용할 현재 목적지 route
+    val currentDestination: String?
+        get() = navController.currentBackStackEntry?.destination?.route
+
+    // 최상위 목적지 리스트
+    val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().toList()
+
+    // BottomBar를 위한 최상위 목적지 이동 함수
+    fun navigateToTopLevelDestination(destination: TopLevelDestination) {
+        navController.navigate(destination.routeName) {
+            popUpTo(navController.graph.startDestinationId) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
 }
