@@ -20,7 +20,7 @@ fun StoreScreen(){
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "설정 화면",
+                text = "상점 화면",
                 color = colors.black
             )
         }
