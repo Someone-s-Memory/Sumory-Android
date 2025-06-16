@@ -25,6 +25,12 @@ dependencies {
     implementation(project(":core:ui"))
 
     implementation(project(":feature:home"))
+    implementation(project(":feature:calendar"))
+    implementation(project(":feature:diary"))
+    implementation(project(":feature:stat"))
+    implementation(project(":feature:profile"))
+    implementation(project(":feature:store"))
+    implementation(project(":feature:setting"))
 
     implementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext)

@@ -4,8 +4,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.sumory.calendar.calendarScreen
+import com.sumory.diary.diaryScreen
 import com.sumory.home.homeRoute
 import com.sumory.home.homeScreen
+import com.sumory.profile.profileScreen
+import com.sumory.setting.settingScreen
+import com.sumory.stat.statScreen
+import com.sumory.store.storeScreen
 
 @Composable
 fun SumoryNavHost(
@@ -19,5 +25,17 @@ fun SumoryNavHost(
         startDestination = startDestination,
     ) {
         homeScreen()
+
+        calendarScreen()
+
+        diaryScreen()
+
+        statScreen()
+
+        profileScreen()
+
+        storeScreen()
+
+        settingScreen()
     }
 }
