@@ -1,7 +1,7 @@
 package com.sumory.model.diary
 
 data class DiaryListEntity(
-    val id: String,
+    val id: Int,
     val title: String,
     val date: String,
     val emotionEmoji: String,
