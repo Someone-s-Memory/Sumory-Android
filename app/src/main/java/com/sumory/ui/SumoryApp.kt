@@ -90,8 +90,16 @@ fun SumoryBottomBar(
                     SumoryNavigationBarItem(
                         selected = isSelected,
                         onClick = { onNavigateToDestination(destination) },
-                        icon = { Icon(painter = iconPainter, contentDescription = null) },
-                        selectedIcon = { Icon(painter = iconPainter, contentDescription = null, tint = colors.main) },
+                        icon = {
+                            Icon(
+                                painter = iconPainter,
+                                contentDescription = null
+                            ) },
+                        selectedIcon = {
+                            Icon(
+                                painter = iconPainter,
+                                contentDescription = null
+                            ) },
                         label = {
                             Text(
                                 text = destination.iconText,

@@ -12,12 +12,6 @@ enum class TopLevelDestination (
     val iconText: String,
     val routeName: String,
 ) {
-    Home(
-        unSelectedIcon = R.drawable.ic_home,
-        iconText = "홈",
-        routeName = homeRoute
-    ),
-
     Calendar(
         unSelectedIcon = R.drawable.ic_calendar,
         iconText = "캘린더",
@@ -28,6 +22,12 @@ enum class TopLevelDestination (
         unSelectedIcon = R.drawable.ic_diary,
         iconText = "모아보기",
         routeName = diaryRoute
+    ),
+
+    Home(
+        unSelectedIcon = R.drawable.ic_home,
+        iconText = "홈",
+        routeName = homeRoute
     ),
 
     Stat(

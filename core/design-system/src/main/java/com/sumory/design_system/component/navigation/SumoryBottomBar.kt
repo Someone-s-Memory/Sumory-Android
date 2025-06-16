@@ -19,6 +19,7 @@ import com.sumory.design_system.theme.color.SumoryColor
 
 @Composable
 fun RowScope.SumoryNavigationBarItem(
+    modifier: Modifier = Modifier,
     selected: Boolean,
     onClick: () -> Unit,
     icon: @Composable () -> Unit,
@@ -26,6 +27,7 @@ fun RowScope.SumoryNavigationBarItem(
     label: @Composable () -> Unit,
 ) {
     NavigationBarItem(
+        modifier = modifier,
         selected = selected,
         onClick = onClick,
         icon = if (selected) selectedIcon else icon,

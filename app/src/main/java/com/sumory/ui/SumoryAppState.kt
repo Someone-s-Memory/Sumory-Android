@@ -6,6 +6,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.sumory.home.homeRoute
 import com.sumory.navigation.TopLevelDestination
@@ -44,7 +45,8 @@ class SumoryAppState(
 
     // BottomBar에서 사용할 현재 목적지 route
     val currentDestination: String?
-        get() = navController.currentBackStackEntry?.destination?.route
+        @Composable get() = navController
+            .currentBackStackEntryAsState().value?.destination?.route
 
     // 최상위 목적지 리스트
     val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().toList()
