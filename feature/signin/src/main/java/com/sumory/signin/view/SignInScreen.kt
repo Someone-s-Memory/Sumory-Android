@@ -52,7 +52,7 @@ fun SignInScreen(
                 style = typography.titleMedium1
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = modifier.height(8.dp))
 
             Text(
                 text = "Sumory",
@@ -60,7 +60,7 @@ fun SignInScreen(
                 color = colors.black
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = modifier.height(4.dp))
 
             Text(
                 text = "로그인하여 시작하세요",
@@ -68,7 +68,7 @@ fun SignInScreen(
                 color = colors.gray500
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = modifier.height(32.dp))
 
             SumoryTextField(
                 textState = id,
@@ -84,18 +84,18 @@ fun SignInScreen(
                 icon = {
                     EyeIcon(
                         isSelected = passwordVisible,
-                        modifier = Modifier.clickable { passwordVisible = !passwordVisible },
+                        modifier = modifier.clickable { passwordVisible = !passwordVisible },
                         tint = colors.black
                     )
                 },
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
             )
 
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = modifier.height(15.dp))
 
             Button(
                 onClick = { /* TODO: 로그인 처리 */ },
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .height(48.dp),
                 shape = RoundedCornerShape(12.dp),
@@ -104,7 +104,7 @@ fun SignInScreen(
                 Text("로그인", color = colors.white)
             }
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = modifier.height(10.dp))
 
             TextButton(onClick = onSignUpClick) {
                 Text("회원가입", color = colors.main)
