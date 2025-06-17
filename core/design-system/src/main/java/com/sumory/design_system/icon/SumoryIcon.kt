@@ -128,6 +128,19 @@ fun FilterIcon(
 }
 
 @Composable
+fun StarIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+){
+    Icon(
+        painter = painterResource(id = R.drawable.ic_star),
+        contentDescription = stringResource(id = R.string.star_description),
+        modifier = modifier,
+        tint = tint
+    )
+}
+
+@Composable
 fun EyeIcon(
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
