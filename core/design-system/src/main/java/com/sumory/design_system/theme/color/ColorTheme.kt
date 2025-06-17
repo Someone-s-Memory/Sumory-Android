@@ -6,13 +6,13 @@ abstract class ColorTheme {
 
     // Main ColorTheme
     abstract val main: Color
-
     // System ColorTheme
     abstract val error: Color
-    abstract val success: Color
 
+    abstract val success: Color
     // Gray ColorTheme
     abstract val gray800: Color
+
     abstract val gray700: Color
     abstract val gray600: Color
     abstract val gray500: Color
@@ -23,6 +23,7 @@ abstract class ColorTheme {
     abstract val gray50: Color
 
     abstract val pinkSoftBackground: Color
+    abstract val darkPink: Color
 
     // Black And White ColorTheme
     abstract val black: Color

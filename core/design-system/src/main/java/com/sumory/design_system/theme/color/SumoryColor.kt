@@ -8,9 +8,10 @@ object SumoryColor : ColorTheme() {
     override val main = Color(0xFFFFB3C6) // 포인트 핑크
 
     override val error = Color(0xFFDF454A)
-    override val success = Color(0xFF4CAF50)
 
+    override val success = Color(0xFF4CAF50)
     override val gray800 = Color(0xFF222222) // 메인 텍스트
+
     override val gray700 = Color(0xFF333333)
     override val gray600 = Color(0xFF666666) // 서브 텍스트
     override val gray500 = Color(0xFF999999)
@@ -21,6 +22,7 @@ object SumoryColor : ColorTheme() {
     override val gray50 = Color(0xFFFDFDFD)
 
     override val pinkSoftBackground = Color(0xFFFFF5F8) // 감정/날씨 아이콘 배경, 텍스트필드
+    override val darkPink = Color(0xFFFF72B6) // 진한 핑크
 
     // 기본
     override val black = Color(0xFF121212)
