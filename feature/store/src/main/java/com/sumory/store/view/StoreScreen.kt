@@ -12,7 +12,7 @@ import com.sumory.ui.DevicePreviews
 
 @Composable
 fun StoreScreen(){
-    SumoryTheme { colors, typography ->
+    SumoryTheme { colors, _ ->
         Box(
             Modifier
             .fillMaxSize()
