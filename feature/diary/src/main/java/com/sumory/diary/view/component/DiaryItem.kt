@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,13 +21,16 @@ import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.model.diary.DiaryListEntity
 import com.sumory.ui.DevicePreviews
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiaryItem(
     modifier: Modifier = Modifier,
-    item: DiaryListEntity
+    item: DiaryListEntity,
+    onClick: () -> Unit
 ) {
     SumoryTheme { colors, typography ->
         Card(
+            onClick = onClick,
             shape = RoundedCornerShape(12.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
             colors = CardDefaults.cardColors(containerColor = colors.white),
@@ -76,5 +80,6 @@ fun DiaryItemPreview(){
             date = "2025. 6. 10.",
             emotionEmoji = "😊",
             weatherEmoji = "☀️"),
+        onClick = {},
     )
 }
