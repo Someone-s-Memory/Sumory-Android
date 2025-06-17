@@ -32,6 +32,7 @@ dependencies {
     implementation(project(":feature:store"))
     implementation(project(":feature:setting"))
     implementation(project(":feature:signin"))
+    implementation(project(":feature:signup"))
 
     implementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext)
