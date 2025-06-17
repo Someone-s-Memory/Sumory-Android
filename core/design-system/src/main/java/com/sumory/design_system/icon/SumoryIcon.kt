@@ -1,12 +1,14 @@
 package com.sumory.design_system.icon
 
 import android.opengl.Visibility
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.sumory.design_system.R
 
 @Composable
@@ -126,27 +128,16 @@ fun FilterIcon(
 }
 
 @Composable
-fun VisibilityIcon(
+fun EyeIcon(
     modifier: Modifier = Modifier,
-    tint: Color = Color.Unspecified
-){
+    isSelected: Boolean = false,
+    color: Color = Color.Unspecified,
+) {
     Icon(
-        painter = painterResource(id = R.drawable.ic_visibility),
+        painter = if (isSelected) painterResource(id = R.drawable.ic_visibility)
+        else painterResource(id = R.drawable.ic_visibility_off),
         contentDescription = stringResource(id = R.string.visibility_description),
         modifier = modifier,
-        tint = tint
-    )
-}
-
-@Composable
-fun VisibilityOffIcon(
-    modifier: Modifier = Modifier,
-    tint: Color = Color.Unspecified
-){
-    Icon(
-        painter = painterResource(id = R.drawable.ic_visibility_off),
-        contentDescription = stringResource(id = R.string.visibility_description),
-        modifier = modifier,
-        tint = tint
+        tint = color
     )
 }
