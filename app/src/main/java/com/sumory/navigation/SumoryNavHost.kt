@@ -10,6 +10,8 @@ import com.sumory.home.homeRoute
 import com.sumory.home.homeScreen
 import com.sumory.profile.profileScreen
 import com.sumory.setting.settingScreen
+import com.sumory.signin.signInScreen
+import com.sumory.signup.signUpScreen
 import com.sumory.stat.statScreen
 import com.sumory.store.storeScreen
 
@@ -24,6 +26,10 @@ fun SumoryNavHost(
         navController = navController,
         startDestination = startDestination,
     ) {
+        signInScreen()
+
+        signUpScreen()
+
         homeScreen()
 
         calendarScreen()
