@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sonchan.sumory"
+    namespace = "com.sumory"
     compileSdk = 35
 
     packaging {
@@ -31,6 +31,7 @@ dependencies {
     implementation(project(":feature:profile"))
     implementation(project(":feature:store"))
     implementation(project(":feature:setting"))
+    implementation(project(":feature:signin"))
 
     implementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext)
