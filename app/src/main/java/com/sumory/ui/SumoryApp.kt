@@ -66,7 +66,7 @@ fun SumoryApp(
         ) { paddingValues ->
             SumoryNavHost(
                 modifier = Modifier.padding(paddingValues),
-                navController = appState.navController
+                appState = appState
             )
         }
     }
