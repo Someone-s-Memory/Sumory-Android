@@ -6,6 +6,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import com.sumory.calendar.calendarScreen
 import com.sumory.diary.diaryScreen
+import com.sumory.home.homeRoute
 import com.sumory.home.homeScreen
 import com.sumory.profile.profileScreen
 import com.sumory.setting.settingScreen
@@ -21,7 +22,7 @@ import com.sumory.ui.SumoryAppState
 @Composable
 fun SumoryNavHost(
     modifier: Modifier = Modifier,
-    startDestination: String = signInRoute,
+    startDestination: String = homeRoute,
     appState: SumoryAppState,
 ) {
     val navController = appState.navController
