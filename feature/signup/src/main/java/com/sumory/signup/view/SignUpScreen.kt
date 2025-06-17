@@ -101,6 +101,8 @@ fun SignUpScreen(
                     textState = checkPassword,
                     placeHolder = "비밀번호 확인",
                     onTextChange = { checkPassword = it },
+                    isError = password != checkPassword,
+                    helperText = if(password != checkPassword) "비밀번호가 일치하는지 확인해주세요" else "",
                     icon = {
                         EyeIcon(
                             isSelected = checkPasswordVisible,
