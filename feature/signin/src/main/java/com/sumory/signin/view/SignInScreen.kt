@@ -1,6 +1,7 @@
 package com.sumory.signin.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -22,7 +22,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.sumory.design_system.component.textfield.SumoryTextField
+import com.sumory.design_system.icon.EyeIcon
 import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.ui.DevicePreviews
 
@@ -33,6 +36,7 @@ fun SignInScreen(
 ) {
     var id by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
 
     SumoryTheme { colors, typography ->
         Column(
@@ -66,27 +70,28 @@ fun SignInScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // 아이디 입력
-            OutlinedTextField(
-                value = id,
-                onValueChange = { id = it },
-                placeholder = { Text("아이디") },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
+            SumoryTextField(
+                textState = id,
+                placeHolder = "아이디",
+                onTextChange = { id = it },
+                icon = {}
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                placeholder = { Text("비밀번호") },
-                singleLine = true,
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth()
+            SumoryTextField(
+                textState = password,
+                placeHolder = "비밀번호",
+                onTextChange = { password = it },
+                icon = {
+                    EyeIcon(
+                        isSelected = passwordVisible,
+                        modifier = Modifier.clickable { passwordVisible = !passwordVisible },
+                        tint = colors.black
+                    )
+                },
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(15.dp))
 
             Button(
                 onClick = { /* TODO: 로그인 처리 */ },
@@ -99,7 +104,7 @@ fun SignInScreen(
                 Text("로그인", color = colors.white)
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             TextButton(onClick = onSignUpClick) {
                 Text("회원가입", color = colors.main)
