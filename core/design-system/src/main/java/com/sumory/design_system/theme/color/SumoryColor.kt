@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.Color
 object SumoryColor : ColorTheme() {
 
     // 메인 색상
-    override val main = Color(0xFFFFB3C6) // 포인트 핑크
+    override val main = Color(0xFFFF99B1) // 포인트 핑크
 
     override val error = Color(0xFFDF454A)
 
