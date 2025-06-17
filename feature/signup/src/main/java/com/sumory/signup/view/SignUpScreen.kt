@@ -11,7 +11,7 @@ import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.ui.DevicePreviews
 
 @Composable
-fun StoreScreen(){
+fun SignUpScreen(){
     SumoryTheme { colors, _ ->
         Box(
             Modifier
@@ -20,7 +20,7 @@ fun StoreScreen(){
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "상점 화면",
+                text = "회원가입 화면",
                 color = colors.black
             )
         }
@@ -29,6 +29,6 @@ fun StoreScreen(){
 
 @DevicePreviews
 @Composable
-fun StoreScreenPreview(){
-    StoreScreen()
+fun SignUpScreenPreview(){
+    SignUpScreen()
 }
