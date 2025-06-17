@@ -2,7 +2,6 @@ package com.sumory.signin.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +14,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.sumory.design_system.theme.SumoryTheme
@@ -46,7 +43,6 @@ fun SignInScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // 상단 이모지 아이콘
             Text(
                 text = "🐱",
                 style = typography.titleMedium1
@@ -54,7 +50,6 @@ fun SignInScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // 앱 이름
             Text(
                 text = "Sumory",
                 style = typography.titleMedium1,
@@ -63,7 +58,6 @@ fun SignInScreen(
 
             Spacer(modifier = Modifier.height(4.dp))
 
-            // 부제
             Text(
                 text = "로그인하여 시작하세요",
                 style = typography.bodyRegular2,
@@ -83,7 +77,6 @@ fun SignInScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // 비밀번호 입력
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
@@ -95,7 +88,6 @@ fun SignInScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // 로그인 버튼 (핑크, 모서리 둥글게)
             Button(
                 onClick = { /* TODO: 로그인 처리 */ },
                 modifier = Modifier
