@@ -131,13 +131,13 @@ fun FilterIcon(
 fun EyeIcon(
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
-    color: Color = Color.Unspecified,
+    tint: Color = Color.Unspecified,
 ) {
     Icon(
         painter = if (isSelected) painterResource(id = R.drawable.ic_visibility)
         else painterResource(id = R.drawable.ic_visibility_off),
         contentDescription = stringResource(id = R.string.visibility_description),
         modifier = modifier,
-        tint = color
+        tint = tint
     )
 }
