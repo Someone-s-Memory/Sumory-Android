@@ -3,17 +3,16 @@ package com.sumory.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.sumory.calendar.calendarScreen
 import com.sumory.diary.diaryScreen
-import com.sumory.home.homeRoute
 import com.sumory.home.homeScreen
 import com.sumory.profile.profileScreen
 import com.sumory.setting.settingScreen
+import com.sumory.signin.navigateToSignIn
 import com.sumory.signin.signInRoute
 import com.sumory.signin.signInScreen
-import com.sumory.signup.navigationToSignUp
+import com.sumory.signup.navigateToSignUp
 import com.sumory.signup.signUpScreen
 import com.sumory.stat.statScreen
 import com.sumory.store.storeScreen
@@ -34,10 +33,12 @@ fun SumoryNavHost(
         startDestination = startDestination,
     ) {
         signInScreen(
-            onSignUpClick = navController::navigationToSignUp,
+            onSignUpClick = navController::navigateToSignUp,
         )
 
-        signUpScreen()
+        signUpScreen(
+            onBackClick = navController::navigateToSignIn
+        )
 
         homeScreen()
 

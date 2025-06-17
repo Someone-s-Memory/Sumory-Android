@@ -8,12 +8,16 @@ import com.sumory.signup.view.SignUpScreen
 
 const val signUpRoute = "signUpRoute"
 
-fun NavController.navigationToSignUp(navOptions: NavOptions? = null) {
+fun NavController.navigateToSignUp(navOptions: NavOptions? = null) {
     this.navigate(signUpRoute, navOptions)
 }
 
-fun NavGraphBuilder.signUpScreen() {
+fun NavGraphBuilder.signUpScreen(
+    onBackClick: () -> Unit
+) {
     composable(signUpRoute) {
-        SignUpScreen()
+        SignUpScreen(
+            onBackClick = onBackClick
+        )
     }
 }
