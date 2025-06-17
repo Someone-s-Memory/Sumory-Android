@@ -25,7 +25,8 @@ import com.sumory.ui.DevicePreviews
 @Composable
 fun DiaryScreen(
     modifier: Modifier = Modifier,
-    diaryItems: List<DiaryListEntity>
+    diaryItems: List<DiaryListEntity>,
+    onDiaryClick: (Int) -> Unit
 ){
     SumoryTheme { colors, typography ->
         Column(
@@ -58,7 +59,8 @@ fun DiaryScreen(
             ) {
                 items(diaryItems){ item ->
                     DiaryItem(
-                        item = item
+                        item = item,
+                        onClick = { onDiaryClick(item.id) }
                     )
                 }
             }
@@ -77,6 +79,7 @@ fun DiaryScreenPreview(){
     )
 
     DiaryScreen(
-        diaryItems = dummyList
+        diaryItems = dummyList,
+        onDiaryClick = {}
     )
 }
