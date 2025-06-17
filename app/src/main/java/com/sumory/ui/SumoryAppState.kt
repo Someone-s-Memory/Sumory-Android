@@ -40,10 +40,6 @@ class SumoryAppState(
     val coroutineScope: CoroutineScope
 ) {
     // 현재 목적지 route
-    val currentDestinationRoute: String
-        get() = navController.currentBackStackEntry?.destination?.route ?: homeRoute
-
-    // BottomBar에서 사용할 현재 목적지 route
     val currentDestination: String?
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination?.route

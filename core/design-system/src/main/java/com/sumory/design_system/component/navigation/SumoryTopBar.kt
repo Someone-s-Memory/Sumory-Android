@@ -28,7 +28,7 @@ fun SumoryTopBar(
     modifier: Modifier = Modifier,
     title: String,
     coinCount: Int,
-    currentRoute: String,
+    currentRoute: String?,
     onNavigateTo: (String) -> Unit,
 ) {
     SumoryTheme { colors, typography ->

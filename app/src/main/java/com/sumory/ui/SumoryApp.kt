@@ -1,5 +1,6 @@
 package com.sumory.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -16,16 +17,19 @@ import com.sumory.design_system.component.navigation.SumoryTopBar
 import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.navigation.SumoryNavHost
 import com.sumory.navigation.TopLevelDestination
+import com.sumory.signin.signInRoute
+import com.sumory.signup.signUpRoute
 
 @Composable
 fun SumoryApp(
     windowSizeClass: WindowSizeClass,
     appState: SumoryAppState = rememberSumoryAppState(windowSizeClass = windowSizeClass) // 화면 크기에 맞게 앱 상태를 기억합니다.
 ) {
-    val currentRoute = appState.currentDestinationRoute
+    val currentRoute = appState.currentDestination
+    Log.d("SumoryApp", "Current route: $currentRoute")
 
     // 로그인/회원가입 화면은 제외할 라우트 목록
-    val shouldShowBars = currentRoute !in listOf("login", "signup")
+    val shouldShowBars = currentRoute !in listOf(signInRoute, signUpRoute)
 
     SumoryTheme { _, _ ->
         Scaffold(
