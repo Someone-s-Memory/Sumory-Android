@@ -1,5 +1,6 @@
 package com.sumory.design_system.icon
 
+import android.opengl.Visibility
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -119,6 +120,32 @@ fun FilterIcon(
     Icon(
         painter = painterResource(id = R.drawable.ic_filter),
         contentDescription = stringResource(id = R.string.filter_description),
+        modifier = modifier,
+        tint = tint
+    )
+}
+
+@Composable
+fun VisibilityIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+){
+    Icon(
+        painter = painterResource(id = R.drawable.ic_visibility),
+        contentDescription = stringResource(id = R.string.visibility_description),
+        modifier = modifier,
+        tint = tint
+    )
+}
+
+@Composable
+fun VisibilityOffIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+){
+    Icon(
+        painter = painterResource(id = R.drawable.ic_visibility_off),
+        contentDescription = stringResource(id = R.string.visibility_description),
         modifier = modifier,
         tint = tint
     )
