@@ -22,7 +22,7 @@ import com.sumory.ui.SumoryAppState
 @Composable
 fun SumoryNavHost(
     modifier: Modifier = Modifier,
-    startDestination: String = homeRoute,
+    startDestination: String = signInRoute,
     appState: SumoryAppState,
 ) {
     val navController = appState.navController
@@ -34,7 +34,12 @@ fun SumoryNavHost(
         startDestination = startDestination,
     ) {
         signInScreen(
-            onSignUpClick = navController::navigateToSignUp,
+            onSignInClick = navController::navigateToSignUp,
+            onSignInSuccess = {
+                navController.navigate(homeRoute) {
+                    popUpTo(0) // 스택 전체 초기화 (로그인 이후 백 버튼 방지)
+                }
+            }
         )
 
         signUpScreen(

@@ -21,7 +21,8 @@ fun NavGraphBuilder.diaryScreen() {
             DiaryListEntity(3, "행복한 순간", "2025. 6. 5.", "😄", "☀️"),
         )
         DiaryScreen(
-            diaryItems = dummyList
+            diaryItems = dummyList,
+            onDiaryClick = TODO()
         )
     }
 }

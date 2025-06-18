@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.sumory.signin.view.SignInScreen
+import com.sumory.signin.view.SignInRoute
 
 const val signInRoute = "signInRoute"
 
@@ -13,11 +13,13 @@ fun NavController.navigateToSignIn(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.signInScreen(
-    onSignUpClick: () -> Unit,
+    onSignInClick: () -> Unit,
+    onSignInSuccess: () -> Unit,
 ) {
     composable(signInRoute) {
-        SignInScreen(
-            onSignUpClick = onSignUpClick
+        SignInRoute(
+            onSignInClick = onSignInClick,
+            onSignInSuccess = onSignInSuccess,
         )
     }
 }
