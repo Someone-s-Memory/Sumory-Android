@@ -15,6 +15,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,20 +26,56 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sumory.design_system.component.textfield.SumoryTextField
 import com.sumory.design_system.icon.EyeIcon
 import com.sumory.design_system.theme.SumoryTheme
+import com.sumory.signin.viewmodel.SignInViewModel
+import com.sumory.signin.viewmodel.uistate.SignInUiState
 import com.sumory.ui.DevicePreviews
+
+@Composable
+fun SignInRoute(
+    onSignInClick: () -> Unit,
+    onSignInSuccess: () -> Unit,
+    viewModel: SignInViewModel = hiltViewModel()
+) {
+    var passwordVisible by remember { mutableStateOf(false) }
+
+    val uiState by viewModel.signInState.collectAsState()
+
+    LaunchedEffect(uiState) {
+        if (uiState is SignInUiState.Success) {
+            onSignInSuccess()
+        }
+    }
+
+    SignInScreen(
+        id = viewModel.id.value,
+        password = viewModel.password.value,
+        passwordVisible = passwordVisible,
+        onIdChange = viewModel::onIdChange,
+        onPasswordChange = viewModel::onPasswordChange,
+        onPasswordVisibilityToggle = { passwordVisible = !passwordVisible },
+        onSignInClick = { viewModel.signIn() },
+        onSignUpClick = onSignInClick
+    )
+}
+
+
 
 @Composable
 fun SignInScreen(
     modifier: Modifier = Modifier,
-    onSignUpClick: () -> Unit,
+    id: String,
+    password: String,
+    passwordVisible: Boolean,
+    onIdChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onPasswordVisibilityToggle: () -> Unit,
+    onSignInClick: () -> Unit,
+    onSignUpClick: () -> Unit
 ) {
-    var id by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
-
     SumoryTheme { colors, typography ->
         Column(
             modifier = modifier
@@ -73,18 +111,18 @@ fun SignInScreen(
             SumoryTextField(
                 textState = id,
                 placeHolder = "아이디",
-                onTextChange = { id = it },
+                onTextChange = onIdChange,
                 icon = {}
             )
 
             SumoryTextField(
                 textState = password,
                 placeHolder = "비밀번호",
-                onTextChange = { password = it },
+                onTextChange = onPasswordChange,
                 icon = {
                     EyeIcon(
                         isSelected = passwordVisible,
-                        modifier = modifier.clickable { passwordVisible = !passwordVisible },
+                        modifier = modifier.clickable { onPasswordVisibilityToggle() },
                         tint = colors.black
                     )
                 },
@@ -94,7 +132,7 @@ fun SignInScreen(
             Spacer(modifier = modifier.height(15.dp))
 
             Button(
-                onClick = { /* TODO: 로그인 처리 */ },
+                onClick = onSignInClick,
                 modifier = modifier
                     .fillMaxWidth()
                     .height(48.dp),
@@ -113,11 +151,17 @@ fun SignInScreen(
     }
 }
 
-
 @DevicePreviews
 @Composable
-fun SignInScreenPreview(){
+fun SignInScreenPreview() {
     SignInScreen(
+        id = "previewId",
+        password = "123456",
+        passwordVisible = false,
+        onIdChange = {},
+        onPasswordChange = {},
+        onPasswordVisibilityToggle = {},
+        onSignInClick = {},
         onSignUpClick = {}
     )
 }
