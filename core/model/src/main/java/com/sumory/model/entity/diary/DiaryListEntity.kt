@@ -1,4 +1,4 @@
-package com.sumory.model.diary
+package com.sumory.model.entity.diary
 
 data class DiaryListEntity(
     val id: Int,

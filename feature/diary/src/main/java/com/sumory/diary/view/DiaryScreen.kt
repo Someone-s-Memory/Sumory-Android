@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.sumory.design_system.icon.FilterIcon
 import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.diary.view.component.DiaryItem
-import com.sumory.model.diary.DiaryListEntity
+import com.sumory.model.entity.diary.DiaryListEntity
 import com.sumory.ui.DevicePreviews
 
 @Composable

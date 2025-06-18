@@ -18,7 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.sumory.design_system.theme.SumoryTheme
-import com.sumory.model.diary.DiaryListEntity
+import com.sumory.model.entity.diary.DiaryListEntity
 import com.sumory.ui.DevicePreviews
 
 @OptIn(ExperimentalMaterial3Api::class)

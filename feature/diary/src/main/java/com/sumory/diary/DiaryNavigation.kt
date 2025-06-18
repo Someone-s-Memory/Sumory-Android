@@ -3,7 +3,7 @@ package com.sumory.diary
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.sumory.diary.view.DiaryScreen
-import com.sumory.model.diary.DiaryListEntity
+import com.sumory.model.entity.diary.DiaryListEntity
 
 const val diaryRoute = "diaryRoute"
 
