@@ -8,8 +8,6 @@ plugins {
 }
 
 android {
-    namespace = "com.sumory.network"
-
     buildFeatures {
         buildConfig = true
     }
@@ -18,9 +16,11 @@ android {
         buildConfigField(
             type = "String",
             name = "BASE_URL",
-            getApiKey("BASE_URL")
+            value = "\"${getApiKey("BASE_URL")}\"" // ✅ 문자열로 감싸기
         )
     }
+
+    namespace = "com.sumory.network"
 }
 
 dependencies {
