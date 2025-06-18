@@ -22,7 +22,7 @@ fun NavGraphBuilder.diaryScreen() {
         )
         DiaryScreen(
             diaryItems = dummyList,
-            onDiaryClick = TODO()
+            onDiaryClick = {}
         )
     }
 }

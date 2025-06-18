@@ -50,7 +50,8 @@ class SumoryAppState(
     // BottomBar를 위한 최상위 목적지 이동 함수
     fun navigateToTopLevelDestination(destination: TopLevelDestination) {
         navController.navigate(destination.routeName) {
-            popUpTo(navController.graph.startDestinationId) {
+            popUpTo(homeRoute) {
+                inclusive = false
                 saveState = true
             }
             launchSingleTop = true
