@@ -41,18 +41,22 @@ fun SignInRoute(
     viewModel: SignInViewModel = hiltViewModel()
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
+    val userId by viewModel.userId.collectAsState()
+    val password by viewModel.password.collectAsState()
 
     val uiState by viewModel.signInState.collectAsState()
 
     LaunchedEffect(uiState) {
+        android.util.Log.d("SignInRoute", "uiState changed: $uiState")
         if (uiState is SignInUiState.Success) {
+            android.util.Log.d("SignInRoute", "로그인 성공 → onSignInSuccess() 호출")
             onSignInSuccess()
         }
     }
 
     SignInScreen(
-        id = viewModel.id.value,
-        password = viewModel.password.value,
+        id = userId,
+        password = password,
         passwordVisible = passwordVisible,
         onIdChange = viewModel::onIdChange,
         onPasswordChange = viewModel::onPasswordChange,
