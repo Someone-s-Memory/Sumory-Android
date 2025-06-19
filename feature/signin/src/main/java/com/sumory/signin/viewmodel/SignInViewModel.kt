@@ -53,4 +53,10 @@ class SignInViewModel @Inject constructor(
                 }
         }
     }
+
+    fun resetError() {
+        if (signInState.value is SignInUiState.Error) {
+            _signInState.value = SignInUiState.Idle
+        }
+    }
 }

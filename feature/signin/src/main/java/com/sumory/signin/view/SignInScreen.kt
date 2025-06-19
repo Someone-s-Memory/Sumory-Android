@@ -43,13 +43,14 @@ fun SignInRoute(
     var passwordVisible by remember { mutableStateOf(false) }
     val userId by viewModel.userId.collectAsState()
     val password by viewModel.password.collectAsState()
-
     val uiState by viewModel.signInState.collectAsState()
 
+    val isError = uiState is SignInUiState.Error
+    val errorMessage = (uiState as? SignInUiState.Error)?.message ?: ""
+
+    // 로그인 성공 시 홈 이동
     LaunchedEffect(uiState) {
-        android.util.Log.d("SignInRoute", "uiState changed: $uiState")
         if (uiState is SignInUiState.Success) {
-            android.util.Log.d("SignInRoute", "로그인 성공 → onSignInSuccess() 호출")
             onSignInSuccess()
         }
     }
@@ -58,13 +59,22 @@ fun SignInRoute(
         id = userId,
         password = password,
         passwordVisible = passwordVisible,
-        onIdChange = viewModel::onIdChange,
-        onPasswordChange = viewModel::onPasswordChange,
+        onIdChange = {
+            viewModel.onIdChange(it)
+            viewModel.resetError() // 텍스트 바뀌면 에러 초기화
+        },
+        onPasswordChange = {
+            viewModel.onPasswordChange(it)
+            viewModel.resetError()
+        },
         onPasswordVisibilityToggle = { passwordVisible = !passwordVisible },
         onSignInClick = { viewModel.signIn() },
-        onSignUpClick = onSignInClick
+        onSignUpClick = onSignInClick,
+        isError = isError,
+        errorMessage = errorMessage
     )
 }
+
 
 
 
@@ -78,7 +88,9 @@ fun SignInScreen(
     onPasswordChange: (String) -> Unit,
     onPasswordVisibilityToggle: () -> Unit,
     onSignInClick: () -> Unit,
-    onSignUpClick: () -> Unit
+    onSignUpClick: () -> Unit,
+    isError: Boolean,
+    errorMessage: String
 ) {
     SumoryTheme { colors, typography ->
         Column(
@@ -116,7 +128,8 @@ fun SignInScreen(
                 textState = id,
                 placeHolder = "아이디",
                 onTextChange = onIdChange,
-                icon = {}
+                icon = {},
+                isError = isError
             )
 
             SumoryTextField(
@@ -130,7 +143,9 @@ fun SignInScreen(
                         tint = colors.black
                     )
                 },
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                isError = isError,
+                helperText = if (isError) errorMessage else ""
             )
 
             Spacer(modifier = modifier.height(15.dp))
@@ -166,6 +181,8 @@ fun SignInScreenPreview() {
         onPasswordChange = {},
         onPasswordVisibilityToggle = {},
         onSignInClick = {},
-        onSignUpClick = {}
+        onSignUpClick = {},
+        isError = true,
+        errorMessage = "아이디 혹은 비밀번호가 올바르지 않습니다"
     )
 }
