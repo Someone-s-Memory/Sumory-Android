@@ -38,6 +38,12 @@ class SignUpViewModel @Inject constructor(
     private val _checkPasswordVisible = MutableStateFlow(false)
     val checkPasswordVisible: StateFlow<Boolean> = _checkPasswordVisible.asStateFlow()
 
+    private val _passwordLengthError = MutableStateFlow(false)
+    val passwordLengthError: StateFlow<Boolean> = _passwordLengthError.asStateFlow()
+
+    private val _passwordLengthErrorMessage = MutableStateFlow("")
+    val passwordLengthErrorMessage: StateFlow<String> = _passwordLengthErrorMessage.asStateFlow()
+
     fun signUp(
         userId: String,
         password: String,
@@ -72,10 +78,6 @@ class SignUpViewModel @Inject constructor(
         _nickname.value = newNickname
     }
 
-    fun onPasswordChange(newPassword: String) {
-        _password.value = newPassword
-    }
-
     fun onPasswordVisibleChange(isVisible: Boolean) {
         _passwordVisible.value = isVisible
     }
@@ -86,5 +88,20 @@ class SignUpViewModel @Inject constructor(
 
     fun onCheckPasswordVisibleChange(isVisible: Boolean) {
         _checkPasswordVisible.value = isVisible
+    }
+
+    fun onPasswordChange(newPassword: String) {
+        _password.value = newPassword
+        validatePasswordLength(newPassword)
+    }
+
+    private fun validatePasswordLength(password: String) {
+        if (password.isNotBlank() && password.length < 8) {
+            _passwordLengthError.value = true
+            _passwordLengthErrorMessage.value = "비밀번호는 8자 이상이어야 합니다."
+        } else {
+            _passwordLengthError.value = false
+            _passwordLengthErrorMessage.value = ""
+        }
     }
 }

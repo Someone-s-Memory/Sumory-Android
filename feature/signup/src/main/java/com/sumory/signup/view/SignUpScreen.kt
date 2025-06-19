@@ -46,12 +46,18 @@ fun SignUpRoute(
     val passwordVisible by viewModel.passwordVisible.collectAsState()
     val checkPassword by viewModel.checkPassword.collectAsState()
     val checkPasswordVisible by viewModel.checkPasswordVisible.collectAsState()
+    val isPasswordLengthError by viewModel.passwordLengthError.collectAsState()
+    val passwordLengthErrorMessage by viewModel.passwordLengthErrorMessage.collectAsState()
 
-    val isPasswordError = password != checkPassword && checkPassword.isNotEmpty()
-    val passwordErrorMessage = if (isPasswordError) "비밀번호가 일치하는지 확인해주세요" else ""
+    val isPasswordMismatchError = password != checkPassword && checkPassword.isNotEmpty()
+    val passwordMismatchErrorMessage = "비밀번호가 일치하는지 확인해주세요"
 
-    val isButtonEnabled = userId.isNotBlank() && nickname.isNotBlank()
-            && password.isNotBlank() && checkPassword.isNotBlank() && !isPasswordError
+    val isButtonEnabled = userId.isNotBlank()
+            && nickname.isNotBlank()
+            && password.isNotBlank()
+            && checkPassword.isNotBlank()
+            && !isPasswordLengthError
+            && !isPasswordMismatchError
 
     val isError = signUpState is SignUpUiState.Error
     val errorMessage = (signUpState as? SignUpUiState.Error)?.errorMessage ?: ""
@@ -69,39 +75,23 @@ fun SignUpRoute(
         passwordVisible = passwordVisible,
         checkPassword = checkPassword,
         checkPasswordVisible = checkPasswordVisible,
-        onUserIdChange = {
-            viewModel.onUserIdChange(it)
-            viewModel.resetError()
-        },
-        onNicknameChange = {
-            viewModel.onNicknameChange(it)
-            viewModel.resetError()
-        },
-        onPasswordChange = {
-            viewModel.onPasswordChange(it)
-            viewModel.resetError()
-        },
+        onUserIdChange = { viewModel.onUserIdChange(it); viewModel.resetError() },
+        onNicknameChange = { viewModel.onNicknameChange(it); viewModel.resetError() },
+        onPasswordChange = { viewModel.onPasswordChange(it); viewModel.resetError() },
         onPasswordVisibleChange = { viewModel.onPasswordVisibleChange(it) },
-        onCheckPasswordChange = {
-            viewModel.onCheckPasswordChange(it)
-            viewModel.resetError()
-        },
+        onCheckPasswordChange = { viewModel.onCheckPasswordChange(it); viewModel.resetError() },
         onCheckPasswordVisibleChange = { viewModel.onCheckPasswordVisibleChange(it) },
         onBackClick = onBackClick,
         onSignUpClick = {
-            if (!isPasswordError) {
-                viewModel.signUp(
-                    userId = userId,
-                    password = password,
-                    passwordCheck = checkPassword,
-                    nickname = nickname
-                )
+            if (!isPasswordLengthError && !isPasswordMismatchError) {
+                viewModel.signUp(userId, password, checkPassword, nickname)
             }
         },
-        isPasswordError = isPasswordError,
-        passwordErrorMessage = passwordErrorMessage,
+        isPasswordFieldError = isPasswordLengthError || isError,
+        passwordFieldErrorMessage = passwordLengthErrorMessage,
+        isPasswordCheckError = isPasswordMismatchError || isError,
+        passwordCheckErrorMessage = if (isPasswordMismatchError) passwordMismatchErrorMessage else errorMessage,
         isError = isError,
-        errorMessage = errorMessage,
         isButtonEnabled = isButtonEnabled
     )
 }
@@ -123,10 +113,11 @@ fun SignUpScreen(
     onCheckPasswordVisibleChange: (Boolean) -> Unit,
     onBackClick: () -> Unit,
     onSignUpClick: () -> Unit,
-    isPasswordError: Boolean,
-    passwordErrorMessage: String = "",
+    isPasswordFieldError: Boolean,
+    passwordFieldErrorMessage: String,
+    isPasswordCheckError: Boolean,
+    passwordCheckErrorMessage: String,
     isError: Boolean,
-    errorMessage: String,
     isButtonEnabled: Boolean
 ) {
     SumoryTheme { colors, typography ->
@@ -184,29 +175,24 @@ fun SignUpScreen(
                         )
                     },
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                    isError = isError
+                    isError = isPasswordFieldError,
+                    helperText = if (isPasswordFieldError) passwordFieldErrorMessage else "",
                 )
 
                 SumoryTextField(
                     textState = checkPassword,
                     placeHolder = "비밀번호 확인",
                     onTextChange = onCheckPasswordChange,
-                    isError = isPasswordError || isError,
-                    helperText = when {
-                        isPasswordError -> passwordErrorMessage // "비밀번호가 일치하는지 확인해주세요"
-                        isError -> errorMessage                 // "동일한 아이디가 존재합니다"
-                        else -> ""
-                    },
                     icon = {
                         EyeIcon(
                             isSelected = checkPasswordVisible,
-                            modifier = modifier.clickable {
-                                onCheckPasswordVisibleChange(!checkPasswordVisible)
-                            },
+                            modifier = modifier.clickable { onCheckPasswordVisibleChange(!checkPasswordVisible) },
                             tint = colors.black
                         )
                     },
                     visualTransformation = if (checkPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    isError = isPasswordCheckError,
+                    helperText = if (isPasswordCheckError) passwordCheckErrorMessage else "",
                 )
 
                 Spacer(modifier = modifier.height(15.dp))
@@ -247,10 +233,11 @@ fun SignUpScreenPreview() {
         onCheckPasswordVisibleChange = {},
         onBackClick = {},
         onSignUpClick = {},
-        isPasswordError = false,
-        isButtonEnabled = false,
-        passwordErrorMessage = "",
+        isPasswordFieldError = false,
+        passwordFieldErrorMessage = "",
+        isPasswordCheckError = false,
+        passwordCheckErrorMessage = "",
         isError = false,
-        errorMessage = ""
+        isButtonEnabled = false
     )
 }
