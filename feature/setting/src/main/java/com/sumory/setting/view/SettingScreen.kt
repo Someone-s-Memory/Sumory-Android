@@ -1,20 +1,29 @@
 package com.sumory.setting.view
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.setting.viewmodel.SettingViewModel
+import com.sumory.setting.viewmodel.uistate.SignOutUiState
 import com.sumory.ui.DevicePreviews
 
 @Composable
@@ -24,17 +33,52 @@ fun SettingRoute(
 ) {
     val signOutState by viewModel.signOutState.collectAsState()
 
-    // 로그아웃 완료 시 콜백 실행
+    var showDialog by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+
     LaunchedEffect(signOutState) {
-        if (signOutState) {
-            onSignOutSuccess()
-            viewModel.resetSignOutState()
+        when (signOutState) {
+            is SignOutUiState.Success -> {
+                onSignOutSuccess()
+                viewModel.resetSignOutState()
+            }
+            is SignOutUiState.Error -> {
+                Toast.makeText(context, (signOutState as SignOutUiState.Error).message, Toast.LENGTH_SHORT).show()
+                viewModel.resetSignOutState()
+            }
+            else -> Unit
         }
     }
 
     SettingScreen(
-        onSignOutClick = { viewModel.signOut() }
+        onSignOutClick = { showDialog = true }
     )
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(text = "로그아웃") },
+            text = { Text("정말 로그아웃 하시겠습니까?") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showDialog = false
+                        viewModel.signOut()
+                    }
+                ) {
+                    Text("확인")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { showDialog = false }
+                ) {
+                    Text("취소")
+                }
+            }
+        )
+    }
 }
 
 @Composable
@@ -43,10 +87,11 @@ fun SettingScreen(
     onSignOutClick: () -> Unit
 ){
     SumoryTheme { colors, typography ->
+
         Box(
-            Modifier
-            .fillMaxSize()
-            .background(colors.white),
+            modifier
+                .fillMaxSize()
+                .background(colors.white),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -54,13 +99,16 @@ fun SettingScreen(
                 color = colors.black
             )
         }
+
         Button(
-            onClick = onSignOutClick
+            onClick = onSignOutClick,
+            modifier = modifier
         ) {
             Text("로그아웃")
         }
     }
 }
+
 
 @DevicePreviews
 @Composable
