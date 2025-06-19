@@ -65,7 +65,7 @@ fun SumoryNavHost(
                 }
             },
             onSignUpSuccess = {
-                navController.navigate(homeRoute) {
+                navController.navigate(signInRoute) {
                     popUpTo(0)
                 }
             }
