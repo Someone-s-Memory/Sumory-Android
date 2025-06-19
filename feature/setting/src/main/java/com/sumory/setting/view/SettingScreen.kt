@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.sumory.design_system.component.dialog.SumoryDialog
 import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.setting.view.component.SettingItem
 import com.sumory.setting.viewmodel.SettingViewModel
@@ -56,27 +57,14 @@ fun SettingRoute(
     )
 
     if (showDialog) {
-        AlertDialog(
-            onDismissRequest = { showDialog = false },
-            title = { Text(text = "로그아웃") },
-            text = { Text("정말 로그아웃 하시겠습니까?") },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        showDialog = false
-                        viewModel.signOut()
-                    }
-                ) {
-                    Text("확인")
-                }
+        SumoryDialog(
+            title = "로그아웃",
+            message = "정말 로그아웃 하시겠습니까?",
+            onConfirm = {
+                showDialog = false
+                viewModel.signOut()
             },
-            dismissButton = {
-                TextButton(
-                    onClick = { showDialog = false }
-                ) {
-                    Text("취소")
-                }
-            }
+            onDismiss = { showDialog = false }
         )
     }
 }
