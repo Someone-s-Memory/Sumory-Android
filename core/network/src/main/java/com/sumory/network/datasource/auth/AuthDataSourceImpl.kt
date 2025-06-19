@@ -17,4 +17,7 @@ class AuthDataSourceImpl @Inject constructor(
 
     override fun signUp(body: SignUpRequest): Flow<SignUpResponse> =
         performApiRequest { api.signUp(body) }
+
+    override fun signOut(): Flow<Unit> =
+        performApiRequest { api.signOut() }
 }
