@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.sumory.signup.view.SignUpScreen
+import com.sumory.signup.view.SignUpRoute
 
 const val signUpRoute = "signUpRoute"
 
@@ -13,11 +13,13 @@ fun NavController.navigateToSignUp(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.signUpScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onSignUpSuccess: () -> Unit
 ) {
     composable(signUpRoute) {
-        SignUpScreen(
-            onBackClick = onBackClick
+        SignUpRoute(
+            onBackClick = onBackClick,
+            onSignUpSuccess = onSignUpSuccess
         )
     }
 }
