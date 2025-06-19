@@ -2,4 +2,15 @@
 <resources>
 
     <style name="Theme.Sumory" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.Sumory.Splash" parent="Theme.SplashScreen">
+        <!-- 배경 색상 -->
+        <item name="windowSplashScreenBackground">@color/white</item>
+
+        <!-- 아이콘은 선택 (생략도 가능) -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+
+        <!-- Compose 테마로 전환 -->
+        <item name="postSplashScreenTheme">@style/Theme.Sumory</item>
+    </style>
 </resources>
