@@ -14,6 +14,7 @@ import com.sumory.signin.navigateToSignIn
 import com.sumory.signin.signInRoute
 import com.sumory.signin.signInScreen
 import com.sumory.signup.navigateToSignUp
+import com.sumory.signup.signUpRoute
 import com.sumory.signup.signUpScreen
 import com.sumory.splash.splashRoute
 import com.sumory.splash.splashScreen
@@ -58,7 +59,16 @@ fun SumoryNavHost(
         )
 
         signUpScreen(
-            onBackClick = navController::navigateToSignIn
+            onBackClick = {
+                navController.navigate(signInRoute) {
+                    popUpTo(signUpRoute) { inclusive = true }
+                }
+            },
+            onSignUpSuccess = {
+                navController.navigate(homeRoute) {
+                    popUpTo(0)
+                }
+            }
         )
 
         homeScreen()
