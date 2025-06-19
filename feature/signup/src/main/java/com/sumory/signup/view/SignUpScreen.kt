@@ -54,7 +54,7 @@ fun SignUpRoute(
             && password.isNotBlank() && checkPassword.isNotBlank() && !isPasswordError
 
     val isError = signUpState is SignUpUiState.Error
-    val errorMessage = if (isError) "동일한 아이디가 존재합니다." else ""
+    val errorMessage = (signUpState as? SignUpUiState.Error)?.errorMessage ?: ""
 
     LaunchedEffect(signUpState) {
         if (signUpState is SignUpUiState.Success) {

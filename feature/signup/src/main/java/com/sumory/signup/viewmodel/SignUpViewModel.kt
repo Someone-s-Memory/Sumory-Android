@@ -50,7 +50,7 @@ class SignUpViewModel @Inject constructor(
                 SignUpRequestParam(userId, password, passwordCheck, nickname)
             )
                 .catch { e ->
-                    _signUpState.value = SignUpUiState.Error(e.message ?: "알 수 없는 오류")
+                    _signUpState.value = SignUpUiState.Error("동일한 아이디가 존재합니다.")
                 }
                 .collect {
                     _signUpState.value = SignUpUiState.Success(it.msg)
