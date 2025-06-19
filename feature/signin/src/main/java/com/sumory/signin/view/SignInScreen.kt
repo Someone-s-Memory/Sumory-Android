@@ -47,6 +47,7 @@ fun SignInRoute(
 
     val isError = uiState is SignInUiState.Error
     val errorMessage = (uiState as? SignInUiState.Error)?.message ?: ""
+    val isButtonEnabled = userId.isNotBlank() && password.isNotBlank()
 
     // 로그인 성공 시 홈 이동
     LaunchedEffect(uiState) {
@@ -71,7 +72,8 @@ fun SignInRoute(
         onSignInClick = { viewModel.signIn() },
         onSignUpClick = onSignInClick,
         isError = isError,
-        errorMessage = errorMessage
+        errorMessage = errorMessage,
+        isButtonEnabled = isButtonEnabled
     )
 }
 
@@ -90,7 +92,8 @@ fun SignInScreen(
     onSignInClick: () -> Unit,
     onSignUpClick: () -> Unit,
     isError: Boolean,
-    errorMessage: String
+    errorMessage: String,
+    isButtonEnabled: Boolean
 ) {
     SumoryTheme { colors, typography ->
         Column(
@@ -152,11 +155,14 @@ fun SignInScreen(
 
             Button(
                 onClick = onSignInClick,
+                enabled = isButtonEnabled,
                 modifier = modifier
                     .fillMaxWidth()
                     .height(48.dp),
                 shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = colors.darkPink)
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (isButtonEnabled) colors.darkPink else colors.main
+                )
             ) {
                 Text("로그인", color = colors.white)
             }
@@ -183,6 +189,7 @@ fun SignInScreenPreview() {
         onSignInClick = {},
         onSignUpClick = {},
         isError = true,
-        errorMessage = "아이디 혹은 비밀번호가 올바르지 않습니다"
+        errorMessage = "아이디 혹은 비밀번호가 올바르지 않습니다",
+        isButtonEnabled = false
     )
 }
