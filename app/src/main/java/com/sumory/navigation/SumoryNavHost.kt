@@ -83,6 +83,12 @@ fun SumoryNavHost(
 
         storeScreen()
 
-        settingScreen()
+        settingScreen(
+            onSignOutSuccess = {
+                navController.navigate(signInRoute) {
+                    popUpTo(0)
+                }
+            }
+        )
     }
 }
