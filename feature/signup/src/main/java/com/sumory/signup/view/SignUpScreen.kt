@@ -90,6 +90,7 @@ fun SignUpRoute(
 
 @Composable
 fun SignUpScreen(
+    modifier: Modifier = Modifier,
     id: String,
     nickname: String,
     password: String,
@@ -109,18 +110,18 @@ fun SignUpScreen(
 ) {
     SumoryTheme { colors, typography ->
         Box(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
                 .background(colors.white)
         ) {
             LeftArrowIcon(
-                modifier = Modifier
+                modifier = modifier
                     .padding(24.dp)
                     .clickable { onBackClick() },
                 tint = colors.black
             )
             Column(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxSize()
                     .padding(horizontal = 32.dp),
                 verticalArrangement = Arrangement.Center,
@@ -132,7 +133,7 @@ fun SignUpScreen(
                     color = colors.black
                 )
 
-                Spacer(modifier = Modifier.height(50.dp))
+                Spacer(modifier = modifier.height(50.dp))
 
                 SumoryTextField(
                     textState = nickname,
@@ -155,7 +156,7 @@ fun SignUpScreen(
                     icon = {
                         EyeIcon(
                             isSelected = passwordVisible,
-                            modifier = Modifier.clickable { onPasswordVisibleChange(!passwordVisible) },
+                            modifier = modifier.clickable { onPasswordVisibleChange(!passwordVisible) },
                             tint = colors.black
                         )
                     },
@@ -171,7 +172,7 @@ fun SignUpScreen(
                     icon = {
                         EyeIcon(
                             isSelected = checkPasswordVisible,
-                            modifier = Modifier.clickable {
+                            modifier = modifier.clickable {
                                 onCheckPasswordVisibleChange(!checkPasswordVisible)
                             },
                             tint = colors.black
@@ -180,11 +181,11 @@ fun SignUpScreen(
                     visualTransformation = if (checkPasswordVisible) VisualTransformation.None else PasswordVisualTransformation()
                 )
 
-                Spacer(modifier = Modifier.height(15.dp))
+                Spacer(modifier = modifier.height(15.dp))
 
                 Button(
                     onClick = onSignUpClick,
-                    modifier = Modifier
+                    modifier = modifier
                         .fillMaxWidth()
                         .height(48.dp),
                     shape = RoundedCornerShape(12.dp),
