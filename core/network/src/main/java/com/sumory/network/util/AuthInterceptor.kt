@@ -1,6 +1,6 @@
 package com.sumory.network.util
 
-import com.sumory.data.datastore.auth.TokenDataStore
+import com.sumory.datastore.auth.TokenDataStore
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
