@@ -15,6 +15,8 @@ import com.sumory.signin.signInRoute
 import com.sumory.signin.signInScreen
 import com.sumory.signup.navigateToSignUp
 import com.sumory.signup.signUpScreen
+import com.sumory.splash.splashRoute
+import com.sumory.splash.splashScreen
 import com.sumory.stat.statScreen
 import com.sumory.store.storeScreen
 import com.sumory.ui.SumoryAppState
@@ -22,7 +24,7 @@ import com.sumory.ui.SumoryAppState
 @Composable
 fun SumoryNavHost(
     modifier: Modifier = Modifier,
-    startDestination: String = signInRoute,
+    startDestination: String = splashRoute,
     appState: SumoryAppState,
 ) {
     val navController = appState.navController
@@ -33,6 +35,19 @@ fun SumoryNavHost(
         navController = navController,
         startDestination = startDestination,
     ) {
+        splashScreen(
+            onNavigateToHome = {
+                navController.navigate(homeRoute) {
+                    popUpTo(splashRoute) { inclusive = true } // Splash 제거
+                }
+            },
+            onNavigateToSignIn = {
+                navController.navigate(signInRoute) {
+                    popUpTo(splashRoute) { inclusive = true } // Splash 제거
+                }
+            }
+        )
+
         signInScreen(
             onSignInClick = navController::navigateToSignUp,
             onSignInSuccess = {
