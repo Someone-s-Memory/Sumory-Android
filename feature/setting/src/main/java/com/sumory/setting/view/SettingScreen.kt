@@ -4,7 +4,10 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -22,6 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sumory.design_system.theme.SumoryTheme
+import com.sumory.setting.view.component.SettingItem
 import com.sumory.setting.viewmodel.SettingViewModel
 import com.sumory.setting.viewmodel.uistate.SignOutUiState
 import com.sumory.ui.DevicePreviews
@@ -85,30 +89,31 @@ fun SettingRoute(
 fun SettingScreen(
     modifier: Modifier = Modifier,
     onSignOutClick: () -> Unit
-){
+) {
     SumoryTheme { colors, typography ->
 
-        Box(
+        Column(
             modifier
                 .fillMaxSize()
-                .background(colors.white),
-            contentAlignment = Alignment.Center
+                .background(colors.white)
+                .padding(start = 20.dp, end = 20.dp, top = 24.dp),
         ) {
             Text(
-                text = "설정 화면",
-                color = colors.black
+                text = "설정",
+                color = colors.black,
+                style = typography.titleMedium1
             )
-        }
 
-        Button(
-            onClick = onSignOutClick,
-            modifier = modifier
-        ) {
-            Text("로그아웃")
+            Spacer(modifier = modifier.padding(top = 24.dp))
+
+            SettingItem(
+                title = "로그아웃",
+                subtitle = "계정에서 로그아웃",
+                onClick = onSignOutClick
+            )
         }
     }
 }
-
 
 @DevicePreviews
 @Composable
