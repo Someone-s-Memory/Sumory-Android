@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
@@ -53,6 +54,7 @@ fun SettingRoute(
     }
 
     SettingScreen(
+        onAlertSettingClick = {},
         onSignOutClick = { showDialog = true }
     )
 
@@ -72,6 +74,7 @@ fun SettingRoute(
 @Composable
 fun SettingScreen(
     modifier: Modifier = Modifier,
+    onAlertSettingClick: () -> Unit,
     onSignOutClick: () -> Unit
 ) {
     SumoryTheme { colors, typography ->
@@ -91,6 +94,14 @@ fun SettingScreen(
             Spacer(modifier = modifier.padding(top = 24.dp))
 
             SettingItem(
+                title = "알림 설정",
+                subtitle = "일기 작성 리마인드",
+                onClick = onAlertSettingClick
+            )
+
+            Spacer(modifier = modifier.height(15.dp))
+
+            SettingItem(
                 title = "로그아웃",
                 subtitle = "계정에서 로그아웃",
                 onClick = onSignOutClick
@@ -103,6 +114,7 @@ fun SettingScreen(
 @Composable
 fun SettingScreenPreview(){
     SettingScreen(
+        onAlertSettingClick = {},
         onSignOutClick = {}
     )
 }
