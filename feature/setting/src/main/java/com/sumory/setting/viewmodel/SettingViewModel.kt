@@ -26,7 +26,7 @@ class SettingViewModel @Inject constructor(
                         _signOutState.value = SignOutUiState.Success
                     }
             } catch (e: Exception) {
-                _signOutState.value = SignOutUiState.Error(e.message ?: "로그아웃 실패")
+                _signOutState.value = SignOutUiState.Error("로그아웃 실패")
             }
         }
     }
