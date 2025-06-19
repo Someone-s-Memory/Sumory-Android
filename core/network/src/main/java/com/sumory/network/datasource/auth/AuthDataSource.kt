@@ -9,4 +9,5 @@ import kotlinx.coroutines.flow.Flow
 interface AuthDataSource {
     fun signIn(body: SignInRequest): Flow<SignInResponse>
     fun signUp(body: SignUpRequest): Flow<SignUpResponse>
+    fun signOut(): Flow<Unit>
 }
