@@ -1,12 +1,9 @@
 package com.sumory.setting.view.component
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -18,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.sumory.design_system.icon.RightArrowIcon
-import com.sumory.design_system.icon.SettingIcon
 import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.ui.DevicePreviews
 
@@ -39,16 +35,15 @@ fun SettingItem(
             colors = CardDefaults.cardColors(containerColor = colors.white),
             modifier = modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
             Row(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
-                    modifier = Modifier.weight(1f)
+                    modifier = modifier.weight(1f)
                 ) {
                     Text(
                         text = title,
@@ -59,7 +54,7 @@ fun SettingItem(
                         text = subtitle,
                         style = typography.captionRegular1,
                         color = colors.gray500,
-                        modifier = Modifier.padding(top = 4.dp)
+                        modifier = modifier.padding(top = 4.dp)
                     )
                 }
 
