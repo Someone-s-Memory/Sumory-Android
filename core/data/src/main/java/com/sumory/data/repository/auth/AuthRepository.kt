@@ -9,6 +9,6 @@ import kotlinx.coroutines.flow.Flow
 interface AuthRepository {
     suspend fun signIn(body: SignInRequestParam) : Flow<SignInResponseModel>
     suspend fun isSignIn(): Boolean
-    suspend fun logout()
     suspend fun signUp(body: SignUpRequestParam): Flow<SignUpResponseModel>
+    suspend fun signOut(): Flow<Unit>
 }
