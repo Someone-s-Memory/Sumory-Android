@@ -43,7 +43,7 @@ fun SignUpRoute(
 ) {
     val signUpState by viewModel.signUpState.collectAsState()
 
-    var id by remember { mutableStateOf("") }
+    var userId by remember { mutableStateOf("") }
     var nickname by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -53,6 +53,9 @@ fun SignUpRoute(
     val isPasswordError = password != checkPassword && checkPassword.isNotEmpty()
     val passwordErrorMessage = if (isPasswordError) "비밀번호가 일치하는지 확인해주세요" else ""
 
+    val isButtonEnabled = userId.isNotBlank() && nickname.isNotBlank()
+            && password.isNotBlank() && checkPassword.isNotBlank() && !isPasswordError
+
     LaunchedEffect(signUpState) {
         if (signUpState is SignUpUiState.Success) {
             onSignUpSuccess()
@@ -60,13 +63,13 @@ fun SignUpRoute(
     }
 
     SignUpScreen(
-        id = id,
+        userId = userId,
         nickname = nickname,
         password = password,
         passwordVisible = passwordVisible,
         checkPassword = checkPassword,
         checkPasswordVisible = checkPasswordVisible,
-        onIdChange = { id = it },
+        onIdChange = { userId = it },
         onNicknameChange = { nickname = it },
         onPasswordChange = { password = it },
         onPasswordVisibleChange = { passwordVisible = it },
@@ -76,7 +79,7 @@ fun SignUpRoute(
         onSignUpClick = {
             if (!isPasswordError) {
                 viewModel.signUp(
-                    userId = id,
+                    userId = userId,
                     password = password,
                     passwordCheck = checkPassword,
                     nickname = nickname
@@ -84,14 +87,15 @@ fun SignUpRoute(
             }
         },
         isPasswordError = isPasswordError,
-        passwordErrorMessage = passwordErrorMessage
+        passwordErrorMessage = passwordErrorMessage,
+        isButtonEnabled = isButtonEnabled
     )
 }
 
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
-    id: String,
+    userId: String,
     nickname: String,
     password: String,
     passwordVisible: Boolean,
@@ -106,7 +110,8 @@ fun SignUpScreen(
     onBackClick: () -> Unit,
     onSignUpClick: () -> Unit,
     isPasswordError: Boolean,
-    passwordErrorMessage: String = ""
+    passwordErrorMessage: String = "",
+    isButtonEnabled: Boolean
 ) {
     SumoryTheme { colors, typography ->
         Box(
@@ -143,7 +148,7 @@ fun SignUpScreen(
                 )
 
                 SumoryTextField(
-                    textState = id,
+                    textState = userId,
                     placeHolder = "아이디",
                     onTextChange = onIdChange,
                     icon = {}
@@ -185,11 +190,14 @@ fun SignUpScreen(
 
                 Button(
                     onClick = onSignUpClick,
+                    enabled = isButtonEnabled,
                     modifier = modifier
                         .fillMaxWidth()
                         .height(48.dp),
                     shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = colors.darkPink)
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (isButtonEnabled) colors.darkPink else colors.main
+                    )
                 ) {
                     Text("가입하기", color = colors.white)
                 }
@@ -202,7 +210,7 @@ fun SignUpScreen(
 @Composable
 fun SignUpScreenPreview() {
     SignUpScreen(
-        id = "",
+        userId = "",
         nickname = "",
         password = "",
         passwordVisible = false,
@@ -216,6 +224,7 @@ fun SignUpScreenPreview() {
         onCheckPasswordVisibleChange = {},
         onBackClick = {},
         onSignUpClick = {},
-        isPasswordError = false
+        isPasswordError = false,
+        isButtonEnabled = false
     )
 }
