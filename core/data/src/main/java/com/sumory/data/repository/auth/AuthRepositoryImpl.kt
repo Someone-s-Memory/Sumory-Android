@@ -30,10 +30,6 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun logout() {
-        tokenDataStore.clearTokens()
-    }
-
     override suspend fun isSignIn(): Boolean {
         val access = tokenDataStore.accessToken.firstOrNull()
         val refresh = tokenDataStore.refreshToken.firstOrNull()
@@ -43,6 +39,13 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun signUp(body: SignUpRequestParam): Flow<SignUpResponseModel> {
         return authDataSource.signUp(body.toDto()).transform {
             emit(it.toModel())
+        }
+    }
+
+    override suspend fun signOut(): Flow<Unit> {
+        return authDataSource.signOut().transform {
+            tokenDataStore.clearTokens()
+            emit(Unit)
         }
     }
 }
