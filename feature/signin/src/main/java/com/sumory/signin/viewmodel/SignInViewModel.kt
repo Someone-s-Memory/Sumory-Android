@@ -45,7 +45,7 @@ class SignInViewModel @Inject constructor(
             authRepository.signIn(SignInRequestParam(userId.value, password.value))
                 .catch { e ->
                     Log.e("SignInViewModel", "로그인 실패: ${e.message}", e)
-                    _signInState.value = SignInUiState.Error(e.message ?: "알 수 없는 오류")
+                    _signInState.value = SignInUiState.Error("아이디 혹은 비밀번호가 올바르지 않습니다.")
                 }
                 .collectLatest { result ->
                     Log.d("SignInViewModel", "로그인 성공: $result")

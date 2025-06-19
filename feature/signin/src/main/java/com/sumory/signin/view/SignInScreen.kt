@@ -46,7 +46,7 @@ fun SignInRoute(
     val uiState by viewModel.signInState.collectAsState()
 
     val isError = uiState is SignInUiState.Error
-    val errorMessage = if (isError) "아이디 혹은 비밀번호가 올바르지 않습니다." else ""
+    val errorMessage = (uiState as? SignInUiState.Error)?.message ?: ""
     val isButtonEnabled = userId.isNotBlank() && password.isNotBlank()
 
     // 로그인 성공 시 홈 이동
