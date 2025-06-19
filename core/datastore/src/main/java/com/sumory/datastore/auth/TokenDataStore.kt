@@ -1,4 +1,4 @@
-package com.sumory.data.datastore.auth
+package com.sumory.datastore.auth
 
 import android.content.Context
 import androidx.datastore.preferences.core.*
