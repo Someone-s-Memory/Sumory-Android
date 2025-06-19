@@ -17,4 +17,7 @@ interface AuthApi {
     suspend fun signUp(
         @Body body: SignUpRequest
     ): SignUpResponse
+
+    @POST("sign-out")
+    suspend fun signOut(): Unit
 }
