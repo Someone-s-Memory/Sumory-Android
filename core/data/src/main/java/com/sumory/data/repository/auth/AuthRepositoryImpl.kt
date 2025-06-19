@@ -2,7 +2,9 @@ package com.sumory.data.repository.auth
 
 import com.sumory.datastore.auth.TokenDataStore
 import com.sumory.model.model.auth.SignInResponseModel
+import com.sumory.model.model.auth.SignUpResponseModel
 import com.sumory.model.param.auth.SignInRequestParam
+import com.sumory.model.param.auth.SignUpRequestParam
 import com.sumory.network.datasource.auth.AuthDataSource
 import com.sumory.network.mapper.auth.request.toDto
 import com.sumory.network.mapper.auth.response.toModel
@@ -13,7 +15,7 @@ import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val authDataSource: AuthDataSource,
-    private val tokenDataStore: com.sumory.datastore.auth.TokenDataStore
+    private val tokenDataStore: TokenDataStore
 ) : AuthRepository {
 
     override suspend fun signIn(body: SignInRequestParam): Flow<SignInResponseModel> {
@@ -36,5 +38,11 @@ class AuthRepositoryImpl @Inject constructor(
         val access = tokenDataStore.accessToken.firstOrNull()
         val refresh = tokenDataStore.refreshToken.firstOrNull()
         return !access.isNullOrEmpty() && !refresh.isNullOrEmpty()
+    }
+
+    override suspend fun signUp(body: SignUpRequestParam): Flow<SignUpResponseModel> {
+        return authDataSource.signUp(body.toDto()).transform {
+            emit(it.toModel())
+        }
     }
 }
