@@ -18,9 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -43,18 +40,21 @@ fun SignUpRoute(
 ) {
     val signUpState by viewModel.signUpState.collectAsState()
 
-    var userId by remember { mutableStateOf("") }
-    var nickname by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
-    var checkPassword by remember { mutableStateOf("") }
-    var checkPasswordVisible by remember { mutableStateOf(false) }
+    val userId by viewModel.userId.collectAsState()
+    val nickname by viewModel.nickname.collectAsState()
+    val password by viewModel.password.collectAsState()
+    val passwordVisible by viewModel.passwordVisible.collectAsState()
+    val checkPassword by viewModel.checkPassword.collectAsState()
+    val checkPasswordVisible by viewModel.checkPasswordVisible.collectAsState()
 
     val isPasswordError = password != checkPassword && checkPassword.isNotEmpty()
     val passwordErrorMessage = if (isPasswordError) "비밀번호가 일치하는지 확인해주세요" else ""
 
     val isButtonEnabled = userId.isNotBlank() && nickname.isNotBlank()
             && password.isNotBlank() && checkPassword.isNotBlank() && !isPasswordError
+
+    val isError = signUpState is SignUpUiState.Error
+    val errorMessage = if (isError) "동일한 아이디가 존재합니다." else ""
 
     LaunchedEffect(signUpState) {
         if (signUpState is SignUpUiState.Success) {
@@ -69,12 +69,24 @@ fun SignUpRoute(
         passwordVisible = passwordVisible,
         checkPassword = checkPassword,
         checkPasswordVisible = checkPasswordVisible,
-        onIdChange = { userId = it },
-        onNicknameChange = { nickname = it },
-        onPasswordChange = { password = it },
-        onPasswordVisibleChange = { passwordVisible = it },
-        onCheckPasswordChange = { checkPassword = it },
-        onCheckPasswordVisibleChange = { checkPasswordVisible = it },
+        onUserIdChange = {
+            viewModel.onUserIdChange(it)
+            viewModel.resetError()
+        },
+        onNicknameChange = {
+            viewModel.onNicknameChange(it)
+            viewModel.resetError()
+        },
+        onPasswordChange = {
+            viewModel.onPasswordChange(it)
+            viewModel.resetError()
+        },
+        onPasswordVisibleChange = { viewModel.onPasswordVisibleChange(it) },
+        onCheckPasswordChange = {
+            viewModel.onCheckPasswordChange(it)
+            viewModel.resetError()
+        },
+        onCheckPasswordVisibleChange = { viewModel.onCheckPasswordVisibleChange(it) },
         onBackClick = onBackClick,
         onSignUpClick = {
             if (!isPasswordError) {
@@ -88,6 +100,8 @@ fun SignUpRoute(
         },
         isPasswordError = isPasswordError,
         passwordErrorMessage = passwordErrorMessage,
+        isError = isError,
+        errorMessage = errorMessage,
         isButtonEnabled = isButtonEnabled
     )
 }
@@ -101,7 +115,7 @@ fun SignUpScreen(
     passwordVisible: Boolean,
     checkPassword: String,
     checkPasswordVisible: Boolean,
-    onIdChange: (String) -> Unit,
+    onUserIdChange: (String) -> Unit,
     onNicknameChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onPasswordVisibleChange: (Boolean) -> Unit,
@@ -111,6 +125,8 @@ fun SignUpScreen(
     onSignUpClick: () -> Unit,
     isPasswordError: Boolean,
     passwordErrorMessage: String = "",
+    isError: Boolean,
+    errorMessage: String,
     isButtonEnabled: Boolean
 ) {
     SumoryTheme { colors, typography ->
@@ -144,14 +160,16 @@ fun SignUpScreen(
                     textState = nickname,
                     placeHolder = "닉네임",
                     onTextChange = onNicknameChange,
-                    icon = {}
+                    icon = {},
+                    isError = isError
                 )
 
                 SumoryTextField(
                     textState = userId,
                     placeHolder = "아이디",
-                    onTextChange = onIdChange,
-                    icon = {}
+                    onTextChange = onUserIdChange,
+                    icon = {},
+                    isError = isError
                 )
 
                 SumoryTextField(
@@ -165,15 +183,20 @@ fun SignUpScreen(
                             tint = colors.black
                         )
                     },
-                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
+                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    isError = isError
                 )
 
                 SumoryTextField(
                     textState = checkPassword,
                     placeHolder = "비밀번호 확인",
                     onTextChange = onCheckPasswordChange,
-                    isError = isPasswordError,
-                    helperText = passwordErrorMessage,
+                    isError = isPasswordError || isError,
+                    helperText = when {
+                        isPasswordError -> passwordErrorMessage // "비밀번호가 일치하는지 확인해주세요"
+                        isError -> errorMessage                 // "동일한 아이디가 존재합니다"
+                        else -> ""
+                    },
                     icon = {
                         EyeIcon(
                             isSelected = checkPasswordVisible,
@@ -183,7 +206,7 @@ fun SignUpScreen(
                             tint = colors.black
                         )
                     },
-                    visualTransformation = if (checkPasswordVisible) VisualTransformation.None else PasswordVisualTransformation()
+                    visualTransformation = if (checkPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 )
 
                 Spacer(modifier = modifier.height(15.dp))
@@ -216,7 +239,7 @@ fun SignUpScreenPreview() {
         passwordVisible = false,
         checkPassword = "",
         checkPasswordVisible = false,
-        onIdChange = {},
+        onUserIdChange = {},
         onNicknameChange = {},
         onPasswordChange = {},
         onPasswordVisibleChange = {},
@@ -225,6 +248,9 @@ fun SignUpScreenPreview() {
         onBackClick = {},
         onSignUpClick = {},
         isPasswordError = false,
-        isButtonEnabled = false
+        isButtonEnabled = false,
+        passwordErrorMessage = "",
+        isError = false,
+        errorMessage = ""
     )
 }
