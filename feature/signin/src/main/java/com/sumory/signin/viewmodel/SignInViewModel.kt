@@ -47,7 +47,7 @@ class SignInViewModel @Inject constructor(
                     Log.e("SignInViewModel", "로그인 실패: ${e.message}", e)
                     _signInState.value = SignInUiState.Error(e.message ?: "알 수 없는 오류")
                 }
-                .collect { result ->
+                .collectLatest { result ->
                     Log.d("SignInViewModel", "로그인 성공: $result")
                     _signInState.value = SignInUiState.Success(result)
                 }
