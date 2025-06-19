@@ -19,6 +19,7 @@ import com.sumory.navigation.SumoryNavHost
 import com.sumory.navigation.TopLevelDestination
 import com.sumory.signin.signInRoute
 import com.sumory.signup.signUpRoute
+import com.sumory.splash.splashRoute
 
 @Composable
 fun SumoryApp(
@@ -29,7 +30,7 @@ fun SumoryApp(
     Log.d("SumoryApp", "Current route: $currentRoute")
 
     // 로그인/회원가입 화면은 제외할 라우트 목록
-    val shouldShowBars = currentRoute !in listOf(signInRoute, signUpRoute)
+    val shouldShowBars = currentRoute !in listOf(signInRoute, signUpRoute, splashRoute)
 
     SumoryTheme { _, _ ->
         Scaffold(
