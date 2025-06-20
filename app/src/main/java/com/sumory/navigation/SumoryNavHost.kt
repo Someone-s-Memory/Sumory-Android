@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import com.sumory.calendar.calendarScreen
 import com.sumory.diary.diaryDeatilScreen
 import com.sumory.diary.diaryDetailRoute
+import com.sumory.diary.diaryRoute
 import com.sumory.diary.diaryScreen
 import com.sumory.home.homeRoute
 import com.sumory.home.homeScreen
@@ -27,7 +28,7 @@ import com.sumory.ui.SumoryAppState
 @Composable
 fun SumoryNavHost(
     modifier: Modifier = Modifier,
-    startDestination: String = diaryDetailRoute,
+    startDestination: String = homeRoute,
     appState: SumoryAppState,
 ) {
     val navController = appState.navController
@@ -77,7 +78,13 @@ fun SumoryNavHost(
 
         calendarScreen()
 
-        diaryScreen()
+        diaryScreen(
+            onDiaryClick = {
+                navController.navigate(diaryDetailRoute){
+
+                }
+            }
+        )
 
         statScreen()
 
@@ -93,6 +100,12 @@ fun SumoryNavHost(
             }
         )
 
-        diaryDeatilScreen()
+        diaryDeatilScreen(
+            onBackClick = {
+                navController.navigate(diaryRoute){
+                    popUpTo(0)
+                }
+            }
+        )
     }
 }
