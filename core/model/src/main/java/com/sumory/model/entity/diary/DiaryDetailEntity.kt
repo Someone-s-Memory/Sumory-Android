@@ -7,5 +7,6 @@ data class DiaryDetailEntity(
     val createdDate: String,
     val feeling: String,
     val weather: String,
-    val characterCount: Int
+    val characterCount: Int,
+    val photoUrls: List<String> = emptyList() // 사진 URL 리스트
 )
