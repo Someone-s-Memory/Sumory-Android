@@ -167,6 +167,19 @@ fun RightArrowIcon(
 }
 
 @Composable
+fun AddIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+){
+    Icon(
+        painter = painterResource(id = R.drawable.ic_add),
+        contentDescription = stringResource(id =R.string.add_description),
+        modifier = modifier,
+        tint = tint
+    )
+}
+
+@Composable
 fun EyeIcon(
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,

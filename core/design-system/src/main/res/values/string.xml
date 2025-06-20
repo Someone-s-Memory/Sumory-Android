@@ -14,4 +14,5 @@
     <string name="star_description">즐겨찾기 아이콘</string>
     <string name="left_arrow_description">왼쪽 화살표 아이콘</string>
     <string name="right_arrow_description">오른쪽 화살표 아이콘</string>
+    <string name="add_description">추가 아이콘</string>
 </resources>
