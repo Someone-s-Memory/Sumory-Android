@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.sumory.design_system.icon.FilterIcon
 import com.sumory.design_system.theme.SumoryTheme
@@ -27,7 +28,7 @@ fun DiaryScreen(
     modifier: Modifier = Modifier,
     diaryItems: List<DiaryListEntity>,
     onDiaryClick: (Int) -> Unit
-){
+) {
     SumoryTheme { colors, typography ->
         Column(
             modifier
@@ -36,8 +37,7 @@ fun DiaryScreen(
                 .padding(start = 16.dp, end = 16.dp, top = 16.dp),
         ) {
             Row(
-                modifier
-                    .fillMaxWidth(),
+                modifier = modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
@@ -45,28 +45,47 @@ fun DiaryScreen(
                     style = typography.titleRegular3,
                     color = colors.black
                 )
-                Spacer(modifier.weight(1f))
+                Spacer(modifier = modifier.weight(1f))
                 FilterIcon(
-                    modifier.padding(start = 5.dp),
+                    modifier = modifier.padding(start = 5.dp),
                     tint = colors.black
                 )
             }
-            Spacer(modifier.height(16.dp))
-            LazyColumn(
-                modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                items(diaryItems){ item ->
-                    DiaryItem(
-                        item = item,
-                        onClick = { onDiaryClick(item.id) }
+
+            Spacer(modifier = modifier.height(16.dp))
+
+            if (diaryItems.isEmpty()) {
+                Column(
+                    modifier = modifier
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "아직 작성된 일기가 없어요.\n캘린더에서 오늘의 감정을 기록해보세요 ☁️",
+                        style = typography.bodyRegular2,
+                        color = colors.gray700,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
                     )
+                }
+            } else {
+                LazyColumn(
+                    modifier = modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    items(diaryItems) { item ->
+                        DiaryItem(
+                            item = item,
+                            onClick = { onDiaryClick(item.id) }
+                        )
+                    }
                 }
             }
         }
     }
 }
+
 
 @DevicePreviews
 @Composable
@@ -80,6 +99,15 @@ fun DiaryScreenPreview(){
 
     DiaryScreen(
         diaryItems = dummyList,
+        onDiaryClick = {}
+    )
+}
+
+@DevicePreviews
+@Composable
+fun DiaryScreenPreviewEmpty() {
+    DiaryScreen(
+        diaryItems = emptyList(),
         onDiaryClick = {}
     )
 }
