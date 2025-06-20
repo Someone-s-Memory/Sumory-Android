@@ -16,14 +16,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -93,12 +92,33 @@ fun DiaryDetailScreen(
             Row(
                 modifier = modifier
                     .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Button(onClick = {}, shape = RoundedCornerShape(50), colors = ButtonDefaults.buttonColors(colors.gray100)) {
-                    Text(text = "$emotion 오늘의 기분", color = colors.black)
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Surface(
+                    shape = RoundedCornerShape(20.dp),
+                    color = colors.gray50, // 연한 배경색
+                    modifier = Modifier.padding(vertical = 4.dp)
+                ) {
+                    Text(
+                        text = "$emotion 오늘의 기분",
+                        style = typography.bodyRegular2,
+                        color = colors.black,
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                    )
                 }
-                Button(onClick = {}, shape = RoundedCornerShape(50), colors = ButtonDefaults.buttonColors(colors.gray100)) {
-                    Text(text = "$weather 날씨", color = colors.black)
+                Spacer(modifier.width(15.dp))
+                Surface(
+                    shape = RoundedCornerShape(20.dp),
+                    color = colors.gray50,
+                    modifier = Modifier.padding(vertical = 4.dp)
+                ) {
+                    Text(
+                        text = "$weather 날씨",
+                        style = typography.bodyRegular2,
+                        color = colors.black,
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                    )
                 }
             }
 
@@ -122,8 +142,6 @@ fun DiaryDetailScreen(
                     }
                 }
             }
-
-            Text(text = content, style = typography.bodyRegular2, color = colors.black)
 
             zoomedImageUrl?.let { url ->
                 Dialog(onDismissRequest = { zoomedImageUrl = null }) {
@@ -150,6 +168,10 @@ fun DiaryDetailScreen(
                     }
                 }
             }
+
+            Spacer(modifier.height(12.dp))
+
+            Text(text = content, style = typography.bodyRegular2, color = colors.black)
         }
     }
 }
