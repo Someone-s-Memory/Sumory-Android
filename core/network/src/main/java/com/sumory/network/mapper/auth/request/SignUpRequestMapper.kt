@@ -7,5 +7,6 @@ fun SignUpRequestParam.toDto(): SignUpRequest = SignUpRequest(
     userId = this.userId,
     password = this.password,
     passwordCheck = this.passwordCheck,
-    nickname = this.nickname
+    nickname = this.nickname,
+    email = this.email
 )

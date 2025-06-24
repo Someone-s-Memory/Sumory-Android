@@ -28,7 +28,7 @@ import com.sumory.ui.SumoryAppState
 @Composable
 fun SumoryNavHost(
     modifier: Modifier = Modifier,
-    startDestination: String = homeRoute,
+    startDestination: String = splashRoute,
     appState: SumoryAppState,
 ) {
     val navController = appState.navController

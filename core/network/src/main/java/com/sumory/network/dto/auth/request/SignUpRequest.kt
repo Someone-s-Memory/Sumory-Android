@@ -9,4 +9,5 @@ data class SignUpRequest (
     @Json(name = "password") val password: String,
     @Json(name = "passwordCheck") val passwordCheck: String,
     @Json(name = "nickname") val nickname: String,
+    @Json(name = "email") val email: String,
 )

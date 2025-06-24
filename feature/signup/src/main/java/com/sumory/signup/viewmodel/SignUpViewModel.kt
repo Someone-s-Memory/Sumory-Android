@@ -44,19 +44,23 @@ class SignUpViewModel @Inject constructor(
     private val _passwordLengthErrorMessage = MutableStateFlow("")
     val passwordLengthErrorMessage: StateFlow<String> = _passwordLengthErrorMessage.asStateFlow()
 
+    private val _email = MutableStateFlow("")
+    val email: StateFlow<String> = _email.asStateFlow()
+
     fun signUp(
         userId: String,
         password: String,
         passwordCheck: String,
-        nickname: String
+        nickname: String,
+        email: String
     ) {
         viewModelScope.launch {
             _signUpState.value = SignUpUiState.Loading
             authRepository.signUp(
-                SignUpRequestParam(userId, password, passwordCheck, nickname)
+                SignUpRequestParam(userId, password, passwordCheck, nickname, email)
             )
                 .catch { e ->
-                    _signUpState.value = SignUpUiState.Error("동일한 아이디가 존재합니다.")
+                    _signUpState.value = SignUpUiState.Error("동일한 아이디가 존재하거나 이메일 형식을 확인하세요.")
                 }
                 .collect {
                     _signUpState.value = SignUpUiState.Success(it.msg)
@@ -93,6 +97,10 @@ class SignUpViewModel @Inject constructor(
     fun onPasswordChange(newPassword: String) {
         _password.value = newPassword
         validatePasswordLength(newPassword)
+    }
+
+    fun onEmailChange(newEmail: String) {
+        _email.value = newEmail
     }
 
     private fun validatePasswordLength(password: String) {

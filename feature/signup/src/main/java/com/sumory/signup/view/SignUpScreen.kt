@@ -48,12 +48,14 @@ fun SignUpRoute(
     val checkPasswordVisible by viewModel.checkPasswordVisible.collectAsState()
     val isPasswordLengthError by viewModel.passwordLengthError.collectAsState()
     val passwordLengthErrorMessage by viewModel.passwordLengthErrorMessage.collectAsState()
+    val email by viewModel.email.collectAsState()
 
     val isPasswordMismatchError = password != checkPassword && checkPassword.isNotEmpty()
     val passwordMismatchErrorMessage = "비밀번호가 일치하는지 확인해주세요"
 
     val isButtonEnabled = userId.isNotBlank()
             && nickname.isNotBlank()
+            && email.isNotBlank()
             && password.isNotBlank()
             && checkPassword.isNotBlank()
             && !isPasswordLengthError
@@ -71,12 +73,14 @@ fun SignUpRoute(
     SignUpScreen(
         userId = userId,
         nickname = nickname,
+        email = email,
         password = password,
         passwordVisible = passwordVisible,
         checkPassword = checkPassword,
         checkPasswordVisible = checkPasswordVisible,
         onUserIdChange = { viewModel.onUserIdChange(it); viewModel.resetError() },
         onNicknameChange = { viewModel.onNicknameChange(it); viewModel.resetError() },
+        onEmailChange = { viewModel.onEmailChange(it); viewModel.resetError() },
         onPasswordChange = { viewModel.onPasswordChange(it); viewModel.resetError() },
         onPasswordVisibleChange = { viewModel.onPasswordVisibleChange(it) },
         onCheckPasswordChange = { viewModel.onCheckPasswordChange(it); viewModel.resetError() },
@@ -84,7 +88,7 @@ fun SignUpRoute(
         onBackClick = onBackClick,
         onSignUpClick = {
             if (!isPasswordLengthError && !isPasswordMismatchError) {
-                viewModel.signUp(userId, password, checkPassword, nickname)
+                viewModel.signUp(userId, password, checkPassword, nickname, email)
             }
         },
         isPasswordFieldError = isPasswordLengthError || isError,
@@ -101,12 +105,14 @@ fun SignUpScreen(
     modifier: Modifier = Modifier,
     userId: String,
     nickname: String,
+    email: String,
     password: String,
     passwordVisible: Boolean,
     checkPassword: String,
     checkPasswordVisible: Boolean,
     onUserIdChange: (String) -> Unit,
     onNicknameChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onPasswordVisibleChange: (Boolean) -> Unit,
     onCheckPasswordChange: (String) -> Unit,
@@ -150,6 +156,7 @@ fun SignUpScreen(
                 SumoryTextField(
                     textState = nickname,
                     placeHolder = "닉네임",
+                    focusText = "닉네임",
                     onTextChange = onNicknameChange,
                     icon = {},
                     isError = isError
@@ -158,7 +165,17 @@ fun SignUpScreen(
                 SumoryTextField(
                     textState = userId,
                     placeHolder = "아이디",
+                    focusText = "아이디",
                     onTextChange = onUserIdChange,
+                    icon = {},
+                    isError = isError
+                )
+
+                SumoryTextField(
+                    textState = email,
+                    placeHolder = "이메일",
+                    focusText = "example@email.com",
+                    onTextChange = onEmailChange,
                     icon = {},
                     isError = isError
                 )
@@ -166,6 +183,7 @@ fun SignUpScreen(
                 SumoryTextField(
                     textState = password,
                     placeHolder = "비밀번호",
+                    focusText = "비밀번호",
                     onTextChange = onPasswordChange,
                     icon = {
                         EyeIcon(
@@ -182,6 +200,7 @@ fun SignUpScreen(
                 SumoryTextField(
                     textState = checkPassword,
                     placeHolder = "비밀번호 확인",
+                    focusText = "비밀번호 확인",
                     onTextChange = onCheckPasswordChange,
                     icon = {
                         EyeIcon(
@@ -221,12 +240,14 @@ fun SignUpScreenPreview() {
     SignUpScreen(
         userId = "",
         nickname = "",
+        email = "",
         password = "",
         passwordVisible = false,
         checkPassword = "",
         checkPasswordVisible = false,
         onUserIdChange = {},
         onNicknameChange = {},
+        onEmailChange = {},
         onPasswordChange = {},
         onPasswordVisibleChange = {},
         onCheckPasswordChange = {},

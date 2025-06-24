@@ -2,6 +2,7 @@ package com.sumory.design_system.component.textfield
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,10 +13,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -30,6 +34,7 @@ fun SumoryTextField(
     modifier: Modifier = Modifier,
     textState: String,
     placeHolder: String,
+    focusText: String = "",
     helperText: String = "",
     isError: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
@@ -37,8 +42,10 @@ fun SumoryTextField(
     icon: @Composable () -> Unit
 ) {
     SumoryTheme { colors, typography ->
-        Column(modifier = modifier.fillMaxWidth()) {
+        val interactionSource = remember { MutableInteractionSource() }
+        var isFocused by remember { mutableStateOf(false) }
 
+        Column(modifier = modifier.fillMaxWidth()) {
             BasicTextField(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -47,12 +54,14 @@ fun SumoryTextField(
                         color = if (isError) colors.error else colors.gray100,
                         shape = RoundedCornerShape(size = 8.dp)
                     )
-                    .padding(vertical = 14.dp, horizontal = 16.dp),
+                    .padding(vertical = 14.dp, horizontal = 16.dp)
+                    .onFocusChanged { isFocused = it.isFocused },
                 value = textState,
-                onValueChange = { newText -> onTextChange(newText) },
+                onValueChange = onTextChange,
                 visualTransformation = visualTransformation,
                 singleLine = true,
                 textStyle = typography.bodyRegular2.copy(color = colors.black),
+                interactionSource = interactionSource,
                 decorationBox = { innerTextField ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -62,27 +71,29 @@ fun SumoryTextField(
                         Box(modifier = Modifier.weight(1f)) {
                             if (textState.isEmpty()) {
                                 Text(
-                                    text = placeHolder,
+                                    text = if (isFocused) focusText else placeHolder,
                                     color = colors.gray400,
                                     style = typography.bodyRegular2
                                 )
                             }
                             innerTextField()
                         }
-
                         icon()
                     }
                 }
             )
 
-            Text(
-                text = helperText,
-                color = colors.error,
-                style = typography.bodyRegular2
-            )
+            if (isError) {
+                Text(
+                    text = helperText,
+                    color = colors.error,
+                    style = typography.bodyRegular2
+                )
+            }
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
@@ -117,6 +128,13 @@ fun SumoryTextFieldPreview() {
             placeHolder = "비밀번호를 입력해주세요",
             isError = true,
             helperText = "아이디와 비밀번호가 일치하는지 확인해주세요",
+            onTextChange = onTextChange,
+            icon = {}
+        )
+        SumoryTextField(
+            textState = textState,
+            placeHolder = "이메일을 입력해주세요",
+            focusText = "이메일은 이메일 형식입니다",
             onTextChange = onTextChange,
             icon = {}
         )
