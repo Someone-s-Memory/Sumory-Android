@@ -83,13 +83,11 @@ fun SumoryTextField(
                 }
             )
 
-            if (isError) {
-                Text(
-                    text = helperText,
-                    color = colors.error,
-                    style = typography.bodyRegular2
-                )
-            }
+            Text(
+                text = helperText,
+                color = colors.error,
+                style = typography.bodyRegular2
+            )
         }
     }
 }
