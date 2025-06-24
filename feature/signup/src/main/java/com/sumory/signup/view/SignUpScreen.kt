@@ -262,3 +262,32 @@ fun SignUpScreenPreview() {
         isButtonEnabled = false
     )
 }
+
+@DevicePreviews
+@Composable
+fun SignUpErrorScreenPreview(){
+    SignUpScreen(
+        userId = "",
+        nickname = "",
+        email = "",
+        password = "",
+        passwordVisible = false,
+        checkPassword = "",
+        checkPasswordVisible = false,
+        onUserIdChange = {},
+        onNicknameChange = {},
+        onEmailChange = {},
+        onPasswordChange = {},
+        onPasswordVisibleChange = {},
+        onCheckPasswordChange = {},
+        onCheckPasswordVisibleChange = {},
+        onBackClick = {},
+        onSignUpClick = {},
+        isPasswordFieldError = true,
+        passwordFieldErrorMessage = "",
+        isPasswordCheckError = true,
+        passwordCheckErrorMessage = "",
+        isError = true,
+        isButtonEnabled = false
+    )
+}
