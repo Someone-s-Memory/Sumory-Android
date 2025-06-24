@@ -60,7 +60,12 @@ class SignUpViewModel @Inject constructor(
                 SignUpRequestParam(userId, password, passwordCheck, nickname, email)
             )
                 .catch { e ->
-                    _signUpState.value = SignUpUiState.Error("동일한 아이디가 존재하거나 이메일 형식을 확인하세요.")
+                    val message = when {
+                        e.message?.contains("HTTP 400") == true -> "이메일 형식이 올바르지 않습니다."
+                        e.message?.contains("HTTP 500") == true -> "이미 존재하는 아이디입니다."
+                        else -> "회원가입에 실패했습니다. 다시 시도해주세요."
+                    }
+                    _signUpState.value = SignUpUiState.Error(message)
                 }
                 .collect {
                     _signUpState.value = SignUpUiState.Success(it.msg)
