@@ -19,7 +19,7 @@ fun rememberSumoryAppState(
     navController: NavHostController = rememberNavController(), // 네비게이션 컨트롤러를 생성합니다.
     coroutineScope: CoroutineScope = rememberCoroutineScope() // 코루틴 스코프를 생성합니다.
 ): SumoryAppState {
-    // windowSizeClass와 navController, coroutineScope가 변경될 때만 재생성하는 ExpoAppState를 기억합니다.
+    // windowSizeClass와 navController, coroutineScope가 변경될 때만 재생성하는 SumoryAppState를 기억합니다.
     return remember(
         windowSizeClass,
         coroutineScope,
@@ -47,15 +47,13 @@ class SumoryAppState(
     // 최상위 목적지 리스트
     val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().toList()
 
-    // BottomBar를 위한 최상위 목적지 이동 함수
     fun navigateToTopLevelDestination(destination: TopLevelDestination) {
         navController.navigate(destination.routeName) {
             popUpTo(homeRoute) {
                 inclusive = false
-                saveState = true
             }
             launchSingleTop = true
-            restoreState = true
         }
     }
+
 }
