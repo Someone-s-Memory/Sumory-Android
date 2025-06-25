@@ -43,7 +43,7 @@ fun DiaryItem(
                     Text(
                         text = item.title,
                         color = colors.black,
-                        style = MaterialTheme.typography.titleMedium
+                        style = typography.titleRegular3
                     )
                     Row {
                         Text(
