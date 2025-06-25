@@ -48,12 +48,12 @@ fun DiaryItem(
                     Row {
                         Text(
                             text = item.emotionEmoji,
-                            style = typography.titleRegular3,
+                            style = typography.bodyBold1,
                             )
                         Spacer(modifier = modifier.width(4.dp))
                         Text(
                             text = item.weatherEmoji,
-                            style = typography.titleRegular3,
+                            style = typography.bodyBold1,
                         )
                     }
                 }
