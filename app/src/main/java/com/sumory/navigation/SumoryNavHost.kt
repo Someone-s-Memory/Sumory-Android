@@ -108,9 +108,7 @@ fun SumoryNavHost(
 
         diaryDeatilScreen(
             onBackClick = {
-                navController.navigate(diaryRoute){
-                    popUpTo(0)
-                }
+                navController.popBackStack()
             }
         )
     }
