@@ -25,6 +25,7 @@ import kotlin.math.ceil
 
 @Composable
 fun CalendarScreen(
+    modifier: Modifier = Modifier,
     onDiaryClick: (Int) -> Unit
 ) {
     val currentMonth = YearMonth.of(2025, 6)
@@ -44,13 +45,13 @@ fun CalendarScreen(
 
     SumoryTheme { colors, typography ->
         Column(
-            Modifier
+            modifier
                 .fillMaxSize()
                 .background(colors.white)
         ) {
             // 상단 월 표시 & 연속 뱃지
             Row(
-                Modifier
+                modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp, vertical = 25.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -62,7 +63,7 @@ fun CalendarScreen(
                     style = typography.titleBold2
                 )
                 Box(
-                    modifier = Modifier
+                    modifier = modifier
                         .background(colors.pinkSoftBackground, RoundedCornerShape(20.dp))
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
@@ -75,13 +76,14 @@ fun CalendarScreen(
             }
 
             // 요일 헤더
-            Row(Modifier
+            Row(
+                modifier = modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)) {
                 listOf("일", "월", "화", "수", "목", "금", "토").forEach {
                     Text(
                         text = it,
-                        modifier = Modifier.weight(1f),
+                        modifier = modifier.weight(1f),
                         textAlign = TextAlign.Center,
                         color = colors.black,
                         style = typography.bodyRegular2
@@ -91,7 +93,8 @@ fun CalendarScreen(
 
             // 6주 렌더링
             for (week in days.chunked(7)) {
-                Row(Modifier
+                Row(
+                    modifier = modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp)) {
                     week.forEach { date ->
@@ -106,7 +109,7 @@ fun CalendarScreen(
                         }
 
                         Box(
-                            modifier = Modifier
+                            modifier = modifier
                                 .weight(1f)
                                 .aspectRatio(1f)
                                 .padding(4.dp)
@@ -116,8 +119,8 @@ fun CalendarScreen(
                                 )
                                 .then(
                                     if (border != null)
-                                        Modifier.border(border, RoundedCornerShape(12.dp))
-                                    else Modifier
+                                        modifier.border(border, RoundedCornerShape(12.dp))
+                                    else modifier
                                 )
                                 .clickable(enabled = date != null) {
                                     date?.let { selectedDate = it }
@@ -140,15 +143,15 @@ fun CalendarScreen(
                 }
             }
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(modifier.height(16.dp))
 
             // 날짜 + 일기 리스트
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Box(
-                    modifier = Modifier
+                    modifier = modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
                 ) {
@@ -156,10 +159,10 @@ fun CalendarScreen(
                         text = "${selectedDate.year}. ${selectedDate.monthValue}. ${selectedDate.dayOfMonth}",
                         style = typography.titleBold2,
                         color = colors.black,
-                        modifier = Modifier.align(Alignment.Center)
+                        modifier = modifier.align(Alignment.Center)
                     )
                     EditIcon(
-                        modifier = Modifier
+                        modifier = modifier
                             .align(Alignment.CenterEnd)
                             .clickable {
                                 // TODO: 일기 작성 화면 이동
@@ -168,12 +171,12 @@ fun CalendarScreen(
                     )
                 }
 
-                Spacer(Modifier.height(8.dp))
+                Spacer(modifier.height(8.dp))
 
                 val diaries = diaryMap[selectedDate]
                 if (!diaries.isNullOrEmpty()) {
                     Column(
-                        modifier = Modifier
+                        modifier = modifier
                             .padding(horizontal = 16.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
@@ -191,7 +194,7 @@ fun CalendarScreen(
                         text = "작성된 일기가 없어요 ☁️",
                         color = colors.black,
                         style = typography.bodyRegular2,
-                        modifier = Modifier.padding(horizontal = 16.dp)
+                        modifier = modifier.padding(horizontal = 16.dp)
                     )
                 }
             }
