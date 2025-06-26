@@ -23,39 +23,56 @@ import java.time.LocalDate
 import java.time.YearMonth
 import kotlin.math.ceil
 
+data class CalendarDateState(
+    val date: LocalDate?,
+    val isSelected: Boolean,
+    val isToday: Boolean,
+    val hasDiary: Boolean,
+    val emoji: String = ""
+)
+
 @Composable
 fun CalendarRoute(
     modifier: Modifier = Modifier,
     onDiaryClick: (Int) -> Unit,
     onWriteClick: () -> Unit
 ) {
-    // 선택된 날짜 상태
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
     val currentMonth = YearMonth.now()
     val today = LocalDate.now()
 
-    // 샘플 일기 데이터 (ViewModel에서 실제 데이터로 교체)
+    // 샘플 데이터 (실제 프로젝트에선 ViewModel로부터 주입)
     val diaryList = listOf(
         CalendarDiaryListEntity(1, "산책", "날씨 좋아서 산책", "😍", "☀️", LocalDate.of(2025, 6, 6)),
         CalendarDiaryListEntity(2, "비 오는 날", "집에만 있었음", "😐", "🌧️", LocalDate.of(2025, 6, 9)),
         CalendarDiaryListEntity(3, "카페에서", "회고", "😊", "☀️", LocalDate.of(2025, 6, 11))
     )
-    // null인 date 필터링 후 그룹핑
-    val diaryMap = diaryList.filter { it.date != null }
-        .groupBy { it.date!! }
+
+    val diaryMap = diaryList.groupBy { it.date }
 
     val calendarDays = generateCalendarDates(currentMonth)
-    val weeks = calendarDays.chunked(7)
 
-    val consecutiveDays = 3 // 연속 일기 작성일 수 (예시)
+    val weeks: List<List<CalendarDateState>> = calendarDays.chunked(7).map { week ->
+        week.map { date ->
+            val hasDiary = date != null && diaryMap.containsKey(date)
+            CalendarDateState(
+                date = date,
+                isSelected = date == selectedDate,
+                isToday = date == today,
+                hasDiary = hasDiary,
+                emoji = if (hasDiary) diaryMap[date]?.firstOrNull()?.emotionEmoji.orEmpty() else ""
+            )
+        }
+    }
+
+    val consecutiveDays = 3
 
     CalendarScreen(
         modifier = modifier,
         currentMonth = currentMonth,
-        today = today,
         selectedDate = selectedDate,
         weeks = weeks,
-        diaryMap = diaryMap,
+        diariesOfSelectedDate = diaryMap[selectedDate].orEmpty(),
         consecutiveDays = consecutiveDays,
         onDateSelected = { selectedDate = it },
         onDiaryClick = onDiaryClick,
@@ -67,10 +84,9 @@ fun CalendarRoute(
 fun CalendarScreen(
     modifier: Modifier = Modifier,
     currentMonth: YearMonth,
-    today: LocalDate,
     selectedDate: LocalDate,
-    weeks: List<List<LocalDate?>>, // 6주 렌더링용 날짜 리스트
-    diaryMap: Map<LocalDate, List<CalendarDiaryListEntity>>, // 날짜별 일기 리스트
+    weeks: List<List<CalendarDateState>>,
+    diariesOfSelectedDate: List<CalendarDiaryListEntity>,
     consecutiveDays: Int,
     onDateSelected: (LocalDate) -> Unit,
     onDiaryClick: (Int) -> Unit,
@@ -82,9 +98,8 @@ fun CalendarScreen(
                 .fillMaxSize()
                 .background(colors.white)
         ) {
-            // 상단 월 + 연속 뱃지
             Row(
-                modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp, vertical = 25.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -108,7 +123,6 @@ fun CalendarScreen(
                 }
             }
 
-            // 요일 헤더
             Row(
                 modifier = modifier
                     .fillMaxWidth()
@@ -125,23 +139,15 @@ fun CalendarScreen(
                 }
             }
 
-            Spacer(modifier = modifier.height(10.dp))
+            Spacer(modifier.height(10.dp))
 
-            // 날짜 셀 (6주)
             weeks.forEach { week ->
-                Row(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp)
-                ) {
-                    week.forEach { date ->
-                        val isSelected = date == selectedDate
-                        val isToday = date == today
-                        val hasDiary = date != null && diaryMap.containsKey(date)
-
+                Row(modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+                    week.forEach { dayState ->
+                        val date = dayState.date
                         val border = when {
-                            hasDiary -> BorderStroke(2.dp, colors.success)
-                            isToday -> BorderStroke(1.dp, colors.gray300)
+                            dayState.hasDiary -> BorderStroke(2.dp, colors.success)
+                            dayState.isToday -> BorderStroke(1.dp, colors.gray300)
                             else -> null
                         }
 
@@ -157,7 +163,7 @@ fun CalendarScreen(
                                     .size(size)
                                     .clip(RoundedCornerShape(12.dp))
                                     .background(
-                                        if (isSelected) colors.pinkSoftBackground else colors.white
+                                        if (dayState.isSelected) colors.pinkSoftBackground else colors.white
                                     )
                                     .then(
                                         if (border != null)
@@ -175,9 +181,8 @@ fun CalendarScreen(
                                         style = typography.bodyRegular1,
                                         color = colors.black
                                     )
-                                    if (hasDiary) {
-                                        val emoji = diaryMap[date]?.firstOrNull()?.emotionEmoji ?: ""
-                                        Text(emoji, fontSize = 12.sp)
+                                    if (dayState.hasDiary) {
+                                        Text(dayState.emoji, fontSize = 12.sp)
                                     }
                                 }
                             }
@@ -188,7 +193,6 @@ fun CalendarScreen(
 
             Spacer(modifier.height(16.dp))
 
-            // 선택된 날짜의 일기 리스트
             Column(
                 modifier = modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -214,13 +218,12 @@ fun CalendarScreen(
 
                 Spacer(modifier.height(8.dp))
 
-                val diaries = diaryMap[selectedDate]
-                if (!diaries.isNullOrEmpty()) {
+                if (diariesOfSelectedDate.isNotEmpty()) {
                     Column(
                         modifier = modifier.padding(horizontal = 16.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        diaries.forEach { diary ->
+                        diariesOfSelectedDate.forEach { diary ->
                             CalendarDiaryItem(
                                 item = diary,
                                 onClick = { onDiaryClick(diary.id) }
@@ -265,20 +268,26 @@ fun CalendarScreenPreview() {
         CalendarDiaryListEntity(2, "비 오는 날", "집에만 있었음", "😐", "🌧️", LocalDate.of(2025, 6, 9)),
         CalendarDiaryListEntity(3, "카페에서", "회고", "😊", "☀️", LocalDate.of(2025, 6, 11))
     )
+    val diaryMap = dummyList.groupBy { it.date }
 
-    val diaryMap: Map<LocalDate, List<CalendarDiaryListEntity>> =
-        dummyList.filter { it.date != null }
-            .groupBy { it.date!! }
-
-    val calendarDays = generateCalendarDates(currentMonth)
-    val weeks = calendarDays.chunked(7)
+    val weeks = generateCalendarDates(currentMonth).chunked(7).map { week ->
+        week.map { date ->
+            val hasDiary = date != null && diaryMap.containsKey(date)
+            CalendarDateState(
+                date = date,
+                isSelected = date == selectedDate,
+                isToday = date == today,
+                hasDiary = hasDiary,
+                emoji = if (hasDiary) diaryMap[date]?.firstOrNull()?.emotionEmoji.orEmpty() else ""
+            )
+        }
+    }
 
     CalendarScreen(
         currentMonth = currentMonth,
-        today = today,
         selectedDate = selectedDate,
         weeks = weeks,
-        diaryMap = diaryMap,
+        diariesOfSelectedDate = diaryMap[selectedDate].orEmpty(),
         consecutiveDays = 3,
         onDateSelected = { selectedDate = it },
         onDiaryClick = {},
