@@ -71,7 +71,7 @@ fun DiaryItem(
 
 @DevicePreviews
 @Composable
-fun DiaryItemPreview(){
+private fun DiaryItemPreview(){
     DiaryItem(
         item = DiaryListEntity(
             id = 1,

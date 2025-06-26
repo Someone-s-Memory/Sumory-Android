@@ -89,7 +89,7 @@ fun HomeScreen(
 
 @DevicePreviews
 @Composable
-fun HomeScreenPreview(){
+private fun HomeScreenPreview(){
     HomeScreen(
         petName = "나의 펫",
         affinity = 15

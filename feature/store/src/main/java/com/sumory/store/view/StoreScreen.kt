@@ -29,6 +29,6 @@ fun StoreScreen(){
 
 @DevicePreviews
 @Composable
-fun StoreScreenPreview(){
+private fun StoreScreenPreview(){
     StoreScreen()
 }

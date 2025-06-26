@@ -175,7 +175,7 @@ fun DiaryDetailScreen(
 
 @DevicePreviews
 @Composable
-fun DiaryDetailScreenPreview() {
+private fun DiaryDetailScreenPreview() {
     DiaryDetailScreen(
         date = "2025년 6월 10일 화요일",
         emotion = "😊",

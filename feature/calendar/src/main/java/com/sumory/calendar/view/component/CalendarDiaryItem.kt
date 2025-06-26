@@ -77,7 +77,7 @@ fun CalendarDiaryItem(
 
 @DevicePreviews
 @Composable
-fun CalendarDiaryItemPreview(){
+private fun CalendarDiaryItemPreview(){
     CalendarDiaryItem(
         item = CalendarDiaryListEntity(
             id = 1,

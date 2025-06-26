@@ -236,7 +236,7 @@ fun SignUpScreen(
 
 @DevicePreviews
 @Composable
-fun SignUpScreenPreview() {
+private fun SignUpScreenPreview() {
     SignUpScreen(
         userId = "",
         nickname = "",
@@ -265,7 +265,7 @@ fun SignUpScreenPreview() {
 
 @DevicePreviews
 @Composable
-fun SignUpErrorScreenPreview(){
+private fun SignUpErrorScreenPreview(){
     SignUpScreen(
         userId = "",
         nickname = "",

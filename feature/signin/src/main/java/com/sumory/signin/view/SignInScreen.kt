@@ -178,7 +178,7 @@ fun SignInScreen(
 
 @DevicePreviews
 @Composable
-fun SignInScreenPreview() {
+private fun SignInScreenPreview() {
     SignInScreen(
         id = "previewId",
         password = "123456",
@@ -196,7 +196,7 @@ fun SignInScreenPreview() {
 
 @DevicePreviews
 @Composable
-fun SignInFailScreenPreview() {
+private fun SignInFailScreenPreview() {
     SignInScreen(
         id = "previewId",
         password = "123456",

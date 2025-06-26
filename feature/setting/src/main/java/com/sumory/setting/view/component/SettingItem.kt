@@ -68,7 +68,7 @@ fun SettingItem(
 
 @DevicePreviews
 @Composable
-fun SettingItemPreview(){
+private fun SettingItemPreview(){
     SettingItem(
         title = "로그아웃",
         subtitle = "계정에서 로그아웃",

@@ -112,7 +112,7 @@ fun SettingScreen(
 
 @DevicePreviews
 @Composable
-fun SettingScreenPreview(){
+private fun SettingScreenPreview(){
     SettingScreen(
         onAlertSettingClick = {},
         onSignOutClick = {}

@@ -258,7 +258,7 @@ fun generateCalendarDates(yearMonth: YearMonth): List<LocalDate?> {
 
 @DevicePreviews
 @Composable
-fun CalendarScreenPreview() {
+private fun CalendarScreenPreview() {
     val currentMonth = YearMonth.of(2025, 6)
     val today = LocalDate.of(2025, 6, 26)
     var selectedDate by remember { mutableStateOf(today) }

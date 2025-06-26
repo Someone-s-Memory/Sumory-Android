@@ -89,7 +89,7 @@ fun DiaryScreen(
 
 @DevicePreviews
 @Composable
-fun DiaryScreenPreview(){
+private fun DiaryScreenPreview(){
 
     val dummyList = listOf(
         DiaryListEntity(1,"즐거운 하루", "2025. 6. 10.", "😊", "☀️"),
@@ -105,7 +105,7 @@ fun DiaryScreenPreview(){
 
 @DevicePreviews
 @Composable
-fun DiaryScreenPreviewEmpty() {
+private fun DiaryScreenPreviewEmpty() {
     DiaryScreen(
         diaryItems = emptyList(),
         onDiaryClick = {}
