@@ -29,6 +29,6 @@ fun StatScreen(){
 
 @DevicePreviews
 @Composable
-fun StatScreenPreview(){
+private fun StatScreenPreview(){
     StatScreen()
 }
