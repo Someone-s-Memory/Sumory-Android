@@ -79,7 +79,7 @@ fun CalendarScreen(
             Row(
                 modifier = modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)) {
+                .padding(horizontal = 8.dp)) {
                 listOf("일", "월", "화", "수", "목", "금", "토").forEach {
                     Text(
                         text = it,
@@ -110,34 +110,40 @@ fun CalendarScreen(
                             else -> null
                         }
 
-                        Box(
+                        BoxWithConstraints(
                             modifier = modifier
                                 .weight(1f)
-                                .aspectRatio(1f)
-                                .padding(2.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(
-                                    if (isSelected) colors.pinkSoftBackground else colors.white
-                                )
-                                .then(
-                                    if (border != null)
-                                        modifier.border(border, RoundedCornerShape(12.dp))
-                                    else modifier
-                                )
-                                .clickable(enabled = date != null) {
-                                    date?.let { selectedDate = it }
-                                },
+                                .padding(2.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text(
-                                    text = date?.dayOfMonth?.toString() ?: "",
-                                    style = typography.bodyRegular1,
-                                    color = colors.black
-                                )
-                                if (hasDiary) {
-                                    val emoji = diaryMap[date]?.firstOrNull()?.emotionEmoji ?: ""
-                                    Text(emoji, fontSize = 12.sp)
+                            val size = maxWidth.coerceAtMost(90.dp)
+                            Box(
+                                modifier = modifier
+                                    .size(size)
+                                    .clip(RoundedCornerShape(12.dp))
+                                    .background(
+                                        if (isSelected) colors.pinkSoftBackground else colors.white
+                                    )
+                                    .then(
+                                        if (border != null)
+                                            modifier.border(border, RoundedCornerShape(12.dp))
+                                        else modifier
+                                    )
+                                    .clickable(enabled = date != null) {
+                                        date?.let { selectedDate = it }
+                                    },
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Text(
+                                        text = date?.dayOfMonth?.toString() ?: "",
+                                        style = typography.bodyRegular1,
+                                        color = colors.black
+                                    )
+                                    if (hasDiary) {
+                                        val emoji = diaryMap[date]?.firstOrNull()?.emotionEmoji ?: ""
+                                        Text(emoji, fontSize = 12.sp)
+                                    }
                                 }
                             }
                         }
