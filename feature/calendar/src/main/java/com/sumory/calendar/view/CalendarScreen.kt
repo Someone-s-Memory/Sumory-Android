@@ -112,7 +112,7 @@ fun CalendarScreen(
                             modifier = modifier
                                 .weight(1f)
                                 .aspectRatio(1f)
-                                .padding(4.dp)
+                                .padding(2.dp)
                                 .clip(RoundedCornerShape(12.dp))
                                 .background(
                                     if (isSelected) colors.pinkSoftBackground else colors.white
