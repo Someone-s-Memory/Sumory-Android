@@ -7,13 +7,11 @@ import androidx.navigation.compose.NavHost
 import com.sumory.calendar.calendarScreen
 import com.sumory.diary.diaryDeatilScreen
 import com.sumory.diary.diaryDetailRoute
-import com.sumory.diary.diaryRoute
 import com.sumory.diary.diaryScreen
 import com.sumory.home.homeRoute
 import com.sumory.home.homeScreen
 import com.sumory.profile.profileScreen
 import com.sumory.setting.settingScreen
-import com.sumory.signin.navigateToSignIn
 import com.sumory.signin.signInRoute
 import com.sumory.signin.signInScreen
 import com.sumory.signup.navigateToSignUp
