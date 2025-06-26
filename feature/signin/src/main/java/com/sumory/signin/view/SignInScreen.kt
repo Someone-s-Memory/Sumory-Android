@@ -188,6 +188,24 @@ fun SignInScreenPreview() {
         onPasswordVisibilityToggle = {},
         onSignInClick = {},
         onSignUpClick = {},
+        isError = false,
+        errorMessage = "",
+        isButtonEnabled = true
+    )
+}
+
+@DevicePreviews
+@Composable
+fun SignInFailScreenPreview() {
+    SignInScreen(
+        id = "previewId",
+        password = "123456",
+        passwordVisible = false,
+        onIdChange = {},
+        onPasswordChange = {},
+        onPasswordVisibilityToggle = {},
+        onSignInClick = {},
+        onSignUpClick = {},
         isError = true,
         errorMessage = "아이디 혹은 비밀번호가 올바르지 않습니다",
         isButtonEnabled = false
