@@ -150,7 +150,7 @@ fun DiaryDetailScreen(
                             .fillMaxSize()
                             .background(colors.black.copy(alpha = 0.8f))
                             .pointerInput(Unit) {
-                                detectTapGestures(onTap = { zoomedImageUrl = null }) // 배경 클릭 시 닫기
+                                detectTapGestures(onTap = { zoomedImageUrl = null })
                             },
                         contentAlignment = Alignment.Center
                     ) {
@@ -158,12 +158,9 @@ fun DiaryDetailScreen(
                             painter = rememberAsyncImagePainter(url),
                             contentDescription = "Zoomed Image",
                             modifier = modifier
-                                .fillMaxSize()  // 화면 꽉 채우기
-                                .clip(RoundedCornerShape(12.dp))
-                                .pointerInput(Unit) {
-                                    // 이미지 터치는 닫기 이벤트 막기 용
-                                },
-                            contentScale = ContentScale.Fit  // 비율 유지하면서 화면 안에 꽉 차게
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(12.dp)),
+                            contentScale = ContentScale.Fit
                         )
                     }
                 }
