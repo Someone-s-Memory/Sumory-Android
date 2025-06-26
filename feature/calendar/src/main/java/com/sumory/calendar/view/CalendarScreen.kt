@@ -91,6 +91,8 @@ fun CalendarScreen(
                 }
             }
 
+            Spacer(modifier = modifier.height(10.dp))
+
             // 6주 렌더링
             for (week in days.chunked(7)) {
                 Row(
