@@ -67,7 +67,7 @@ fun SumoryDialog(
 
 @Preview
 @Composable
-fun SumoryDialogPreview() {
+private fun SumoryDialogPreview() {
     SumoryDialog(
         title = "로그아웃",
         message = "정말 로그아웃 하시겠습니까?",

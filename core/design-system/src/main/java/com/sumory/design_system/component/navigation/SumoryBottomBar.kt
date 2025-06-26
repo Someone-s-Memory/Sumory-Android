@@ -67,7 +67,7 @@ fun SumoryNavigationBar(
 
 @Preview
 @Composable
-fun SumoryNavigationPreview() {
+private fun SumoryNavigationPreview() {
     val items = listOf(
         "캘린더",
         "모아보기",

@@ -95,7 +95,7 @@ fun SumoryTextField(
 
 @Preview(showBackground = true)
 @Composable
-fun SumoryTextFieldPreview() {
+private fun SumoryTextFieldPreview() {
     val (textState, onTextChange) = remember { mutableStateOf("") }
     val (isSelected, setIsSelected) = remember { mutableStateOf(false)}
 
