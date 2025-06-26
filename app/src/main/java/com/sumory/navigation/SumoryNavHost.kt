@@ -76,7 +76,13 @@ fun SumoryNavHost(
 
         homeScreen()
 
-        calendarScreen()
+        calendarScreen(
+            onDiaryClick = {
+                navController.navigate(diaryDetailRoute){
+
+                }
+            }
+        )
 
         diaryScreen(
             onDiaryClick = {

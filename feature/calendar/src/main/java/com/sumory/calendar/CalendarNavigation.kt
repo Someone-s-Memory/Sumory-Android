@@ -6,8 +6,12 @@ import com.sumory.calendar.view.CalendarScreen
 
 const val calendarRoute = "calendarRoute"
 
-fun NavGraphBuilder.calendarScreen() {
+fun NavGraphBuilder.calendarScreen(
+    onDiaryClick: (Int) -> Unit
+) {
     composable(calendarRoute) {
-        CalendarScreen()
+        CalendarScreen(
+            onDiaryClick = onDiaryClick
+        )
     }
 }

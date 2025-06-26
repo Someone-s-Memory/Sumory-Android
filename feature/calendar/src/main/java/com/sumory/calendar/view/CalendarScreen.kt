@@ -24,7 +24,9 @@ import java.time.YearMonth
 import kotlin.math.ceil
 
 @Composable
-fun CalendarScreen() {
+fun CalendarScreen(
+    onDiaryClick: (Int) -> Unit
+) {
     val currentMonth = YearMonth.of(2025, 6)
     val today = LocalDate.now()
 
@@ -170,7 +172,7 @@ fun CalendarScreen() {
                             CalendarDiaryItem(
                                 item = diary,
                                 onClick = {
-                                    // TODO: 상세 화면 이동 등
+                                    onDiaryClick(diary.id)
                                 }
                             )
                         }
@@ -203,5 +205,7 @@ fun generateCalendarDates(yearMonth: YearMonth): List<LocalDate?> {
 @DevicePreviews
 @Composable
 fun CalendarScreenPreview() {
-    CalendarScreen()
+    CalendarScreen(
+        onDiaryClick = {}
+    )
 }
