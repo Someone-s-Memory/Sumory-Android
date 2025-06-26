@@ -52,17 +52,25 @@ fun CalendarScreen(
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 16.dp),
+                    .padding(horizontal = 20.dp, vertical = 25.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text("2025년 6월", style = typography.titleBold2)
+                Text(
+                    text = "2025년 6월",
+                    color = colors.black,
+                    style = typography.titleBold2
+                )
                 Box(
                     modifier = Modifier
                         .background(colors.pinkSoftBackground, RoundedCornerShape(20.dp))
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
-                    Text("🔥 3일 연속", style = typography.bodyRegular2, color = colors.darkPink)
+                    Text(
+                        text= "🔥 3일 연속",
+                        style = typography.bodyRegular2,
+                        color = colors.darkPink
+                    )
                 }
             }
 
@@ -75,6 +83,7 @@ fun CalendarScreen(
                         text = it,
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center,
+                        color = colors.black,
                         style = typography.bodyRegular2
                     )
                 }
@@ -145,7 +154,7 @@ fun CalendarScreen(
                 ) {
                     Text(
                         text = "${selectedDate.year}. ${selectedDate.monthValue}. ${selectedDate.dayOfMonth}",
-                        style = typography.titleMedium1,
+                        style = typography.titleBold2,
                         color = colors.black,
                         modifier = Modifier.align(Alignment.Center)
                     )
@@ -179,7 +188,8 @@ fun CalendarScreen(
                     }
                 } else {
                     Text(
-                        "작성된 일기가 없어요 ☁️",
+                        text = "작성된 일기가 없어요 ☁️",
+                        color = colors.black,
                         style = typography.bodyRegular2,
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
