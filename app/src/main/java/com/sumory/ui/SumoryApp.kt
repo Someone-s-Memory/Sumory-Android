@@ -19,6 +19,7 @@ import com.sumory.design_system.component.navigation.SumoryNavigationBarItem
 import com.sumory.design_system.component.navigation.SumoryTopBar
 import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.diary.diaryDetailRoute
+import com.sumory.diary.diaryWriteRoute
 import com.sumory.home.homeRoute
 import com.sumory.navigation.SumoryNavHost
 import com.sumory.navigation.TopLevelDestination
@@ -35,7 +36,7 @@ fun SumoryApp(
     val currentRoute = currentBackStackEntry?.destination?.route
     Log.d("SumoryApp", "Current route: $currentRoute")
 
-    val shouldShowBars = currentRoute !in listOf(signInRoute, signUpRoute, splashRoute, diaryDetailRoute)
+    val shouldShowBars = currentRoute !in listOf(signInRoute, signUpRoute, splashRoute, diaryDetailRoute, diaryWriteRoute)
     val shouldHandleBack = currentRoute != homeRoute &&
             currentRoute !in listOf(signInRoute, signUpRoute, splashRoute)
 
