@@ -58,9 +58,11 @@ fun NavGraphBuilder.diaryWriteScreen(
     onBackClick: () -> Unit
 ) {
     composable(diaryWriteRoute) {
-        DiaryWriteScreen (
+        DiaryWriteScreen(
             date = "2025년 6월 10일 화요일",
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
+            title = "",
+            onTitleChange = {}
         )
     }
 }
