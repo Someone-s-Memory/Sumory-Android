@@ -76,7 +76,7 @@ fun DiaryDetailScreen(
                 Spacer(modifier.weight(1f))
                 Text(
                     text = date,
-                    style = typography.titleRegular3,
+                    style = typography.titleBold3,
                     color = colors.black
                 )
                 Spacer(modifier.weight(1f))
