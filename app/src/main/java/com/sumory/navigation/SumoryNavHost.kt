@@ -8,6 +8,7 @@ import com.sumory.calendar.calendarScreen
 import com.sumory.diary.diaryDeatilScreen
 import com.sumory.diary.diaryDetailRoute
 import com.sumory.diary.diaryScreen
+import com.sumory.diary.diaryWriteScreen
 import com.sumory.home.homeRoute
 import com.sumory.home.homeScreen
 import com.sumory.profile.profileScreen
@@ -105,6 +106,12 @@ fun SumoryNavHost(
         )
 
         diaryDeatilScreen(
+            onBackClick = {
+                navController.popBackStack()
+            }
+        )
+
+        diaryWriteScreen(
             onBackClick = {
                 navController.popBackStack()
             }

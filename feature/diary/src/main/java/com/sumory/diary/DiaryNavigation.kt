@@ -4,10 +4,12 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.sumory.diary.view.DiaryDetailScreen
 import com.sumory.diary.view.DiaryScreen
+import com.sumory.diary.view.DiaryWriteScreen
 import com.sumory.model.entity.diary.DiaryListEntity
 
 const val diaryRoute = "diaryRoute"
 const val diaryDetailRoute = "diaryDetailRoute"
+const val diaryWriteRoute = "diaryWriteRoute"
 
 fun NavGraphBuilder.diaryScreen(
     onDiaryClick: (Int) -> Unit
@@ -47,6 +49,17 @@ fun NavGraphBuilder.diaryDeatilScreen(
                 "https://picsum.photos/202/300"
             ),
             onEditClick = {},
+            onBackClick = onBackClick
+        )
+    }
+}
+
+fun NavGraphBuilder.diaryWriteScreen(
+    onBackClick: () -> Unit
+) {
+    composable(diaryWriteRoute) {
+        DiaryWriteScreen (
+            date = "2025년 6월 10일 화요일",
             onBackClick = onBackClick
         )
     }
