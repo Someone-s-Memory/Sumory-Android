@@ -7,12 +7,13 @@ import com.sumory.calendar.view.CalendarRoute
 const val calendarRoute = "calendarRoute"
 
 fun NavGraphBuilder.calendarScreen(
+    onWriteClick: () -> Unit,
     onDiaryClick: (Int) -> Unit
 ) {
     composable(calendarRoute) {
         CalendarRoute (
             onDiaryClick = onDiaryClick,
-            onWriteClick = {}
+            onWriteClick = onWriteClick
         )
     }
 }

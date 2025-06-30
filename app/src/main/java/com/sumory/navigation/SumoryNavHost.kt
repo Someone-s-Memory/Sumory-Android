@@ -8,6 +8,7 @@ import com.sumory.calendar.calendarScreen
 import com.sumory.diary.diaryDeatilScreen
 import com.sumory.diary.diaryDetailRoute
 import com.sumory.diary.diaryScreen
+import com.sumory.diary.diaryWriteRoute
 import com.sumory.diary.diaryWriteScreen
 import com.sumory.home.homeRoute
 import com.sumory.home.homeScreen
@@ -77,9 +78,12 @@ fun SumoryNavHost(
 
         calendarScreen(
             onDiaryClick = {
-                navController.navigate(diaryDetailRoute){
+                navController.navigate(diaryDetailRoute) {
 
                 }
+            },
+            onWriteClick = {
+                navController.navigate(diaryWriteRoute)
             }
         )
 
