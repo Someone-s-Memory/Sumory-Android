@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.sumory.data.repository.diary.DiaryRepository
 import com.sumory.model.param.diary.DiaryWriteRequestParam
 import com.sumory.diary.viewmodel.uistate.DiaryWriteUiState
+import com.sumory.model.type.DiaryFeeling
+import com.sumory.model.type.DiaryWeather
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -22,14 +24,20 @@ class DiaryWriteViewModel @Inject constructor(
     private val _content = MutableStateFlow("")
     val content = _content.asStateFlow()
 
-    private val _selectedEmotion = MutableStateFlow<String?>(null)
+    private val _selectedEmotion = MutableStateFlow<DiaryFeeling?>(null)
     val selectedEmotion = _selectedEmotion.asStateFlow()
 
-    private val _selectedWeather = MutableStateFlow<String?>(null)
+    private val _selectedWeather = MutableStateFlow<DiaryWeather?>(null)
     val selectedWeather = _selectedWeather.asStateFlow()
 
     private val _diaryWriteState = MutableStateFlow<DiaryWriteUiState>(DiaryWriteUiState.Idle)
     val diaryWriteState = _diaryWriteState.asStateFlow()
+
+    private val _imageUris = MutableStateFlow<List<Uri>>(emptyList())
+    val imageUris: StateFlow<List<Uri>> = _imageUris
+
+    private val _openGalleryEvent = MutableSharedFlow<Unit>()
+    val openGalleryEvent = _openGalleryEvent.asSharedFlow()
 
     fun updateTitle(value: String) {
         _title.value = value
@@ -39,19 +47,13 @@ class DiaryWriteViewModel @Inject constructor(
         _content.value = value
     }
 
-    fun selectEmotion(emoji: String) {
-        _selectedEmotion.value = emoji
+    fun selectEmotion(feeling: DiaryFeeling) {
+        _selectedEmotion.value = feeling
     }
 
-    fun selectWeather(emoji: String) {
-        _selectedWeather.value = emoji
+    fun selectWeather(weather: DiaryWeather) {
+        _selectedWeather.value = weather
     }
-
-    private val _imageUris = MutableStateFlow<List<Uri>>(emptyList())
-    val imageUris: StateFlow<List<Uri>> = _imageUris
-
-    private val _openGalleryEvent = MutableSharedFlow<Unit>()
-    val openGalleryEvent = _openGalleryEvent.asSharedFlow()
 
     fun addImage(uri: Uri) {
         _imageUris.update { it + uri }
@@ -77,8 +79,8 @@ class DiaryWriteViewModel @Inject constructor(
         val param = DiaryWriteRequestParam(
             title = _title.value,
             content = _content.value,
-            feeling = _selectedEmotion.value ?: "",
-            weather = _selectedWeather.value ?: "",
+            feeling = _selectedEmotion.value?.value ?: "",
+            weather = _selectedWeather.value?.value ?: "",
             date = date,
             picture = picture
         )

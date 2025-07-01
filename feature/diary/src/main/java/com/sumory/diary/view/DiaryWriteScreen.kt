@@ -4,9 +4,9 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -30,24 +30,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSavedStateRegistryOwner
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
 import com.sumory.design_system.component.textfield.SumoryTextField
 import com.sumory.design_system.component.toast.SumoryToast
 import com.sumory.design_system.icon.LeftArrowIcon
@@ -55,7 +49,10 @@ import com.sumory.design_system.icon.SaveIcon
 import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.diary.view.component.DiaryImagePickerSection
 import com.sumory.diary.viewmodel.DiaryWriteViewModel
+import com.sumory.diary.viewmodel.mapper.iconRes
 import com.sumory.diary.viewmodel.uistate.DiaryWriteUiState
+import com.sumory.model.type.DiaryFeeling
+import com.sumory.model.type.DiaryWeather
 import com.sumory.ui.DevicePreviews
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -166,7 +163,6 @@ fun DiaryWriteRoute(
         }
     }
 
-    // 실제 UI
     DiaryWriteScreen(
         date = displayDate,
         title = title,
@@ -196,18 +192,15 @@ fun DiaryWriteScreen(
     content: String,
     onContentChange: (String) -> Unit,
     onBackClick: () -> Unit,
-    selectedEmotion: String?,
-    onEmotionSelected: (String) -> Unit,
-    selectedWeather: String?,
-    onWeatherSelected: (String) -> Unit,
+    selectedEmotion: DiaryFeeling?,
+    onEmotionSelected: (DiaryFeeling) -> Unit,
+    selectedWeather: DiaryWeather?,
+    onWeatherSelected: (DiaryWeather) -> Unit,
     onSaveClick: () -> Unit,
     imageUris: List<Uri>,
     onAddImageClick: () -> Unit,
     onRemoveImageClick: (Uri) -> Unit,
 ) {
-    val emotionList = listOf("😊", "😢", "😳", "😠", "😆", "🤔")
-    val weatherList = listOf("🌞", "☁️", "🌧️", "❄️", "🌩️", "🌈")
-
     SumoryTheme { colors, typography ->
         Column(
             modifier = modifier
@@ -240,17 +233,13 @@ fun DiaryWriteScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     SaveIcon(
-                        modifier = modifier
-                            .size(18.dp),
+                        modifier = modifier.size(18.dp),
                         tint = colors.white
                     )
                 }
             }
 
-            Box(
-                modifier = modifier
-                    .padding(top = 30.dp)
-            ) {
+            Box(modifier = modifier.padding(top = 30.dp)) {
                 SumoryTextField(
                     textState = title,
                     placeHolder = "제목을 입력하세요",
@@ -260,60 +249,62 @@ fun DiaryWriteScreen(
                 )
             }
 
-            Text(
-                text = "감정",
-                style = typography.bodyBold1,
-                color = colors.black
-            )
+            Spacer(modifier = modifier.height(16.dp))
+
+            Text(text = "감정", style = typography.bodyBold1, color = colors.black)
             Spacer(modifier = modifier.height(8.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                emotionList.forEach { emoji ->
+                DiaryFeeling.values().forEach { feeling ->
                     Box(
                         modifier = modifier
                             .size(48.dp)
                             .clip(RoundedCornerShape(12.dp))
                             .background(
-                                if (selectedEmotion == emoji) colors.pinkSoftBackground else colors.white
+                                if (selectedEmotion == feeling) colors.pinkSoftBackground else colors.white
                             )
                             .border(
                                 1.dp,
-                                if (selectedEmotion == emoji) colors.main else colors.white,
+                                if (selectedEmotion == feeling) colors.main else colors.white,
                                 RoundedCornerShape(12.dp)
                             )
-                            .clickable { onEmotionSelected(emoji) },
+                            .clickable { onEmotionSelected(feeling) },
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(text = emoji, fontSize = 24.sp)
+                        Image(
+                            painter = painterResource(id = feeling.iconRes()),
+                            contentDescription = feeling.value,
+                            modifier = modifier.size(24.dp),
+                        )
                     }
                 }
             }
 
             Spacer(modifier = modifier.height(12.dp))
 
-            Text(
-                text = "날씨",
-                style = typography.bodyBold1,
-                color = colors.black
-            )
+            Text(text = "날씨", style = typography.bodyBold1, color = colors.black)
             Spacer(modifier = modifier.height(8.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                weatherList.forEach { emoji ->
+                DiaryWeather.values().forEach { weather ->
                     Box(
                         modifier = modifier
                             .size(48.dp)
                             .clip(RoundedCornerShape(12.dp))
                             .background(
-                                if (selectedWeather == emoji) colors.pinkSoftBackground else colors.white
+                                if (selectedWeather == weather) colors.pinkSoftBackground else colors.white
                             )
                             .border(
                                 1.dp,
-                                if (selectedWeather == emoji) colors.main else colors.white,
+                                if (selectedWeather == weather) colors.main else colors.white,
                                 RoundedCornerShape(12.dp)
                             )
-                            .clickable { onWeatherSelected(emoji) },
+                            .clickable { onWeatherSelected(weather) },
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(text = emoji, fontSize = 24.sp)
+                        Image(
+                            painter = painterResource(id = weather.iconRes()),
+                            contentDescription = weather.value,
+                            modifier = modifier.size(24.dp)
+                        )
                     }
                 }
             }
@@ -329,8 +320,7 @@ fun DiaryWriteScreen(
             Spacer(modifier = modifier.height(12.dp))
 
             SumoryTextField(
-                modifier = modifier
-                    .fillMaxHeight(),
+                modifier = modifier.fillMaxHeight(),
                 textState = content,
                 placeHolder = "오늘 하루는 어땠나요?",
                 focusText = "오늘 하루는 어땠나요?",
