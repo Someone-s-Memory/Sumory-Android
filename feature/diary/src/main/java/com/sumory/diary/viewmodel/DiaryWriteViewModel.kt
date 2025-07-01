@@ -47,24 +47,6 @@ class DiaryWriteViewModel @Inject constructor(
         _selectedWeather.value = emoji
     }
 
-    private val emotionMap = mapOf(
-        "😊" to "기쁨",
-        "😢" to "슬픔",
-        "😳" to "당황",
-        "😠" to "화남",
-        "😆" to "즐거움",
-        "🤔" to "생각중"
-    )
-
-    private val weatherMap = mapOf(
-        "🌞" to "맑음",
-        "☁️" to "구름",
-        "🌧️" to "비",
-        "❄️" to "눈",
-        "🌩️" to "천둥번개",
-        "🌈" to "무지개"
-    )
-
     private val _imageUris = MutableStateFlow<List<Uri>>(emptyList())
     val imageUris: StateFlow<List<Uri>> = _imageUris
 
@@ -95,8 +77,8 @@ class DiaryWriteViewModel @Inject constructor(
         val param = DiaryWriteRequestParam(
             title = _title.value,
             content = _content.value,
-            feeling = emotionMap[_selectedEmotion.value] ?: "",
-            weather = weatherMap[_selectedWeather.value] ?: "",
+            feeling = _selectedEmotion.value ?: "",
+            weather = _selectedWeather.value ?: "",
             date = date,
             picture = picture
         )
