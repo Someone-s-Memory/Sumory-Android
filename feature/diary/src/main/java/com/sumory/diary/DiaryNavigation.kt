@@ -68,7 +68,8 @@ fun NavGraphBuilder.diaryWriteScreen(
             selectedEmotion = "",
             onEmotionSelected = {},
             selectedWeather = "",
-            onWeatherSelected = {}
+            onWeatherSelected = {},
+            onSaveClick = {}
         )
     }
 }

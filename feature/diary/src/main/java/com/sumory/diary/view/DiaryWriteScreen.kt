@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sumory.design_system.component.textfield.SumoryTextField
 import com.sumory.design_system.icon.LeftArrowIcon
+import com.sumory.design_system.icon.SaveIcon
 import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.ui.DevicePreviews
 
@@ -43,7 +44,8 @@ fun DiaryWriteScreen(
     selectedEmotion: String?,
     onEmotionSelected: (String) -> Unit,
     selectedWeather: String?,
-    onWeatherSelected: (String) -> Unit
+    onWeatherSelected: (String) -> Unit,
+    onSaveClick: () -> Unit
 ) {
     val emotionList = listOf("😊", "😢", "😳", "😠", "😆", "🤔")
     val weatherList = listOf("🌞", "☁️", "🌧️", "❄️", "🌩️", "🌈")
@@ -71,7 +73,20 @@ fun DiaryWriteScreen(
                     color = colors.black
                 )
                 Spacer(modifier = modifier.weight(1f))
-                Spacer(modifier = modifier.width(24.dp)) // 아이콘 자리 맞춤
+                Box(
+                    modifier = modifier
+                        .size(24.dp)
+                        .clip(RoundedCornerShape(5.dp))
+                        .background(colors.darkPink)
+                        .clickable { onSaveClick() },
+                    contentAlignment = Alignment.Center
+                ) {
+                    SaveIcon(
+                        modifier = modifier
+                            .size(18.dp),
+                        tint = colors.white
+                    )
+                }
             }
 
             Box(
@@ -196,6 +211,7 @@ private fun DiaryWriteScreenPreview() {
         selectedEmotion = null,
         onEmotionSelected = {},
         selectedWeather = null,
-        onWeatherSelected = {}
+        onWeatherSelected = {},
+        onSaveClick = {}
     )
 }
