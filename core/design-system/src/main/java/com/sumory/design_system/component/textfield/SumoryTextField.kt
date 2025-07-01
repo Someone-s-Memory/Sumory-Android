@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,6 +39,7 @@ fun SumoryTextField(
     focusText: String = "",
     helperText: String = "",
     isError: Boolean = false,
+    singleLine: Boolean = true,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     onTextChange: (String) -> Unit,
     icon: @Composable () -> Unit
@@ -45,9 +48,11 @@ fun SumoryTextField(
         val interactionSource = remember { MutableInteractionSource() }
         var isFocused by remember { mutableStateOf(false) }
 
+        val scrollState = rememberScrollState()
+
         Column(modifier = modifier.fillMaxWidth()) {
             BasicTextField(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .border(
                         width = 1.dp,
@@ -55,20 +60,21 @@ fun SumoryTextField(
                         shape = RoundedCornerShape(size = 8.dp)
                     )
                     .padding(vertical = 14.dp, horizontal = 16.dp)
+                    .verticalScroll(scrollState)
                     .onFocusChanged { isFocused = it.isFocused },
                 value = textState,
                 onValueChange = onTextChange,
                 visualTransformation = visualTransformation,
-                singleLine = true,
+                singleLine = singleLine,
                 textStyle = typography.bodyRegular2.copy(color = colors.black),
                 interactionSource = interactionSource,
                 decorationBox = { innerTextField ->
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.Top
                     ) {
-                        Box(modifier = Modifier.weight(1f)) {
+                        Box(modifier = modifier.weight(1f)) {
                             if (textState.isEmpty()) {
                                 Text(
                                     text = if (isFocused) focusText else placeHolder,
