@@ -6,24 +6,30 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.sumory.diary.viewmodel.mapper.iconRes
+import com.sumory.diary.viewmodel.mapper.toDiaryFeeling
+import com.sumory.diary.viewmodel.mapper.toDiaryWeather
 import com.sumory.design_system.theme.SumoryTheme
-import com.sumory.model.entity.diary.DiaryListEntity
+import com.sumory.model.model.diary.DiaryAllResponseModel
 import com.sumory.ui.DevicePreviews
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiaryItem(
     modifier: Modifier = Modifier,
-    item: DiaryListEntity,
+    item: DiaryAllResponseModel,
     onClick: () -> Unit
 ) {
     SumoryTheme { colors, typography ->
@@ -44,15 +50,23 @@ fun DiaryItem(
                         color = colors.black,
                         style = typography.bodyBold1
                     )
+
                     Row {
-                        Text(
-                            text = item.emotionEmoji,
-                            style = typography.bodyBold1,
-                            )
+                        // 감정 아이콘
+                        val feelingEnum = item.feeling.toDiaryFeeling()
+                        Icon(
+                            painter = painterResource(id = feelingEnum.iconRes()),
+                            contentDescription = item.feeling,
+                            modifier = Modifier.size(24.dp)
+                        )
                         Spacer(modifier = modifier.width(4.dp))
-                        Text(
-                            text = item.weatherEmoji,
-                            style = typography.bodyBold1,
+
+                        // 날씨 아이콘
+                        val weatherEnum = item.weather.toDiaryWeather()
+                        Icon(
+                            painter = painterResource(id = weatherEnum.iconRes()),
+                            contentDescription = item.weather,
+                            modifier = Modifier.size(24.dp)
                         )
                     }
                 }
@@ -63,6 +77,15 @@ fun DiaryItem(
                     color = colors.gray500,
                     modifier = modifier.padding(vertical = 4.dp)
                 )
+
+                // content는 제목 아래에 한 줄 정도 보여줌 (원래 UI에는 없었으니 선택적으로 추가)
+                Text(
+                    text = item.content,
+                    style = typography.bodyRegular2,
+                    color = colors.gray700,
+                    maxLines = 1,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
             }
         }
     }
@@ -70,14 +93,18 @@ fun DiaryItem(
 
 @DevicePreviews
 @Composable
-private fun DiaryItemPreview(){
+private fun DiaryItemPreview() {
     DiaryItem(
-        item = DiaryListEntity(
+        item = DiaryAllResponseModel(
             id = 1,
             title = "즐거운 하루",
+            content = "오늘은 정말 행복했어요",
+            feeling = "행복",
+            weather = "맑음",
             date = "2025. 6. 10.",
-            emotionEmoji = "😊",
-            weatherEmoji = "☀️"),
-        onClick = {},
+            pictures = listOf("sample_image"),
+            userID = "user1"
+        ),
+        onClick = {}
     )
 }

@@ -4,6 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.sumory.diary.view.DiaryDetailScreen
 import com.sumory.diary.view.DiaryScreen
+import com.sumory.diary.view.DiaryScreenRoute
 import com.sumory.diary.view.DiaryWriteRoute
 import com.sumory.diary.view.DiaryWriteScreen
 import com.sumory.model.entity.diary.DiaryListEntity
@@ -16,19 +17,7 @@ fun NavGraphBuilder.diaryScreen(
     onDiaryClick: (Int) -> Unit
 ) {
     composable(diaryRoute) {
-        val dummyList = listOf(
-            DiaryListEntity(1,"즐거운 하루", "2025. 6. 10.", "😊", "☀️"),
-            DiaryListEntity(2,"비 오는 날", "2025. 6. 8.", "😐", "🌧️"),
-            DiaryListEntity(3, "행복한 순간", "2025. 6. 5.", "😄", "☀️"),
-            DiaryListEntity(4,"즐거운 하루", "2025. 6. 10.", "😊", "☀️"),
-            DiaryListEntity(5,"비 오는 날", "2025. 6. 8.", "😐", "🌧️"),
-            DiaryListEntity(6, "행복한 순간", "2025. 6. 5.", "😄", "☀️"),
-            DiaryListEntity(7,"즐거운 하루", "2025. 6. 10.", "😊", "☀️"),
-            DiaryListEntity(8,"비 오는 날", "2025. 6. 8.", "😐", "🌧️"),
-            DiaryListEntity(9, "행복한 순간", "2025. 6. 5.", "😄", "☀️"),
-        )
-        DiaryScreen(
-            diaryItems = dummyList,
+        DiaryScreenRoute(
             onDiaryClick = onDiaryClick
         )
     }

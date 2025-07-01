@@ -2,6 +2,7 @@ package com.sumory.diary.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,22 +12,59 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sumory.design_system.icon.FilterIcon
 import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.diary.view.component.DiaryItem
+import com.sumory.diary.viewmodel.DiaryViewModel
 import com.sumory.model.entity.diary.DiaryListEntity
+import com.sumory.model.model.diary.DiaryAllResponseModel
 import com.sumory.ui.DevicePreviews
+
+@Composable
+fun DiaryScreenRoute(
+    viewModel: DiaryViewModel = hiltViewModel(),
+    onDiaryClick: (Int) -> Unit
+) {
+    val diaryList by viewModel.diaryList.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
+
+    when {
+        isLoading -> {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        }
+
+        errorMessage != null -> {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(text = errorMessage ?: "오류가 발생했습니다")
+            }
+        }
+
+        else -> {
+            DiaryScreen(
+                diaryItems = diaryList,
+                onDiaryClick = onDiaryClick
+            )
+        }
+    }
+}
 
 @Composable
 fun DiaryScreen(
     modifier: Modifier = Modifier,
-    diaryItems: List<DiaryListEntity>,
+    diaryItems: List<DiaryAllResponseModel>,  // 변경
     onDiaryClick: (Int) -> Unit
 ) {
     SumoryTheme { colors, typography ->
@@ -56,8 +94,7 @@ fun DiaryScreen(
 
             if (diaryItems.isEmpty()) {
                 Column(
-                    modifier = modifier
-                        .fillMaxSize(),
+                    modifier = modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -86,15 +123,40 @@ fun DiaryScreen(
     }
 }
 
-
 @DevicePreviews
 @Composable
-private fun DiaryScreenPreview(){
-
+private fun DiaryScreenPreview() {
     val dummyList = listOf(
-        DiaryListEntity(1,"즐거운 하루", "2025. 6. 10.", "😊", "☀️"),
-        DiaryListEntity(2,"비 오는 날", "2025. 6. 8.", "😐", "🌧️"),
-        DiaryListEntity(3, "행복한 순간", "2025. 6. 5.", "😄", "☀️")
+        DiaryAllResponseModel(
+            id = 1,
+            title = "즐거운 하루",
+            content = "오늘은 정말 행복했어요",
+            feeling = "행복",
+            weather = "맑음",
+            date = "2025. 6. 10.",
+            pictures = listOf("sample1"),
+            userID = "user1"
+        ),
+        DiaryAllResponseModel(
+            id = 2,
+            title = "비 오는 날",
+            content = "조금 우울했지만 괜찮았어요",
+            feeling = "슬픔",
+            weather = "비",
+            date = "2025. 6. 8.",
+            pictures = listOf("sample2"),
+            userID = "user1"
+        ),
+        DiaryAllResponseModel(
+            id = 3,
+            title = "행복한 순간",
+            content = "가족과 함께한 시간",
+            feeling = "행복",
+            weather = "맑음",
+            date = "2025. 6. 5.",
+            pictures = listOf("sample3"),
+            userID = "user1"
+        ),
     )
 
     DiaryScreen(
