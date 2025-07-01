@@ -64,7 +64,7 @@ fun DiaryScreenRoute(
 @Composable
 fun DiaryScreen(
     modifier: Modifier = Modifier,
-    diaryItems: List<DiaryAllResponseModel>,  // 변경
+    diaryItems: List<DiaryAllResponseModel>,
     onDiaryClick: (Int) -> Unit
 ) {
     SumoryTheme { colors, typography ->

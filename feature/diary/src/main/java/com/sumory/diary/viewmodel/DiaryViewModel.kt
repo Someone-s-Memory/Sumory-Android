@@ -39,7 +39,8 @@ class DiaryViewModel @Inject constructor(
                         _diaryList.value = list
                     }
             } catch (e: Exception) {
-                _errorMessage.value = e.message ?: "오류가 발생했습니다"
+                _diaryList.value = emptyList()
+                _errorMessage.value = null
             } finally {
                 _isLoading.value = false
             }
