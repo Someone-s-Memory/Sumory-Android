@@ -2,7 +2,6 @@ package com.sumory.network.datasource.diary
 
 import com.sumory.datastore.auth.TokenDataStore
 import com.sumory.network.api.DiaryApi
-import com.sumory.network.dto.diary.request.DateDiaryRequest
 import com.sumory.network.dto.diary.request.DiaryWriteRequest
 import com.sumory.network.dto.diary.response.AllDiaryResponse
 import com.sumory.network.dto.diary.response.DateDiaryResponse
@@ -25,12 +24,12 @@ class DiaryDataSourceImpl @Inject constructor(
             )
         }
 
-    override fun getDateDiary(body: DateDiaryRequest): Flow<List<DateDiaryResponse>> =
+    override fun getDateDiary(date: String): Flow<List<DateDiaryResponse>> =
         performApiRequest {
             val token = tokenDataStore.accessToken.firstOrNull() ?: ""
             api.getDateDiary(
                 token = "Bearer $token",
-                body = body
+                date = date
             )
         }
 

@@ -1,23 +1,40 @@
-package com.sumory.calendar.view
+package com.sumory.diary.view
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.sumory.calendar.view.component.CalendarDiaryItem
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sumory.design_system.icon.EditIcon
 import com.sumory.design_system.theme.SumoryTheme
-import com.sumory.model.entity.calendar.CalendarDiaryListEntity
+import com.sumory.diary.view.component.CalendarDiaryItem
+import com.sumory.model.mapper.diary.toCalendarDiaryListEntity
+import com.sumory.model.model.diary.DateDiaryResponseModel
 import com.sumory.ui.DevicePreviews
 import java.time.LocalDate
 import java.time.YearMonth
@@ -28,27 +45,31 @@ data class CalendarDateState(
     val isSelected: Boolean,
     val isToday: Boolean,
     val hasDiary: Boolean,
-    val emoji: String = ""
+    val feeling: String = ""
 )
 
 @Composable
 fun CalendarRoute(
-    modifier: Modifier = Modifier,
+    viewModel: com.sumory.diary.viewmodel.CalendarViewModel = hiltViewModel(),
     onDiaryClick: (Int) -> Unit,
     onWriteClick: () -> Unit
 ) {
-    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+    val diaryList by viewModel.diaryList.collectAsState()
+    val selectedDate by viewModel.selectedDate
+
     val currentMonth = YearMonth.now()
     val today = LocalDate.now()
 
-    // 샘플 데이터 (실제 프로젝트에선 ViewModel로부터 주입)
-    val diaryList = listOf(
-        CalendarDiaryListEntity(1, "산책", "날씨 좋아서 산책", "😍", "☀️", LocalDate.of(2025, 6, 6)),
-        CalendarDiaryListEntity(2, "비 오는 날", "집에만 있었음", "😐", "🌧️", LocalDate.of(2025, 6, 9)),
-        CalendarDiaryListEntity(3, "카페에서", "회고", "😊", "☀️", LocalDate.of(2025, 6, 11))
-    )
-
-    val diaryMap = diaryList.groupBy { it.date }
+    // diaryList -> Map<LocalDate, List<DateDiaryResponseModel>>
+    val diaryMap = diaryList
+        .mapNotNull {
+            try {
+                LocalDate.parse(it.date) to it
+            } catch (e: Exception) {
+                null
+            }
+        }
+        .groupBy({ it.first }, { it.second })
 
     val calendarDays = generateCalendarDates(currentMonth)
 
@@ -60,7 +81,7 @@ fun CalendarRoute(
                 isSelected = date == selectedDate,
                 isToday = date == today,
                 hasDiary = hasDiary,
-                emoji = if (hasDiary) diaryMap[date]?.firstOrNull()?.emotionEmoji.orEmpty() else ""
+                feeling = if (hasDiary) diaryMap[date]?.firstOrNull()?.feeling.orEmpty() else ""
             )
         }
     }
@@ -68,13 +89,12 @@ fun CalendarRoute(
     val consecutiveDays = 3
 
     CalendarScreen(
-        modifier = modifier,
         currentMonth = currentMonth,
         selectedDate = selectedDate,
         weeks = weeks,
         diariesOfSelectedDate = diaryMap[selectedDate].orEmpty(),
         consecutiveDays = consecutiveDays,
-        onDateSelected = { selectedDate = it },
+        onDateSelected = viewModel::onDateSelected,
         onDiaryClick = onDiaryClick,
         onWriteClick = onWriteClick
     )
@@ -86,7 +106,7 @@ fun CalendarScreen(
     currentMonth: YearMonth,
     selectedDate: LocalDate,
     weeks: List<List<CalendarDateState>>,
-    diariesOfSelectedDate: List<CalendarDiaryListEntity>,
+    diariesOfSelectedDate: List<DateDiaryResponseModel>,
     consecutiveDays: Int,
     onDateSelected: (LocalDate) -> Unit,
     onDiaryClick: (Int) -> Unit,
@@ -94,9 +114,7 @@ fun CalendarScreen(
 ) {
     SumoryTheme { colors, typography ->
         Column(
-            modifier
-                .fillMaxSize()
-                .background(colors.white)
+            modifier.fillMaxSize().background(colors.white)
         ) {
             Row(
                 modifier = modifier
@@ -124,9 +142,7 @@ fun CalendarScreen(
             }
 
             Row(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp)
+                modifier = modifier.fillMaxWidth().padding(horizontal = 8.dp)
             ) {
                 listOf("일", "월", "화", "수", "목", "금", "토").forEach {
                     Text(
@@ -152,9 +168,7 @@ fun CalendarScreen(
                         }
 
                         BoxWithConstraints(
-                            modifier = modifier
-                                .weight(1f)
-                                .padding(2.dp),
+                            modifier = modifier.weight(1f).padding(2.dp),
                             contentAlignment = Alignment.Center
                         ) {
                             val size = maxWidth.coerceAtMost(90.dp)
@@ -162,17 +176,9 @@ fun CalendarScreen(
                                 modifier = modifier
                                     .size(size)
                                     .clip(RoundedCornerShape(12.dp))
-                                    .background(
-                                        if (dayState.isSelected) colors.pinkSoftBackground else colors.white
-                                    )
-                                    .then(
-                                        if (border != null)
-                                            modifier.border(border, RoundedCornerShape(12.dp))
-                                        else modifier
-                                    )
-                                    .clickable(enabled = date != null) {
-                                        date?.let { onDateSelected(it) }
-                                    },
+                                    .background(if (dayState.isSelected) colors.pinkSoftBackground else colors.white)
+                                    .then(if (border != null) modifier.border(border, RoundedCornerShape(12.dp)) else modifier)
+                                    .clickable(enabled = date != null) { date?.let { onDateSelected(it) } },
                                 contentAlignment = Alignment.Center
                             ) {
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -182,7 +188,7 @@ fun CalendarScreen(
                                         color = colors.black
                                     )
                                     if (dayState.hasDiary) {
-                                        Text(dayState.emoji, fontSize = 12.sp)
+                                        Text(dayState.feeling, fontSize = 12.sp)
                                     }
                                 }
                             }
@@ -194,14 +200,10 @@ fun CalendarScreen(
             Spacer(modifier.height(16.dp))
 
             Column(
-                modifier = modifier.fillMaxSize(),
+                modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Box(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                ) {
+                Box(modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
                     Text(
                         text = "${selectedDate.year}. ${selectedDate.monthValue}. ${selectedDate.dayOfMonth}",
                         style = typography.titleBold2,
@@ -209,9 +211,7 @@ fun CalendarScreen(
                         modifier = modifier.align(Alignment.Center)
                     )
                     EditIcon(
-                        modifier = modifier
-                            .align(Alignment.CenterEnd)
-                            .clickable { onWriteClick() },
+                        modifier = modifier.align(Alignment.CenterEnd).clickable { onWriteClick() },
                         tint = colors.black
                     )
                 }
@@ -220,12 +220,12 @@ fun CalendarScreen(
 
                 if (diariesOfSelectedDate.isNotEmpty()) {
                     Column(
-                        modifier = modifier.padding(horizontal = 16.dp),
+                        modifier.padding(horizontal = 16.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         diariesOfSelectedDate.forEach { diary ->
                             CalendarDiaryItem(
-                                item = diary,
+                                item = diary.toCalendarDiaryListEntity(),
                                 onClick = { onDiaryClick(diary.id) }
                             )
                         }
@@ -246,7 +246,7 @@ fun CalendarScreen(
 fun generateCalendarDates(yearMonth: YearMonth): List<LocalDate?> {
     val firstDay = yearMonth.atDay(1)
     val daysInMonth = yearMonth.lengthOfMonth()
-    val startOffset = (firstDay.dayOfWeek.value % 7)
+    val startOffset = (firstDay.dayOfWeek.value % 7) // 일요일이 0
     val totalCells = ceil((startOffset + daysInMonth) / 7.0).toInt() * 7
 
     return buildList {
@@ -264,11 +264,13 @@ private fun CalendarScreenPreview() {
     var selectedDate by remember { mutableStateOf(today) }
 
     val dummyList = listOf(
-        CalendarDiaryListEntity(1, "산책", "날씨 좋아서 산책", "😍", "☀️", LocalDate.of(2025, 6, 6)),
-        CalendarDiaryListEntity(2, "비 오는 날", "집에만 있었음", "😐", "🌧️", LocalDate.of(2025, 6, 9)),
-        CalendarDiaryListEntity(3, "카페에서", "회고", "😊", "☀️", LocalDate.of(2025, 6, 11))
+        DateDiaryResponseModel(1, "산책", "날씨 좋아서 산책", "기쁜", "맑음", "2025-06-26", emptyList(), "user1"),
+        DateDiaryResponseModel(2, "비 오는 날", "집에만 있었음", "😐", "🌧️", "2025-06-09", emptyList(), "user1"),
+        DateDiaryResponseModel(3, "카페에서", "회고", "😊", "☀️", "2025-06-11", emptyList(), "user1")
     )
-    val diaryMap = dummyList.groupBy { it.date }
+    val diaryMap = dummyList
+        .mapNotNull { try { LocalDate.parse(it.date) to it } catch (_: Exception) { null } }
+        .groupBy({ it.first }, { it.second })
 
     val weeks = generateCalendarDates(currentMonth).chunked(7).map { week ->
         week.map { date ->
@@ -278,7 +280,7 @@ private fun CalendarScreenPreview() {
                 isSelected = date == selectedDate,
                 isToday = date == today,
                 hasDiary = hasDiary,
-                emoji = if (hasDiary) diaryMap[date]?.firstOrNull()?.emotionEmoji.orEmpty() else ""
+                feeling = if (hasDiary) diaryMap[date]?.firstOrNull()?.feeling.orEmpty() else ""
             )
         }
     }

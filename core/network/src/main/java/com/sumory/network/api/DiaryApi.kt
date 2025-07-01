@@ -1,6 +1,5 @@
 package com.sumory.network.api
 
-import com.sumory.network.dto.diary.request.DateDiaryRequest
 import com.sumory.network.dto.diary.request.DiaryWriteRequest
 import com.sumory.network.dto.diary.response.AllDiaryResponse
 import com.sumory.network.dto.diary.response.DateDiaryResponse
@@ -9,6 +8,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface DiaryApi {
 
@@ -22,7 +22,7 @@ interface DiaryApi {
     @GET("diary")
     suspend fun getDateDiary(
         @Header("Authorization") token: String,
-        @Body body: DateDiaryRequest
+        @Query("date") date: String
     ): List<DateDiaryResponse>
 
     @GET("diary/all")

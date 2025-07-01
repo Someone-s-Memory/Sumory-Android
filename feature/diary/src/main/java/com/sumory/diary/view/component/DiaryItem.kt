@@ -18,10 +18,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.sumory.diary.viewmodel.mapper.iconRes
-import com.sumory.diary.viewmodel.mapper.toDiaryFeeling
-import com.sumory.diary.viewmodel.mapper.toDiaryWeather
 import com.sumory.design_system.theme.SumoryTheme
+import com.sumory.diary.viewmodel.mapper.iconRes
+import com.sumory.model.mapper.diary.toDiaryFeeling
+import com.sumory.model.mapper.diary.toDiaryWeather
 import com.sumory.model.model.diary.AllDiaryResponseModel
 import com.sumory.ui.DevicePreviews
 

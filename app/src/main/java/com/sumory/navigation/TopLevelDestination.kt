@@ -1,6 +1,6 @@
 package com.sumory.navigation
 
-import com.sumory.calendar.calendarRoute
+import com.sumory.diary.calendarRoute
 import com.sumory.home.homeRoute
 import com.sumory.design_system.R
 import com.sumory.diary.diaryRoute

@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
-import com.sumory.calendar.calendarScreen
+import com.sumory.diary.calendarScreen
 import com.sumory.diary.diaryDeatilScreen
 import com.sumory.diary.diaryDetailRoute
 import com.sumory.diary.diaryScreen
