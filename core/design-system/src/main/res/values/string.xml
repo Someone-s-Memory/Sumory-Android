@@ -16,4 +16,5 @@
     <string name="right_arrow_description">오른쪽 화살표 아이콘</string>
     <string name="add_description">추가 아이콘</string>
     <string name="edit_description">수정 아이콘</string>
+    <string name="save_description">저장 아이콘</string>
 </resources>

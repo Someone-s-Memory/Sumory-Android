@@ -190,6 +190,19 @@ fun EditIcon(
 }
 
 @Composable
+fun SaveIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+){
+    Icon(
+        painter = painterResource(id = R.drawable.ic_save),
+        contentDescription = stringResource(id = R.string.save_description),
+        modifier = modifier,
+        tint = tint
+    )
+}
+
+@Composable
 fun EyeIcon(
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
