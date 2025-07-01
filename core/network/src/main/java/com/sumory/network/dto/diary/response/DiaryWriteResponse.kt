@@ -5,5 +5,5 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class DiaryWriteResponse(
-    @Json(name = "message") val success: String,
+    @Json(name = "message") val message: String,
 )
