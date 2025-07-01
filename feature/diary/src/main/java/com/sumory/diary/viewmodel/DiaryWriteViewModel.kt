@@ -79,7 +79,7 @@ class DiaryWriteViewModel @Inject constructor(
                 diaryRepository.diaryWrite(param)
                 _diaryWriteState.value = DiaryWriteUiState.Success
             } catch (e: Exception) {
-                _diaryWriteState.value = DiaryWriteUiState.Error(e.localizedMessage ?: "알 수 없는 오류 발생")
+                _diaryWriteState.value = DiaryWriteUiState.Error(e.localizedMessage ?: "일기 저장에 실패하였습니다.")
             }
         }
     }
