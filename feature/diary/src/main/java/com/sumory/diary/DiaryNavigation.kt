@@ -4,6 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.sumory.diary.view.DiaryDetailScreen
 import com.sumory.diary.view.DiaryScreen
+import com.sumory.diary.view.DiaryWriteRoute
 import com.sumory.diary.view.DiaryWriteScreen
 import com.sumory.model.entity.diary.DiaryListEntity
 
@@ -55,21 +56,13 @@ fun NavGraphBuilder.diaryDeatilScreen(
 }
 
 fun NavGraphBuilder.diaryWriteScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onDiarySavedSuccess: () -> Unit
 ) {
     composable(diaryWriteRoute) {
-        DiaryWriteScreen(
-            date = "2025년 6월 10일 화요일",
+        DiaryWriteRoute(
             onBackClick = onBackClick,
-            title = "",
-            onTitleChange = {},
-            content = "",
-            onContentChange = {},
-            selectedEmotion = "",
-            onEmotionSelected = {},
-            selectedWeather = "",
-            onWeatherSelected = {},
-            onSaveClick = {}
+            onDiarySavedSuccess = onDiarySavedSuccess
         )
     }
 }

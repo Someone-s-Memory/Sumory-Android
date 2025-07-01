@@ -118,6 +118,9 @@ fun SumoryNavHost(
         diaryWriteScreen(
             onBackClick = {
                 navController.popBackStack()
+            },
+            onDiarySavedSuccess = {
+                navController.popBackStack()
             }
         )
     }
