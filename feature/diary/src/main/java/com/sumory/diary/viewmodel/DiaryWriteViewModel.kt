@@ -76,8 +76,9 @@ class DiaryWriteViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                diaryRepository.diaryWrite(param)
-                _diaryWriteState.value = DiaryWriteUiState.Success
+                diaryRepository.diaryWrite(param).collect {
+                    _diaryWriteState.value = DiaryWriteUiState.Success
+                }
             } catch (e: Exception) {
                 _diaryWriteState.value = DiaryWriteUiState.Error(e.localizedMessage ?: "일기 저장에 실패하였습니다.")
             }
