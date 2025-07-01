@@ -26,8 +26,7 @@ import com.sumory.design_system.icon.FilterIcon
 import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.diary.view.component.DiaryItem
 import com.sumory.diary.viewmodel.DiaryViewModel
-import com.sumory.model.entity.diary.DiaryListEntity
-import com.sumory.model.model.diary.DiaryAllResponseModel
+import com.sumory.model.model.diary.AllDiaryResponseModel
 import com.sumory.ui.DevicePreviews
 
 @Composable
@@ -64,7 +63,7 @@ fun DiaryScreenRoute(
 @Composable
 fun DiaryScreen(
     modifier: Modifier = Modifier,
-    diaryItems: List<DiaryAllResponseModel>,
+    diaryItems: List<AllDiaryResponseModel>,
     onDiaryClick: (Int) -> Unit
 ) {
     SumoryTheme { colors, typography ->
@@ -127,7 +126,7 @@ fun DiaryScreen(
 @Composable
 private fun DiaryScreenPreview() {
     val dummyList = listOf(
-        DiaryAllResponseModel(
+        AllDiaryResponseModel(
             id = 1,
             title = "즐거운 하루",
             content = "오늘은 정말 행복했어요",
@@ -137,7 +136,7 @@ private fun DiaryScreenPreview() {
             pictures = listOf("sample1"),
             userID = "user1"
         ),
-        DiaryAllResponseModel(
+        AllDiaryResponseModel(
             id = 2,
             title = "비 오는 날",
             content = "조금 우울했지만 괜찮았어요",
@@ -147,7 +146,7 @@ private fun DiaryScreenPreview() {
             pictures = listOf("sample2"),
             userID = "user1"
         ),
-        DiaryAllResponseModel(
+        AllDiaryResponseModel(
             id = 3,
             title = "행복한 순간",
             content = "가족과 함께한 시간",

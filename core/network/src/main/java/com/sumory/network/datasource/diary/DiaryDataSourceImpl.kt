@@ -3,7 +3,7 @@ package com.sumory.network.datasource.diary
 import com.sumory.datastore.auth.TokenDataStore
 import com.sumory.network.api.DiaryApi
 import com.sumory.network.dto.diary.request.DiaryWriteRequest
-import com.sumory.network.dto.diary.response.DiaryAllResponse
+import com.sumory.network.dto.diary.response.AllDiaryResponse
 import com.sumory.network.dto.diary.response.DiaryWriteResponse
 import com.sumory.network.util.performApiRequest
 import kotlinx.coroutines.flow.Flow
@@ -23,10 +23,10 @@ class DiaryDataSourceImpl @Inject constructor(
             )
         }
 
-    override fun getDiaryAll(): Flow<List<DiaryAllResponse>> =
+    override fun getAllDiary(): Flow<List<AllDiaryResponse>> =
         performApiRequest {
             val token = tokenDataStore.accessToken.firstOrNull() ?: ""
-            api.getDiaryAll(
+            api.getAllDiary(
                 token = "Bearer $token"
             )
         }

@@ -22,14 +22,14 @@ import com.sumory.diary.viewmodel.mapper.iconRes
 import com.sumory.diary.viewmodel.mapper.toDiaryFeeling
 import com.sumory.diary.viewmodel.mapper.toDiaryWeather
 import com.sumory.design_system.theme.SumoryTheme
-import com.sumory.model.model.diary.DiaryAllResponseModel
+import com.sumory.model.model.diary.AllDiaryResponseModel
 import com.sumory.ui.DevicePreviews
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiaryItem(
     modifier: Modifier = Modifier,
-    item: DiaryAllResponseModel,
+    item: AllDiaryResponseModel,
     onClick: () -> Unit
 ) {
     SumoryTheme { colors, typography ->
@@ -95,7 +95,7 @@ fun DiaryItem(
 @Composable
 private fun DiaryItemPreview() {
     DiaryItem(
-        item = DiaryAllResponseModel(
+        item = AllDiaryResponseModel(
             id = 1,
             title = "즐거운 하루",
             content = "오늘은 정말 행복했어요",

@@ -3,7 +3,7 @@ package com.sumory.diary.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sumory.data.repository.diary.DiaryRepository
-import com.sumory.model.model.diary.DiaryAllResponseModel
+import com.sumory.model.model.diary.AllDiaryResponseModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,8 +15,8 @@ class DiaryViewModel @Inject constructor(
     private val diaryRepository: DiaryRepository
 ) : ViewModel() {
 
-    private val _diaryList = MutableStateFlow<List<DiaryAllResponseModel>>(emptyList())
-    val diaryList: StateFlow<List<DiaryAllResponseModel>> = _diaryList
+    private val _diaryList = MutableStateFlow<List<AllDiaryResponseModel>>(emptyList())
+    val diaryList: StateFlow<List<AllDiaryResponseModel>> = _diaryList
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
@@ -33,7 +33,7 @@ class DiaryViewModel @Inject constructor(
             _isLoading.value = true
             _errorMessage.value = null
             try {
-                val list = diaryRepository.getDiaryAll(forceRefresh)
+                val list = diaryRepository.getAllDiary(forceRefresh)
                 _diaryList.value = list
             } catch (e: Exception) {
                 _diaryList.value = emptyList()

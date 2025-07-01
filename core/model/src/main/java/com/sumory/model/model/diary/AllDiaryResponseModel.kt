@@ -1,6 +1,6 @@
 package com.sumory.model.model.diary
 
-data class DiaryAllResponseModel (
+data class AllDiaryResponseModel (
     val id: Int,
     val title: String,
     val content: String,
