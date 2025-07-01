@@ -62,7 +62,13 @@ fun NavGraphBuilder.diaryWriteScreen(
             date = "2025년 6월 10일 화요일",
             onBackClick = onBackClick,
             title = "",
-            onTitleChange = {}
+            onTitleChange = {},
+            content = "",
+            onContentChange = {},
+            selectedEmotion = "",
+            onEmotionSelected = {},
+            selectedWeather = "",
+            onWeatherSelected = {}
         )
     }
 }
