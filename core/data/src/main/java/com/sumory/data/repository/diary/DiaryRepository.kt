@@ -7,5 +7,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface DiaryRepository {
     suspend fun diaryWrite(body: DiaryWriteRequestParam): Flow<DiaryWriteResponseModel>
-    suspend fun getDiaryAll(): Flow<List<DiaryAllResponseModel>>
+    suspend fun getDiaryAll(forceRefresh: Boolean = false): List<DiaryAllResponseModel>
 }

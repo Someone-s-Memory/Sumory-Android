@@ -28,16 +28,13 @@ class DiaryViewModel @Inject constructor(
         fetchDiaries()
     }
 
-    fun fetchDiaries() {
+    fun fetchDiaries(forceRefresh: Boolean = false) {
         viewModelScope.launch {
             _isLoading.value = true
             _errorMessage.value = null
-
             try {
-                diaryRepository.getDiaryAll()
-                    .collect { list ->
-                        _diaryList.value = list
-                    }
+                val list = diaryRepository.getDiaryAll(forceRefresh)
+                _diaryList.value = list
             } catch (e: Exception) {
                 _diaryList.value = emptyList()
                 _errorMessage.value = null
