@@ -53,7 +53,6 @@ fun SumoryTextField(
         Column(modifier = modifier.fillMaxWidth()) {
             BasicTextField(
                 modifier = modifier
-                    .fillMaxWidth()
                     .border(
                         width = 1.dp,
                         color = if (isError) colors.error else colors.gray100,
@@ -70,11 +69,11 @@ fun SumoryTextField(
                 interactionSource = interactionSource,
                 decorationBox = { innerTextField ->
                     Row(
-                        modifier = modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.Top
                     ) {
-                        Box(modifier = modifier.weight(1f)) {
+                        Box(modifier = Modifier.weight(1f)) {
                             if (textState.isEmpty()) {
                                 Text(
                                     text = if (isFocused) focusText else placeHolder,
