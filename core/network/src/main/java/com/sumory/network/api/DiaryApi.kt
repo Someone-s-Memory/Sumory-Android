@@ -5,6 +5,7 @@ import com.sumory.network.dto.diary.response.DiaryAllResponse
 import com.sumory.network.dto.diary.response.DiaryWriteResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface DiaryApi {
@@ -14,5 +15,7 @@ interface DiaryApi {
     ): DiaryWriteResponse
 
     @GET("diary/all")
-    suspend fun getDiaryAll(): List<DiaryAllResponse>
+    suspend fun getDiaryAll(
+        @Header("Authorization") token: String
+    ): List<DiaryAllResponse>
 }
