@@ -1,6 +1,5 @@
 package com.sumory.diary.view
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -18,7 +17,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,10 +27,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.LocalSavedStateRegistryOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import com.sumory.design_system.component.textfield.SumoryTextField
+import com.sumory.design_system.component.toast.SumoryToast
 import com.sumory.design_system.icon.LeftArrowIcon
 import com.sumory.design_system.icon.SaveIcon
 import com.sumory.design_system.theme.SumoryTheme
@@ -50,6 +52,9 @@ fun DiaryWriteRoute(
     viewModel: DiaryWriteViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val viewModelStoreOwner = LocalViewModelStoreOwner.current
+    val savedStateRegistryOwner = LocalSavedStateRegistryOwner.current
 
     val today = LocalDate.now()
     val apiDate = today.format(DateTimeFormatter.ISO_DATE) // "yyyy-MM-dd"
@@ -69,11 +74,13 @@ fun DiaryWriteRoute(
             }
 
             is DiaryWriteUiState.Error -> {
-                Toast.makeText(
-                    context,
-                    (writeState as DiaryWriteUiState.Error).message,
-                    Toast.LENGTH_SHORT
-                ).show()
+                SumoryToast(context = context).showToast(
+                    message = (writeState as DiaryWriteUiState.Error).message,
+                    duration = 1000,
+                    lifecycleOwner = lifecycleOwner,
+                    viewModelStoreOwner = viewModelStoreOwner!!,
+                    savedStateRegistryOwner = savedStateRegistryOwner
+                )
                 viewModel.resetWriteState()
             }
 
