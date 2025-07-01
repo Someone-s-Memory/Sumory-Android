@@ -92,6 +92,27 @@ class DiaryWriteViewModel @Inject constructor(
     }
 
     fun postDiary(date: String, context: Context) {
+        // 1. 유효성 검사
+        when {
+            _title.value.isBlank() -> {
+                _diaryWriteState.value = DiaryWriteUiState.Error("제목을 입력해주세요.")
+                return
+            }
+            _content.value.isBlank() -> {
+                _diaryWriteState.value = DiaryWriteUiState.Error("내용을 입력해주세요.")
+                return
+            }
+            _selectedEmotion.value == null -> {
+                _diaryWriteState.value = DiaryWriteUiState.Error("감정을 선택해주세요.")
+                return
+            }
+            _selectedWeather.value == null -> {
+                _diaryWriteState.value = DiaryWriteUiState.Error("날씨를 선택해주세요.")
+                return
+            }
+        }
+
+        // 2. 이미지 경로 변환
         val picturePaths = _imageUris.value.mapNotNull { uri ->
             val path = getRealPathFromUri(context, uri)
             if (path != null && File(path).exists()) path else null
@@ -112,10 +133,11 @@ class DiaryWriteViewModel @Inject constructor(
                     _diaryWriteState.value = DiaryWriteUiState.Success
                 }
             } catch (e: Exception) {
-                _diaryWriteState.value = DiaryWriteUiState.Error("일기 저장 실패: ${e.message}")
+                _diaryWriteState.value = DiaryWriteUiState.Error("동일한 제목이 있습니다. 다른 제목을 사용해주세요.")
             }
         }
     }
+
 
     fun resetWriteState() {
         _diaryWriteState.value = DiaryWriteUiState.Idle
