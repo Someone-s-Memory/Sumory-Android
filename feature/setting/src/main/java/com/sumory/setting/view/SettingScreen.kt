@@ -1,6 +1,5 @@
 package com.sumory.setting.view
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,9 +16,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.LocalSavedStateRegistryOwner
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import com.sumory.design_system.component.dialog.SumoryDialog
+import com.sumory.design_system.component.toast.SumoryToast
 import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.setting.view.component.SettingItem
 import com.sumory.setting.viewmodel.SettingViewModel
@@ -36,6 +39,9 @@ fun SettingRoute(
     var showDialog by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val viewModelStoreOwner = LocalViewModelStoreOwner.current
+    val savedStateRegistryOwner = LocalSavedStateRegistryOwner.current
 
     LaunchedEffect(signOutState) {
         when (signOutState) {
@@ -44,8 +50,13 @@ fun SettingRoute(
                 viewModel.resetSignOutState()
             }
             is SignOutUiState.Error -> {
-                Toast.makeText(context, (signOutState as SignOutUiState.Error).message, Toast.LENGTH_SHORT).show()
-                viewModel.resetSignOutState()
+                SumoryToast(context = context).showToast(
+                    message = (signOutState as SignOutUiState.Error).message,
+                    duration = 1000,
+                    lifecycleOwner = lifecycleOwner,
+                    viewModelStoreOwner = viewModelStoreOwner!!,
+                    savedStateRegistryOwner = savedStateRegistryOwner
+                )
             }
             else -> Unit
         }
