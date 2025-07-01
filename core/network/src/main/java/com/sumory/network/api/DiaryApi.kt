@@ -11,6 +11,7 @@ import retrofit2.http.POST
 interface DiaryApi {
     @POST("diary/write")
     suspend fun diaryWrite(
+        @Header("Authorization") token: String,
         @Body body: DiaryWriteRequest
     ): DiaryWriteResponse
 

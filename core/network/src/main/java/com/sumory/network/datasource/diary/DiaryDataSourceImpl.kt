@@ -15,7 +15,13 @@ class DiaryDataSourceImpl @Inject constructor(
     private val tokenDataStore: TokenDataStore
 ): DiaryDataSource {
     override fun diaryWrite (body: DiaryWriteRequest): Flow<DiaryWriteResponse> =
-        performApiRequest { api.diaryWrite(body = body) }
+        performApiRequest {
+            val token = tokenDataStore.accessToken.firstOrNull() ?: ""
+            api.diaryWrite(
+                token = "Bearer $token",
+                body = body
+            )
+        }
 
     override fun getDiaryAll(): Flow<List<DiaryAllResponse>> =
         performApiRequest {
