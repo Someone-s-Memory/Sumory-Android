@@ -1,5 +1,6 @@
 package com.sumory.diary.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sumory.data.repository.diary.DiaryRepository
@@ -63,6 +64,32 @@ class DiaryWriteViewModel @Inject constructor(
         "🌩️" to "천둥번개",
         "🌈" to "무지개"
     )
+
+    private val _imageUris = MutableStateFlow<List<Uri>>(emptyList())
+    val imageUris: StateFlow<List<Uri>> = _imageUris
+
+    private val _openGalleryEvent = MutableSharedFlow<Unit>()
+    val openGalleryEvent = _openGalleryEvent.asSharedFlow()
+
+    fun addImage(uri: Uri) {
+        _imageUris.update { it + uri }
+    }
+
+    fun removeImage(uri: Uri) {
+        _imageUris.update { it - uri }
+    }
+
+    fun onImageAddClick() {
+        viewModelScope.launch {
+            _openGalleryEvent.emit(Unit)
+        }
+    }
+
+    fun triggerGalleryLaunch() {
+        viewModelScope.launch {
+            _openGalleryEvent.emit(Unit)
+        }
+    }
 
     fun postDiary(date: String, picture: String = "") {
         val param = DiaryWriteRequestParam(
