@@ -1,5 +1,6 @@
 package com.sumory.diary.view
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -21,16 +22,81 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sumory.design_system.component.textfield.SumoryTextField
 import com.sumory.design_system.icon.LeftArrowIcon
 import com.sumory.design_system.icon.SaveIcon
 import com.sumory.design_system.theme.SumoryTheme
+import com.sumory.diary.viewmodel.DiaryWriteViewModel
+import com.sumory.diary.viewmodel.uistate.DiaryWriteUiState
 import com.sumory.ui.DevicePreviews
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
+
+@Composable
+fun DiaryWriteRoute(
+    onBackClick: () -> Unit = {},
+    onDiarySavedSuccess: () -> Unit = {},
+    viewModel: DiaryWriteViewModel = hiltViewModel()
+) {
+    val context = LocalContext.current
+
+    val today = LocalDate.now()
+    val apiDate = today.format(DateTimeFormatter.ISO_DATE) // "yyyy-MM-dd"
+    val displayDate = today.format(DateTimeFormatter.ofPattern("yyyy년 M월 d일 E요일", Locale.KOREAN))
+
+    val title by viewModel.title.collectAsState()
+    val content by viewModel.content.collectAsState()
+    val selectedEmotion by viewModel.selectedEmotion.collectAsState()
+    val selectedWeather by viewModel.selectedWeather.collectAsState()
+    val writeState by viewModel.diaryWriteState.collectAsState()
+
+    LaunchedEffect(writeState) {
+        when (writeState) {
+            is DiaryWriteUiState.Success -> {
+                onDiarySavedSuccess()
+                viewModel.resetWriteState()
+            }
+
+            is DiaryWriteUiState.Error -> {
+                Toast.makeText(
+                    context,
+                    (writeState as DiaryWriteUiState.Error).message,
+                    Toast.LENGTH_SHORT
+                ).show()
+                viewModel.resetWriteState()
+            }
+
+            else -> Unit
+        }
+    }
+
+    DiaryWriteScreen(
+        date = displayDate,
+        title = title,
+        onTitleChange = viewModel::updateTitle,
+        content = content,
+        onContentChange = viewModel::updateContent,
+        onBackClick = onBackClick,
+        selectedEmotion = selectedEmotion,
+        onEmotionSelected = viewModel::selectEmotion,
+        selectedWeather = selectedWeather,
+        onWeatherSelected = viewModel::selectWeather,
+        onSaveClick = {
+            viewModel.postDiary(date = apiDate)
+        }
+    )
+}
 
 @Composable
 fun DiaryWriteScreen(
