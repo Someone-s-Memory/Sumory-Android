@@ -6,5 +6,5 @@ data class DiaryWriteRequestParam (
     val feeling: String,
     val weather: String,
     val date: String,
-    val picture: String
+    val picture: List<String>
 )

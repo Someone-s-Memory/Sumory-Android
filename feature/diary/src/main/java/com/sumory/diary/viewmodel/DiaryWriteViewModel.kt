@@ -1,5 +1,6 @@
 package com.sumory.diary.viewmodel
 
+import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,6 +12,7 @@ import com.sumory.model.type.DiaryWeather
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -75,14 +77,33 @@ class DiaryWriteViewModel @Inject constructor(
         }
     }
 
-    fun postDiary(date: String, picture: String = "") {
+    // Uri -> 로컬 파일 경로 변환 함수
+    private fun getRealPathFromUri(context: Context, uri: Uri): String? {
+        var path: String? = null
+        val projection = arrayOf(android.provider.MediaStore.Images.Media.DATA)
+        val cursor = context.contentResolver.query(uri, projection, null, null, null)
+        cursor?.use {
+            if (it.moveToFirst()) {
+                val columnIndex = it.getColumnIndexOrThrow(android.provider.MediaStore.Images.Media.DATA)
+                path = it.getString(columnIndex)
+            }
+        }
+        return path
+    }
+
+    fun postDiary(date: String, context: Context) {
+        val picturePaths = _imageUris.value.mapNotNull { uri ->
+            val path = getRealPathFromUri(context, uri)
+            if (path != null && File(path).exists()) path else null
+        }
+
         val param = DiaryWriteRequestParam(
             title = _title.value,
             content = _content.value,
             feeling = _selectedEmotion.value?.value ?: "",
             weather = _selectedWeather.value?.value ?: "",
             date = date,
-            picture = picture
+            picture = picturePaths
         )
 
         viewModelScope.launch {
@@ -91,7 +112,7 @@ class DiaryWriteViewModel @Inject constructor(
                     _diaryWriteState.value = DiaryWriteUiState.Success
                 }
             } catch (e: Exception) {
-                _diaryWriteState.value = DiaryWriteUiState.Error("일기 저장에 실패하였습니다.")
+                _diaryWriteState.value = DiaryWriteUiState.Error("일기 저장 실패: ${e.message}")
             }
         }
     }

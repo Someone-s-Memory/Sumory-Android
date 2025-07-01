@@ -1,5 +1,6 @@
 package com.sumory.diary.view
 
+import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -86,9 +87,9 @@ fun DiaryWriteRoute(
 
     // 권한 요청 대상
     val permissionToRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        android.Manifest.permission.READ_MEDIA_IMAGES
+        Manifest.permission.READ_MEDIA_IMAGES
     } else {
-        android.Manifest.permission.READ_EXTERNAL_STORAGE
+        Manifest.permission.READ_EXTERNAL_STORAGE
     }
 
     // 권한 요청 결과 처리
@@ -175,7 +176,10 @@ fun DiaryWriteRoute(
         selectedWeather = selectedWeather,
         onWeatherSelected = viewModel::selectWeather,
         onSaveClick = {
-            viewModel.postDiary(date = apiDate)
+            viewModel.postDiary(
+                date = apiDate,
+                context = context
+            )
         },
         imageUris = imageUris,
         onAddImageClick = viewModel::onImageAddClick,
