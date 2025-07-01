@@ -5,5 +5,5 @@ import com.sumory.model.param.diary.DiaryWriteRequestParam
 import kotlinx.coroutines.flow.Flow
 
 interface DiaryRepository {
-    suspend fun writeDiary(body: DiaryWriteRequestParam): Flow<DiaryWriteResponseModel>
+    suspend fun diaryWrite(body: DiaryWriteRequestParam): Flow<DiaryWriteResponseModel>
 }
