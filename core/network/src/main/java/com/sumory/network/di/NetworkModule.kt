@@ -3,6 +3,7 @@ package com.sumory.network.di
 import android.util.Log
 import com.sumory.network.BuildConfig
 import com.sumory.network.api.AuthApi
+import com.sumory.network.api.DiaryApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -48,4 +49,9 @@ object NetworkModule {
     @Singleton
     fun provideAuthAPI(retrofit: Retrofit): AuthApi =
         retrofit.create(AuthApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideDiaryAPI(retrofit: Retrofit): DiaryApi =
+        retrofit.create(DiaryApi::class.java)
 }
