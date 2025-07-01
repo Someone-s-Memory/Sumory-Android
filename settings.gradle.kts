@@ -33,7 +33,6 @@ include(":core:data")
 
 include(":feature")
 include(":feature:home")
-include(":feature:calendar")
 include(":feature:diary")
 include(":feature:stat")
 include(":feature:profile")
