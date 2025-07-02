@@ -1,5 +1,6 @@
 package com.sumory.diary.view
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -26,42 +28,54 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.sumory.design_system.icon.EditIcon
+import com.sumory.design_system.icon.LeftArrowIcon
+import com.sumory.design_system.icon.RightArrowIcon
 import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.diary.view.component.CalendarDiaryItem
+import com.sumory.diary.viewmodel.CalendarViewModel
+import com.sumory.diary.viewmodel.mapper.iconRes
 import com.sumory.model.mapper.diary.toCalendarDiaryListEntity
+import com.sumory.model.mapper.diary.toDiaryFeeling
 import com.sumory.model.model.diary.DateDiaryResponseModel
 import com.sumory.ui.DevicePreviews
 import java.time.LocalDate
 import java.time.YearMonth
 import kotlin.math.ceil
 
+@SuppressLint("StateFlowValueCalledInComposition")
 data class CalendarDateState(
     val date: LocalDate?,
     val isSelected: Boolean,
     val isToday: Boolean,
     val hasDiary: Boolean,
-    val feeling: String = ""
+    val feeling: String = "",
+    val imageUrl: String? = null
 )
 
 @Composable
 fun CalendarRoute(
-    viewModel: com.sumory.diary.viewmodel.CalendarViewModel = hiltViewModel(),
+    viewModel: CalendarViewModel = hiltViewModel(),
     onDiaryClick: (Int) -> Unit,
     onWriteClick: () -> Unit
 ) {
-    val diaryList by viewModel.diaryList.collectAsState()
+    val allDiaries by viewModel.allDiaries.collectAsState()
+    val dateDiaries by viewModel.dateDiaries.collectAsState()
     val selectedDate by viewModel.selectedDate
+    val currentMonth by viewModel.currentMonth.collectAsState()
+    val consecutiveDays by viewModel.consecutiveDays
 
-    val currentMonth = YearMonth.now()
     val today = LocalDate.now()
 
-    // diaryList -> Map<LocalDate, List<DateDiaryResponseModel>>
-    val diaryMap = diaryList
+    val diaryMap = allDiaries
         .mapNotNull {
             try {
                 LocalDate.parse(it.date) to it
@@ -81,22 +95,23 @@ fun CalendarRoute(
                 isSelected = date == selectedDate,
                 isToday = date == today,
                 hasDiary = hasDiary,
-                feeling = if (hasDiary) diaryMap[date]?.firstOrNull()?.feeling.orEmpty() else ""
+                feeling = if (hasDiary) diaryMap[date]?.firstOrNull()?.feeling.orEmpty() else "",
+                imageUrl = diaryMap[date]?.firstOrNull()?.pictures?.firstOrNull()
             )
         }
     }
-
-    val consecutiveDays = 3
 
     CalendarScreen(
         currentMonth = currentMonth,
         selectedDate = selectedDate,
         weeks = weeks,
-        diariesOfSelectedDate = diaryMap[selectedDate].orEmpty(),
+        diariesOfSelectedDate = dateDiaries,
         consecutiveDays = consecutiveDays,
         onDateSelected = viewModel::onDateSelected,
         onDiaryClick = onDiaryClick,
-        onWriteClick = onWriteClick
+        onWriteClick = onWriteClick,
+        onNextMonth = viewModel::incrementMonth,
+        onPrevMonth = viewModel::decrementMonth
     )
 }
 
@@ -110,7 +125,9 @@ fun CalendarScreen(
     consecutiveDays: Int,
     onDateSelected: (LocalDate) -> Unit,
     onDiaryClick: (Int) -> Unit,
-    onWriteClick: () -> Unit
+    onWriteClick: () -> Unit,
+    onPrevMonth: () -> Unit,
+    onNextMonth: () -> Unit
 ) {
     SumoryTheme { colors, typography ->
         Column(
@@ -123,21 +140,37 @@ fun CalendarScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    text = "${currentMonth.year}년 ${currentMonth.monthValue}월",
-                    color = colors.black,
-                    style = typography.titleBold2
-                )
-                Box(
-                    modifier = modifier
-                        .background(colors.pinkSoftBackground, RoundedCornerShape(20.dp))
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
-                ) {
-                    Text(
-                        text = "🔥 ${consecutiveDays}일 연속",
-                        style = typography.bodyRegular2,
-                        color = colors.darkPink
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    LeftArrowIcon(
+                        modifier = modifier
+                            .clickable { onPrevMonth() }
+                            .padding(horizontal = 8.dp),
+                        tint = colors.black
                     )
+                    Text(
+                        text = "${currentMonth.year}년 ${currentMonth.monthValue}월",
+                        color = colors.black,
+                        style = typography.titleBold2
+                    )
+                    RightArrowIcon(
+                        modifier = modifier
+                            .clickable { onNextMonth() }
+                            .padding(horizontal = 8.dp),
+                        tint = colors.black
+                    )
+                }
+                if (consecutiveDays >= 3) {
+                    Box(
+                        modifier = modifier
+                            .background(colors.pinkSoftBackground, RoundedCornerShape(20.dp))
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                    ) {
+                        Text(
+                            text = "🔥 ${consecutiveDays}일 연속",
+                            style = typography.bodyRegular2,
+                            color = colors.darkPink
+                        )
+                    }
                 }
             }
 
@@ -176,11 +209,29 @@ fun CalendarScreen(
                                 modifier = modifier
                                     .size(size)
                                     .clip(RoundedCornerShape(12.dp))
-                                    .background(if (dayState.isSelected) colors.pinkSoftBackground else colors.white)
-                                    .then(if (border != null) modifier.border(border, RoundedCornerShape(12.dp)) else modifier)
-                                    .clickable(enabled = date != null) { date?.let { onDateSelected(it) } },
+                                    .clickable(enabled = date != null) { date?.let { onDateSelected(it) } }
+                                    .then(if (border != null) modifier.border(border, RoundedCornerShape(12.dp)) else modifier),
                                 contentAlignment = Alignment.Center
                             ) {
+                                if (!dayState.imageUrl.isNullOrEmpty()) {
+                                    AsyncImage(
+                                        model = ImageRequest.Builder(LocalContext.current)
+                                            .data(dayState.imageUrl)
+                                            .crossfade(true)
+                                            .build(),
+                                        contentDescription = null,
+                                        contentScale = ContentScale.Crop,
+                                        alpha = 0.3f,
+                                        modifier = Modifier.matchParentSize().clip(RoundedCornerShape(12.dp))
+                                    )
+                                } else {
+                                    Box(
+                                        modifier = Modifier
+                                            .matchParentSize()
+                                            .background(if (dayState.isSelected) colors.pinkSoftBackground else colors.white)
+                                    )
+                                }
+
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                     Text(
                                         text = date?.dayOfMonth?.toString() ?: "",
@@ -188,7 +239,12 @@ fun CalendarScreen(
                                         color = colors.black
                                     )
                                     if (dayState.hasDiary) {
-                                        Text(dayState.feeling, fontSize = 12.sp)
+                                        val feelingEnum = dayState.feeling.toDiaryFeeling()
+                                        Icon(
+                                            painter = painterResource(id = feelingEnum.iconRes()),
+                                            contentDescription = dayState.feeling,
+                                            modifier = Modifier.size(24.dp)
+                                        )
                                     }
                                 }
                             }
@@ -246,7 +302,7 @@ fun CalendarScreen(
 fun generateCalendarDates(yearMonth: YearMonth): List<LocalDate?> {
     val firstDay = yearMonth.atDay(1)
     val daysInMonth = yearMonth.lengthOfMonth()
-    val startOffset = (firstDay.dayOfWeek.value % 7) // 일요일이 0
+    val startOffset = (firstDay.dayOfWeek.value % 7)
     val totalCells = ceil((startOffset + daysInMonth) / 7.0).toInt() * 7
 
     return buildList {
@@ -293,6 +349,8 @@ private fun CalendarScreenPreview() {
         consecutiveDays = 3,
         onDateSelected = { selectedDate = it },
         onDiaryClick = {},
-        onWriteClick = {}
+        onWriteClick = {},
+        onPrevMonth = {},
+        onNextMonth = {},
     )
 }
