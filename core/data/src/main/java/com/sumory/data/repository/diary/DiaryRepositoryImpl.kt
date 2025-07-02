@@ -54,7 +54,7 @@ class DiaryRepositoryImpl @Inject constructor(
         dateDiaryCache.remove(date)
     }
 
-    fun clearAllCache() {
+    override suspend fun clearAllCache() {
         cached = null
         dateDiaryCache.clear()
     }

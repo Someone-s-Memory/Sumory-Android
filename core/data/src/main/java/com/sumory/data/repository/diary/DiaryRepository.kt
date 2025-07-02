@@ -10,4 +10,5 @@ interface DiaryRepository {
     suspend fun diaryWrite(body: DiaryWriteRequestParam): Flow<DiaryWriteResponseModel>
     suspend fun getDateDiary(date: String, forceRefresh: Boolean = false): Flow<List<DateDiaryResponseModel>>
     suspend fun getAllDiary(forceRefresh: Boolean = false): List<AllDiaryResponseModel>
+    suspend fun clearAllCache()
 }

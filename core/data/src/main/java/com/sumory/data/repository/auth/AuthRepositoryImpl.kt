@@ -1,5 +1,6 @@
 package com.sumory.data.repository.auth
 
+import com.sumory.data.repository.diary.DiaryRepository
 import com.sumory.datastore.auth.TokenDataStore
 import com.sumory.model.model.auth.SignInResponseModel
 import com.sumory.model.model.auth.SignUpResponseModel
@@ -10,12 +11,14 @@ import com.sumory.network.mapper.auth.request.toDto
 import com.sumory.network.mapper.auth.response.toModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.transform
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val authDataSource: AuthDataSource,
-    private val tokenDataStore: TokenDataStore
+    private val tokenDataStore: TokenDataStore,
+    private val diaryRepository: DiaryRepository
 ) : AuthRepository {
 
     override suspend fun signIn(body: SignInRequestParam): Flow<SignInResponseModel> {
@@ -43,9 +46,9 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun signOut(): Flow<Unit> {
-        return authDataSource.signOut().transform {
+        return authDataSource.signOut().onCompletion {
             tokenDataStore.clearTokens()
-            emit(Unit)
+            diaryRepository.clearAllCache()
         }
     }
 }
