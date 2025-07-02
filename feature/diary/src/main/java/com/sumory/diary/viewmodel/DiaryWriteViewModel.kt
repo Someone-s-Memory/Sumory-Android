@@ -124,7 +124,7 @@ class DiaryWriteViewModel @Inject constructor(
             feeling = _selectedEmotion.value?.value ?: "",
             weather = _selectedWeather.value?.value ?: "",
             date = date,
-            picture = picturePaths
+            pictures = picturePaths
         )
 
         viewModelScope.launch {

@@ -10,5 +10,5 @@ fun DiaryWriteRequestParam.toDto(): DiaryWriteRequest =
         feeling = this.feeling,
         weather = this.weather,
         date = this.date,
-        picture = this.picture
+        pictures = this.pictures
     )

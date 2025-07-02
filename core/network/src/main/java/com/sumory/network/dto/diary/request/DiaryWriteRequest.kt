@@ -10,5 +10,5 @@ data class DiaryWriteRequest(
     @Json(name = "feeling") val feeling: String,
     @Json(name = "weather") val weather: String,
     @Json(name = "date") val date: String,
-    @Json(name = "picture") val picture: List<String>,
+    @Json(name = "pictures") val pictures: List<String>,
 )
