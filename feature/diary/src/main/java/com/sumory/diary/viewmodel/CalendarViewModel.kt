@@ -36,8 +36,7 @@ class CalendarViewModel @Inject constructor(
     val consecutiveDays: State<Int> = _consecutiveDays
 
     init {
-        loadAllDiaries()
-        loadDateDiaries(_selectedDate.value)
+        _selectedDate.value = LocalDate.now()
     }
 
     fun incrementMonth() {
@@ -56,6 +55,7 @@ class CalendarViewModel @Inject constructor(
     fun resetSelectedDateToToday() {
         _selectedDate.value = LocalDate.now()
         loadDateDiaries(_selectedDate.value, forceRefresh = true)
+        loadAllDiaries()
     }
 
     private fun loadAllDiaries(forceRefresh: Boolean = false) {
