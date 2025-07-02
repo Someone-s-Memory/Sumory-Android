@@ -25,9 +25,11 @@ class DiaryRepositoryImpl @Inject constructor(
         return diaryDataSource.diaryWrite(body.toDto()).map { it.toModel() }
     }
 
-    override suspend fun getDateDiary(date: String): Flow<List<DateDiaryResponseModel>> {
-        dateDiaryCache[date]?.let { cachedList ->
-            return kotlinx.coroutines.flow.flowOf(cachedList)
+    override suspend fun getDateDiary(date: String, forceRefresh: Boolean): Flow<List<DateDiaryResponseModel>> {
+        if (!forceRefresh) {
+            dateDiaryCache[date]?.let { cachedList ->
+                return kotlinx.coroutines.flow.flowOf(cachedList)
+            }
         }
 
         return diaryDataSource.getDateDiary(date)

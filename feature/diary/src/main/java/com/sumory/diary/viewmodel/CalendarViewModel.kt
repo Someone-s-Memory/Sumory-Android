@@ -48,9 +48,9 @@ class CalendarViewModel @Inject constructor(
         _currentMonth.value = _currentMonth.value.minusMonths(1)
     }
 
-    fun onDateSelected(date: LocalDate) {
+    fun onDateSelected(date: LocalDate, forceRefresh: Boolean = false) {
         _selectedDate.value = date
-        loadDateDiaries(date)
+        loadDateDiaries(date, forceRefresh)
     }
 
     private fun loadAllDiaries(forceRefresh: Boolean = false) {
@@ -66,10 +66,10 @@ class CalendarViewModel @Inject constructor(
     }
 
 
-    private fun loadDateDiaries(date: LocalDate) {
+    private fun loadDateDiaries(date: LocalDate, forceRefresh: Boolean = false) {
         viewModelScope.launch {
             try {
-                diaryRepository.getDateDiary(date.toString()).collect {
+                diaryRepository.getDateDiary(date.toString(), forceRefresh).collect {
                     _dateDiaries.value = it
                 }
             } catch (e: Exception) {
