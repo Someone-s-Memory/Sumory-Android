@@ -1,5 +1,6 @@
 package com.sumory.diary.view
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -37,10 +38,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.LocalSavedStateRegistryOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import coil.compose.rememberAsyncImagePainter
+import com.sumory.design_system.component.dialog.SumoryDialog
+import com.sumory.design_system.component.toast.SumoryToast
 import com.sumory.design_system.icon.DeleteIcon
 import com.sumory.design_system.icon.EditIcon
 import com.sumory.design_system.icon.LeftArrowIcon
@@ -56,21 +63,62 @@ fun DiaryDetailRoute(
     onBackClick: () -> Unit,
     onEditClick: () -> Unit = {}
 ) {
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val viewModelStoreOwner = LocalViewModelStoreOwner.current
+    val savedStateRegistryOwner = LocalSavedStateRegistryOwner.current
+
     val diaryDetail by viewModel.diaryDetail.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
     val deleteState by viewModel.diaryDetailState.collectAsState()
-
+    var showDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(diaryId) {
         viewModel.loadDiaryDetail(diaryId)
     }
 
     LaunchedEffect(deleteState) {
-        if (deleteState is DiaryDetailUiState.Success) {
-            onBackClick()
-            viewModel.resetState()
+        when (deleteState) {
+            is DiaryDetailUiState.Success -> {
+                SumoryToast(context).showToast(
+                    message = "일기가 삭제되었습니다.",
+                    duration = 1000,
+                    icon = null,
+                    lifecycleOwner = lifecycleOwner,
+                    viewModelStoreOwner = viewModelStoreOwner!!,
+                    savedStateRegistryOwner = savedStateRegistryOwner
+                )
+                onBackClick()
+                viewModel.resetState()
+            }
+
+            is DiaryDetailUiState.Error -> {
+                SumoryToast(context).showToast(
+                    message = (deleteState as DiaryDetailUiState.Error).message,
+                    duration = 1000,
+                    icon = null,
+                    lifecycleOwner = lifecycleOwner,
+                    viewModelStoreOwner = viewModelStoreOwner!!,
+                    savedStateRegistryOwner = savedStateRegistryOwner
+                )
+                viewModel.resetState()
+            }
+
+            else -> {}
         }
+    }
+
+    if (showDialog) {
+        SumoryDialog(
+            title = "일기 삭제",
+            message = "정말로 이 일기를 삭제하시겠어요?",
+            onConfirm = {
+                showDialog = false
+                viewModel.deleteDiary()
+            },
+            onDismiss = { showDialog = false }
+        )
     }
 
     when {
@@ -98,7 +146,7 @@ fun DiaryDetailRoute(
                 photoUrls = diaryDetail!!.pictures,
                 onBackClick = onBackClick,
                 onEditClick = onEditClick,
-                onDeleteClick = viewModel::deleteDiary
+                onDeleteClick = { showDialog = true } // 여기서 다이얼로그 열기
             )
         }
 
@@ -110,6 +158,7 @@ fun DiaryDetailRoute(
         }
     }
 }
+
 
 @Composable
 fun DiaryDetailScreen(

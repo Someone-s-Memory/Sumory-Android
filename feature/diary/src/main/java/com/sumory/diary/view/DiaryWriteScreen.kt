@@ -31,6 +31,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,6 +46,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import com.sumory.design_system.component.dialog.SumoryDialog
 import com.sumory.design_system.component.textfield.SumoryTextField
 import com.sumory.design_system.component.toast.SumoryToast
 import com.sumory.design_system.icon.LeftArrowIcon
@@ -84,6 +88,25 @@ fun DiaryWriteRoute(
     val selectedWeather by viewModel.selectedWeather.collectAsState()
     val writeState by viewModel.diaryWriteState.collectAsState()
     val imageUris by viewModel.imageUris.collectAsState()
+
+    var showSaveDialog by remember { mutableStateOf(false) }
+
+    if (showSaveDialog) {
+        SumoryDialog(
+            title = "일기 작성 완료",
+            message = "일기를 저장하시겠습니까?",
+            onConfirm = {
+                showSaveDialog = false
+                viewModel.postDiary(
+                    date = apiDate,
+                    context = context
+                )
+            },
+            onDismiss = {
+                showSaveDialog = false
+            }
+        )
+    }
 
     // 권한 요청 대상
     val permissionToRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -175,12 +198,7 @@ fun DiaryWriteRoute(
         onEmotionSelected = viewModel::selectEmotion,
         selectedWeather = selectedWeather,
         onWeatherSelected = viewModel::selectWeather,
-        onSaveClick = {
-            viewModel.postDiary(
-                date = apiDate,
-                context = context
-            )
-        },
+        onSaveClick = { showSaveDialog = true },
         imageUris = imageUris,
         onAddImageClick = viewModel::onImageAddClick,
         onRemoveImageClick = viewModel::removeImage
