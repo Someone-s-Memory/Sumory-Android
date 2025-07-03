@@ -42,7 +42,7 @@ class DiaryDataSourceImpl @Inject constructor(
             )
         }
 
-    override fun getDiaryDetail(diaryId: Int): Flow<List<DiaryDetailResponse>> =
+    override fun getDiaryDetail(diaryId: Int): Flow<DiaryDetailResponse> =
         performApiRequest {
             val token = tokenDataStore.accessToken.firstOrNull() ?: ""
             api.getDiaryDetail(

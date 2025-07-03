@@ -2,6 +2,7 @@ package com.sumory.data.repository.diary
 
 import com.sumory.model.model.diary.AllDiaryResponseModel
 import com.sumory.model.model.diary.DateDiaryResponseModel
+import com.sumory.model.model.diary.DiaryDetailResponseModel
 import com.sumory.model.model.diary.DiaryWriteResponseModel
 import com.sumory.model.param.diary.DiaryWriteRequestParam
 import com.sumory.network.datasource.diary.DiaryDataSource
@@ -47,6 +48,12 @@ class DiaryRepositoryImpl @Inject constructor(
         val modelList = dtoList.map { it.toModel() }
         cached = modelList
         return modelList
+    }
+
+    override suspend fun getDiaryDetail(diaryId: Int): DiaryDetailResponseModel {
+        return diaryDataSource.getDiaryDetail(diaryId)
+            .map { it.toModel() }
+            .first()
     }
 
     // 캐시 수동 초기화 함수

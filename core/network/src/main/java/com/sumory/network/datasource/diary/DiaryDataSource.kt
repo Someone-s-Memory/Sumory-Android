@@ -11,5 +11,5 @@ interface DiaryDataSource {
     fun diaryWrite(body: DiaryWriteRequest): Flow<DiaryWriteResponse>
     fun getDateDiary(date: String): Flow<List<DateDiaryResponse>>
     fun getAllDiary(): Flow<List<AllDiaryResponse>>
-    fun getDiaryDetail(diaryId: Int): Flow<List<DiaryDetailResponse>>
+    fun getDiaryDetail(diaryId: Int): Flow<DiaryDetailResponse>
 }

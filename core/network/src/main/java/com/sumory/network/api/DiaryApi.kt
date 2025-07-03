@@ -3,6 +3,7 @@ package com.sumory.network.api
 import com.sumory.network.dto.diary.request.DiaryWriteRequest
 import com.sumory.network.dto.diary.response.AllDiaryResponse
 import com.sumory.network.dto.diary.response.DateDiaryResponse
+import com.sumory.network.dto.diary.response.DiaryDetailResponse
 import com.sumory.network.dto.diary.response.DiaryWriteResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -29,4 +30,10 @@ interface DiaryApi {
     suspend fun getAllDiary(
         @Header("Authorization") token: String
     ): List<AllDiaryResponse>
+
+    @GET("diary/detail")
+    suspend fun getDiaryDetail(
+        @Header("Authorization") token: String,
+        @Query("diaryId") diaryId: Int
+    ): DiaryDetailResponse
 }
