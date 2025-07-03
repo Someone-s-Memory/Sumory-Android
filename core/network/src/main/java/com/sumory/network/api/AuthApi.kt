@@ -5,6 +5,7 @@ import com.sumory.network.dto.auth.request.SignUpRequest
 import com.sumory.network.dto.auth.response.SignInResponse
 import com.sumory.network.dto.auth.response.SignUpResponse
 import retrofit2.http.Body
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface AuthApi {
@@ -20,4 +21,9 @@ interface AuthApi {
 
     @POST("sign-out")
     suspend fun signOut(): Unit
+
+    @POST("refresh")
+    suspend fun refresh(
+        @Header("Authorization") token: String,
+    ): SignInResponse
 }

@@ -4,6 +4,8 @@ import android.util.Log
 import com.sumory.network.BuildConfig
 import com.sumory.network.api.AuthApi
 import com.sumory.network.api.DiaryApi
+import com.sumory.datastore.auth.TokenDataStore
+import com.sumory.network.util.TokenAuthenticator
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,9 +32,12 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideHttpClient(
-        loggingInterceptor: HttpLoggingInterceptor
+        loggingInterceptor: HttpLoggingInterceptor,
+        tokenDataStore: TokenDataStore,
+        authApi: AuthApi
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
+        .authenticator(TokenAuthenticator(tokenDataStore, authApi))
         .build()
 
     @Provides
