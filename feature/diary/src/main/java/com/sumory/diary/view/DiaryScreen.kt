@@ -46,9 +46,10 @@ fun DiaryScreenRoute(
         }
 
         errorMessage != null -> {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = errorMessage ?: "오류가 발생했습니다")
-            }
+            DiaryScreen(
+                diaryItems = emptyList(),
+                onDiaryClick = onDiaryClick
+            )
         }
 
         else -> {
