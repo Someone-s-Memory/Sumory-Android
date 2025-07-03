@@ -21,10 +21,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,11 +39,65 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.sumory.design_system.icon.EditIcon
 import com.sumory.design_system.icon.LeftArrowIcon
 import com.sumory.design_system.theme.SumoryTheme
+import com.sumory.diary.viewmodel.DiaryDetailViewModel
 import com.sumory.ui.DevicePreviews
+
+@Composable
+fun DiaryDetailRoute(
+    diaryId: Int,
+    viewModel: DiaryDetailViewModel = hiltViewModel(),
+    onBackClick: () -> Unit,
+    onEditClick: () -> Unit = {}
+) {
+    val diaryDetail by viewModel.diaryDetail.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
+
+    LaunchedEffect(diaryId) {
+        viewModel.loadDiaryDetail(diaryId)
+    }
+
+    when {
+        isLoading -> Box(
+            Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+
+        errorMessage != null -> Box(
+            Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(text = errorMessage ?: "알 수 없는 오류")
+        }
+
+        diaryDetail != null -> {
+            DiaryDetailScreen(
+                date = diaryDetail!!.date,
+                emotion = diaryDetail!!.feeling,
+                weather = diaryDetail!!.weather,
+                title = diaryDetail!!.title,
+                content = diaryDetail!!.content,
+                photoUrls = diaryDetail!!.pictures,
+                onBackClick = onBackClick,
+                onEditClick = onEditClick
+            )
+        }
+
+        else -> Box(
+            Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(text = "일기 상세 정보가 없습니다.")
+        }
+    }
+}
 
 @Composable
 fun DiaryDetailScreen(

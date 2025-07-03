@@ -5,8 +5,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import com.sumory.diary.calendarScreen
-import com.sumory.diary.diaryDeatilScreen
 import com.sumory.diary.diaryDetailRoute
+import com.sumory.diary.diaryDetailScreen
 import com.sumory.diary.diaryScreen
 import com.sumory.diary.diaryWriteRoute
 import com.sumory.diary.diaryWriteScreen
@@ -77,10 +77,8 @@ fun SumoryNavHost(
         homeScreen()
 
         calendarScreen(
-            onDiaryClick = {
-                navController.navigate(diaryDetailRoute) {
-
-                }
+            onDiaryClick = { diaryId ->
+                navController.navigate("diaryDetailRoute/$diaryId")
             },
             onWriteClick = {
                 navController.navigate(diaryWriteRoute)
@@ -88,10 +86,8 @@ fun SumoryNavHost(
         )
 
         diaryScreen(
-            onDiaryClick = {
-                navController.navigate(diaryDetailRoute){
-
-                }
+            onDiaryClick = { diaryId ->
+                navController.navigate("diaryDetailRoute/$diaryId")
             }
         )
 
@@ -109,7 +105,7 @@ fun SumoryNavHost(
             }
         )
 
-        diaryDeatilScreen(
+        diaryDetailScreen(
             onBackClick = {
                 navController.popBackStack()
             }
