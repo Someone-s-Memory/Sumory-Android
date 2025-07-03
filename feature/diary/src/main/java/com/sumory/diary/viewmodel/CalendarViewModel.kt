@@ -52,28 +52,24 @@ class CalendarViewModel @Inject constructor(
         loadDateDiaries(date, forceRefresh)
     }
 
-    init {
-        resetSelectedDateToToday()
-    }
-
     fun resetSelectedDateToToday() {
         _selectedDate.value = LocalDate.now()
         loadDateDiaries(_selectedDate.value, forceRefresh = true)
-        loadAllDiaries()
+        loadAllDiaries(forceRefresh = true)
     }
 
     private fun loadAllDiaries(forceRefresh: Boolean = false) {
         viewModelScope.launch {
             try {
-                val result = diaryRepository.getAllDiary(forceRefresh)
-                _allDiaries.value = result
-                calculateConsecutiveDays(_allDiaries.value)
+                diaryRepository.getAllDiary(forceRefresh).collect {
+                    _allDiaries.value = it
+                    calculateConsecutiveDays(_allDiaries.value)
+                }
             } catch (e: Exception) {
                 _allDiaries.value = emptyList()
             }
         }
     }
-
 
     private fun loadDateDiaries(date: LocalDate, forceRefresh: Boolean = false) {
         viewModelScope.launch {

@@ -33,11 +33,12 @@ class DiaryViewModel @Inject constructor(
             _isLoading.value = true
             _errorMessage.value = null
             try {
-                val list = diaryRepository.getAllDiary(forceRefresh)
-                _diaryList.value = list
+                diaryRepository.getAllDiary(forceRefresh).collect { list ->
+                    _diaryList.value = list
+                }
             } catch (e: Exception) {
                 _diaryList.value = emptyList()
-                _errorMessage.value = null
+                _errorMessage.value = e.message
             } finally {
                 _isLoading.value = false
             }

@@ -52,6 +52,7 @@ class DiaryDetailViewModel @Inject constructor(
             try {
                 _diaryDetail.value?.let {
                     diaryRepository.deleteDiary(it.date, it.title).collect {
+                        diaryRepository.clearAllCache()
                         _diaryDetailState.value = DiaryDetailUiState.Success
                     }
                 }

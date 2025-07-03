@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface DiaryRepository {
     suspend fun diaryWrite(body: DiaryWriteRequestParam): Flow<DiaryWriteResponseModel>
     suspend fun getDateDiary(date: String, forceRefresh: Boolean = false): Flow<List<DateDiaryResponseModel>>
-    suspend fun getAllDiary(forceRefresh: Boolean = false): List<AllDiaryResponseModel>
+    suspend fun getAllDiary(forceRefresh: Boolean = false): Flow<List<AllDiaryResponseModel>>
     suspend fun getDiaryDetail(diaryId: Int): DiaryDetailResponseModel
     suspend fun deleteDiary(date: String, title: String): Flow<DiaryDeleteResponseModel>
     suspend fun clearAllCache()
