@@ -52,6 +52,10 @@ class CalendarViewModel @Inject constructor(
         loadDateDiaries(date, forceRefresh)
     }
 
+    init {
+        resetSelectedDateToToday()
+    }
+
     fun resetSelectedDateToToday() {
         _selectedDate.value = LocalDate.now()
         loadDateDiaries(_selectedDate.value, forceRefresh = true)
