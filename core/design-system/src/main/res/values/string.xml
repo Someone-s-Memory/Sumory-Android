@@ -17,4 +17,5 @@
     <string name="add_description">추가 아이콘</string>
     <string name="edit_description">수정 아이콘</string>
     <string name="save_description">저장 아이콘</string>
+    <string name="delete_description">삭제 아이콘</string>
 </resources>

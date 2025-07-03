@@ -203,6 +203,19 @@ fun SaveIcon(
 }
 
 @Composable
+fun DeleteIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+){
+    Icon(
+        painter = painterResource(id = R.drawable.delete),
+        contentDescription = stringResource(id = R.string.delete_description),
+        modifier = modifier,
+        tint = tint
+    )
+}
+
+@Composable
 fun EyeIcon(
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
