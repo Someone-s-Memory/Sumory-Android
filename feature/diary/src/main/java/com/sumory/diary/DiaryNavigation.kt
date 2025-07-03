@@ -6,12 +6,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.sumory.diary.view.CalendarRoute
 import com.sumory.diary.view.DiaryDetailRoute
-import com.sumory.diary.view.DiaryDetailScreen
-import com.sumory.diary.view.DiaryScreen
 import com.sumory.diary.view.DiaryScreenRoute
 import com.sumory.diary.view.DiaryWriteRoute
-import com.sumory.diary.view.DiaryWriteScreen
-import com.sumory.model.entity.diary.DiaryListEntity
 
 const val diaryRoute = "diaryRoute"
 const val diaryWriteRoute = "diaryWriteRoute"
