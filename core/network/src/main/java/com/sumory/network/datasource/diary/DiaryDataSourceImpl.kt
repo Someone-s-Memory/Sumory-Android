@@ -5,6 +5,7 @@ import com.sumory.network.api.DiaryApi
 import com.sumory.network.dto.diary.request.DiaryWriteRequest
 import com.sumory.network.dto.diary.response.AllDiaryResponse
 import com.sumory.network.dto.diary.response.DateDiaryResponse
+import com.sumory.network.dto.diary.response.DiaryDetailResponse
 import com.sumory.network.dto.diary.response.DiaryWriteResponse
 import com.sumory.network.util.performApiRequest
 import kotlinx.coroutines.flow.Flow
@@ -40,4 +41,14 @@ class DiaryDataSourceImpl @Inject constructor(
                 token = "Bearer $token"
             )
         }
+
+    override fun getDiaryDetail(diaryId: Int): Flow<List<DiaryDetailResponse>> =
+        performApiRequest {
+            val token = tokenDataStore.accessToken.firstOrNull() ?: ""
+            api.getDiaryDetail(
+                token = "Bearer $token",
+                diaryId = diaryId
+            )
+        }
+
 }
