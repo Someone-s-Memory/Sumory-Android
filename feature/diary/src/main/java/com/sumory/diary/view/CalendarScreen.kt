@@ -217,6 +217,7 @@ fun CalendarScreen(
                     week.forEach { dayState ->
                         val date = dayState.date
                         val border = when {
+                            !dayState.imageUrl.isNullOrEmpty() -> null
                             dayState.hasDiary -> BorderStroke(2.dp, colors.success)
                             dayState.isToday -> BorderStroke(1.dp, colors.gray300)
                             else -> null
@@ -243,7 +244,7 @@ fun CalendarScreen(
                                             .build(),
                                         contentDescription = null,
                                         contentScale = ContentScale.Crop,
-                                        alpha = 0.3f,
+                                        alpha = 0.5f,
                                         modifier = Modifier
                                             .matchParentSize()
                                             .clip(RoundedCornerShape(12.dp))
