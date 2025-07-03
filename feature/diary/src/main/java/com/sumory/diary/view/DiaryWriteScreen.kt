@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -90,6 +91,7 @@ fun DiaryWriteRoute(
     val imageUris by viewModel.imageUris.collectAsState()
 
     var showSaveDialog by remember { mutableStateOf(false) }
+    var showExitDialog by remember { mutableStateOf(false) }
 
     if (showSaveDialog) {
         SumoryDialog(
@@ -104,6 +106,24 @@ fun DiaryWriteRoute(
             },
             onDismiss = {
                 showSaveDialog = false
+            }
+        )
+    }
+
+    BackHandler {
+        showExitDialog = true
+    }
+
+    if (showExitDialog) {
+        SumoryDialog(
+            title = "작성 종료",
+            message = "작성을 종료하시겠습니까?\n작성한 내용은 저장되지 않습니다.",
+            onConfirm = {
+                showExitDialog = false
+                onBackClick()
+            },
+            onDismiss = {
+                showExitDialog = false
             }
         )
     }
@@ -139,6 +159,7 @@ fun DiaryWriteRoute(
         uri?.let { viewModel.addImage(it) }
     }
 
+    // 갤러리 오픈 성공/실패 처리
     LaunchedEffect(Unit) {
         viewModel.openGalleryEvent.collect {
             when {
@@ -193,7 +214,7 @@ fun DiaryWriteRoute(
         onTitleChange = viewModel::updateTitle,
         content = content,
         onContentChange = viewModel::updateContent,
-        onBackClick = onBackClick,
+        onBackClick = { showExitDialog = true },
         selectedEmotion = selectedEmotion,
         onEmotionSelected = viewModel::selectEmotion,
         selectedWeather = selectedWeather,
