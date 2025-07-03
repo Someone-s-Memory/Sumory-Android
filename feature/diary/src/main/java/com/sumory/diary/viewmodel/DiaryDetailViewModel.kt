@@ -64,4 +64,8 @@ class DiaryDetailViewModel @Inject constructor(
             }
         }
     }
+
+    fun resetState() {
+        _diaryDetailState.value = DiaryDetailUiState.Idle
+    }
 }

@@ -46,6 +46,7 @@ import com.sumory.design_system.icon.EditIcon
 import com.sumory.design_system.icon.LeftArrowIcon
 import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.diary.viewmodel.DiaryDetailViewModel
+import com.sumory.diary.viewmodel.uistate.DiaryDetailUiState
 import com.sumory.ui.DevicePreviews
 
 @Composable
@@ -58,9 +59,18 @@ fun DiaryDetailRoute(
     val diaryDetail by viewModel.diaryDetail.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
+    val deleteState by viewModel.diaryDetailState.collectAsState()
+
 
     LaunchedEffect(diaryId) {
         viewModel.loadDiaryDetail(diaryId)
+    }
+
+    LaunchedEffect(deleteState) {
+        if (deleteState is DiaryDetailUiState.Success) {
+            onBackClick()
+            viewModel.resetState()
+        }
     }
 
     when {
