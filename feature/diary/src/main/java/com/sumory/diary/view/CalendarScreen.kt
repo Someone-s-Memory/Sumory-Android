@@ -264,9 +264,9 @@ fun CalendarScreen(
                                         color = colors.black
                                     )
                                     if (dayState.hasDiary) {
-                                        val feelingEnum = dayState.feeling.toDiaryFeeling()
+                                        val feelingIcon = dayState.feeling.toDiaryFeeling()
                                         Icon(
-                                            painter = painterResource(id = feelingEnum.iconRes()),
+                                            painter = painterResource(id = feelingIcon.iconRes()),
                                             contentDescription = dayState.feeling,
                                             modifier = Modifier.size(24.dp)
                                         )

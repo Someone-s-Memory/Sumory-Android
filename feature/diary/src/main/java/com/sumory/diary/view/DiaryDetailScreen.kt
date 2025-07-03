@@ -24,6 +24,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,6 +42,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSavedStateRegistryOwner
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -53,7 +55,9 @@ import com.sumory.design_system.icon.EditIcon
 import com.sumory.design_system.icon.LeftArrowIcon
 import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.diary.viewmodel.DiaryDetailViewModel
+import com.sumory.diary.viewmodel.mapper.iconRes
 import com.sumory.diary.viewmodel.uistate.DiaryDetailUiState
+import com.sumory.model.mapper.diary.toDiaryFeeling
 import com.sumory.ui.DevicePreviews
 
 @Composable
@@ -223,14 +227,14 @@ fun DiaryDetailScreen(
             ) {
                 Surface(
                     shape = RoundedCornerShape(20.dp),
-                    color = colors.gray50, // 연한 배경색
+                    color = colors.gray50,
                     modifier = Modifier.padding(vertical = 4.dp)
                 ) {
-                    Text(
-                        text = "$emotion 오늘의 기분",
-                        style = typography.bodyRegular2,
-                        color = colors.black,
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                    val feelingIcon = emotion.toDiaryFeeling()
+                    Icon(
+                        painter = painterResource(feelingIcon.iconRes()),
+                        contentDescription = "기분 아이콘",
+                        modifier = Modifier.size(24.dp),
                     )
                 }
                 Spacer(modifier.width(15.dp))
@@ -239,11 +243,11 @@ fun DiaryDetailScreen(
                     color = colors.gray50,
                     modifier = Modifier.padding(vertical = 4.dp)
                 ) {
-                    Text(
-                        text = "$weather 날씨",
-                        style = typography.bodyRegular2,
-                        color = colors.black,
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                    val weatherIcon = weather.toDiaryFeeling()
+                    Icon(
+                        painter = painterResource(weatherIcon.iconRes()),
+                        contentDescription = "기분 아이콘",
+                        modifier = Modifier.size(24.dp),
                     )
                 }
             }
