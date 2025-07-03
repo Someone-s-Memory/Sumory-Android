@@ -218,7 +218,7 @@ fun CalendarScreen(
                         val date = dayState.date
                         val border = when {
                             !dayState.imageUrl.isNullOrEmpty() -> null
-                            dayState.hasDiary -> BorderStroke(2.dp, colors.success)
+                            dayState.hasDiary -> BorderStroke(2.dp, colors.darkPink)
                             dayState.isToday -> BorderStroke(1.dp, colors.gray300)
                             else -> null
                         }
