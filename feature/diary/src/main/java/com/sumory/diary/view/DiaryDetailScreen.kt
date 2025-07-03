@@ -88,7 +88,7 @@ fun DiaryDetailRoute(
                 photoUrls = diaryDetail!!.pictures,
                 onBackClick = onBackClick,
                 onEditClick = onEditClick,
-                onDeleteClick = {}
+                onDeleteClick = viewModel::deleteDiary
             )
         }
 
