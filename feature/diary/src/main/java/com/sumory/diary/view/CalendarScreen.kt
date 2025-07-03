@@ -238,13 +238,15 @@ fun CalendarScreen(
                                 if (!dayState.imageUrl.isNullOrEmpty()) {
                                     AsyncImage(
                                         model = ImageRequest.Builder(LocalContext.current)
-                                            .data(dayState.imageUrl)
+                                            .data("file://${dayState.imageUrl}")
                                             .crossfade(true)
                                             .build(),
                                         contentDescription = null,
                                         contentScale = ContentScale.Crop,
                                         alpha = 0.3f,
-                                        modifier = Modifier.matchParentSize().clip(RoundedCornerShape(12.dp))
+                                        modifier = Modifier
+                                            .matchParentSize()
+                                            .clip(RoundedCornerShape(12.dp))
                                     )
                                 } else {
                                     Box(

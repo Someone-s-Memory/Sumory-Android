@@ -77,18 +77,19 @@ class DiaryWriteViewModel @Inject constructor(
         }
     }
 
-    // Uri -> 로컬 파일 경로 변환 함수
-    private fun getRealPathFromUri(context: Context, uri: Uri): String? {
-        var path: String? = null
-        val projection = arrayOf(android.provider.MediaStore.Images.Media.DATA)
-        val cursor = context.contentResolver.query(uri, projection, null, null, null)
-        cursor?.use {
-            if (it.moveToFirst()) {
-                val columnIndex = it.getColumnIndexOrThrow(android.provider.MediaStore.Images.Media.DATA)
-                path = it.getString(columnIndex)
+    // ✅ Uri → 내부 캐시에 복사하여 파일 경로 반환
+    private fun copyUriToInternalStorage(context: Context, uri: Uri): String? {
+        return try {
+            val inputStream = context.contentResolver.openInputStream(uri) ?: return null
+            val fileName = "image_${System.currentTimeMillis()}.jpg"
+            val file = File(context.cacheDir, fileName)
+            file.outputStream().use { output ->
+                inputStream.copyTo(output)
             }
+            file.absolutePath
+        } catch (e: Exception) {
+            null
         }
-        return path
     }
 
     fun postDiary(date: String, context: Context) {
@@ -112,12 +113,12 @@ class DiaryWriteViewModel @Inject constructor(
             }
         }
 
-        // 2. 이미지 경로 변환
+        // 2. 이미지 Uri → 내부 저장소로 복사 후 경로 추출
         val picturePaths = _imageUris.value.mapNotNull { uri ->
-            val path = getRealPathFromUri(context, uri)
-            if (path != null && File(path).exists()) path else null
+            copyUriToInternalStorage(context, uri)
         }
 
+        // 3. 요청 파라미터 생성
         val param = DiaryWriteRequestParam(
             title = _title.value,
             content = _content.value,
@@ -127,6 +128,7 @@ class DiaryWriteViewModel @Inject constructor(
             pictures = picturePaths
         )
 
+        // 4. 업로드 요청
         viewModelScope.launch {
             try {
                 diaryRepository.diaryWrite(param).collect {
@@ -137,7 +139,6 @@ class DiaryWriteViewModel @Inject constructor(
             }
         }
     }
-
 
     fun resetWriteState() {
         _diaryWriteState.value = DiaryWriteUiState.Idle
