@@ -8,15 +8,18 @@ import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
+import javax.inject.Provider
 
 class TokenAuthenticator(
     private val tokenDataStore: TokenDataStore,
-    private val authApi: AuthApi
+    private val authApiProvider: Provider<AuthApi>
 ) : Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
         val refresh = runBlocking { tokenDataStore.refreshToken.firstOrNull() } ?: return null
         val refreshResponse = runBlocking {
-            runCatching { authApi.refresh("Bearer $refresh") }.getOrNull()
+            runCatching {
+                authApiProvider.get().refresh("Bearer $refresh") // ✅ 지연 초기화
+            }.getOrNull()
         } ?: return null
 
         runBlocking {
