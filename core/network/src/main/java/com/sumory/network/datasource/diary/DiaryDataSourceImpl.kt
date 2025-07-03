@@ -2,7 +2,6 @@ package com.sumory.network.datasource.diary
 
 import com.sumory.datastore.auth.TokenDataStore
 import com.sumory.network.api.DiaryApi
-import com.sumory.network.dto.diary.request.DiaryDeleteRequest
 import com.sumory.network.dto.diary.request.DiaryWriteRequest
 import com.sumory.network.dto.diary.response.AllDiaryResponse
 import com.sumory.network.dto.diary.response.DateDiaryResponse
@@ -53,12 +52,13 @@ class DiaryDataSourceImpl @Inject constructor(
             )
         }
 
-    override fun deleteDiary(body: DiaryDeleteRequest): Flow<DiaryDeleteResponse> =
+    override fun deleteDiary(date: String, title: String): Flow<DiaryDeleteResponse> =
         performApiRequest {
             val token = tokenDataStore.accessToken.firstOrNull() ?: ""
             api.deleteDiary(
                 token = "Bearer $token",
-                body = body
+                date = date,
+                title = title
             )
         }
 }

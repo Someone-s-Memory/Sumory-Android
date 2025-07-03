@@ -1,6 +1,5 @@
 package com.sumory.network.api
 
-import com.sumory.network.dto.diary.request.DiaryDeleteRequest
 import com.sumory.network.dto.diary.request.DiaryWriteRequest
 import com.sumory.network.dto.diary.response.AllDiaryResponse
 import com.sumory.network.dto.diary.response.DateDiaryResponse
@@ -43,6 +42,7 @@ interface DiaryApi {
     @DELETE("diary/delete")
     suspend fun deleteDiary(
         @Header("Authorization") token: String,
-        @Body body: DiaryDeleteRequest
+        @Query("date") date: String,
+        @Query("title") title: String
     ): DiaryDeleteResponse
 }

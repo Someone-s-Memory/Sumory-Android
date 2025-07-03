@@ -6,7 +6,6 @@ import com.sumory.data.repository.diary.DiaryRepository
 import com.sumory.diary.viewmodel.uistate.DiaryDetailUiState
 import com.sumory.diary.viewmodel.uistate.DiaryWriteUiState
 import com.sumory.model.model.diary.DiaryDetailResponseModel
-import com.sumory.model.param.diary.DiaryDeleteRequestParam
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -49,16 +48,10 @@ class DiaryDetailViewModel @Inject constructor(
     }
 
     fun deleteDiary(){
-        val param = _diaryDetail.value?.let {
-            DiaryDeleteRequestParam(
-                date = it.date,
-                title = it.title
-            )
-        }
         viewModelScope.launch {
             try {
-                if (param != null) {
-                    diaryRepository.deleteDiary(param).collect {
+                _diaryDetail.value?.let {
+                    diaryRepository.deleteDiary(it.date, it.title).collect {
                         _diaryDetailState.value = DiaryDetailUiState.Success
                     }
                 }
