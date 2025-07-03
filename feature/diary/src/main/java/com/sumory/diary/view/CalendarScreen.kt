@@ -247,7 +247,7 @@ fun CalendarScreen(
                                             .build(),
                                         contentDescription = null,
                                         contentScale = ContentScale.Crop,
-                                        alpha = 0.5f,
+                                        alpha = 0.4f,
                                         modifier = Modifier
                                             .matchParentSize()
                                             .clip(RoundedCornerShape(12.dp))
