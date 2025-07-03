@@ -132,7 +132,8 @@ fun CalendarRoute(
         onDiaryClick = onDiaryClick,
         onWriteClick = onWriteClick,
         onNextMonth = viewModel::incrementMonth,
-        onPrevMonth = viewModel::decrementMonth
+        onPrevMonth = viewModel::decrementMonth,
+        onMonthClick = viewModel::todayMonth
     )
 }
 
@@ -148,7 +149,8 @@ fun CalendarScreen(
     onDiaryClick: (Int) -> Unit,
     onWriteClick: () -> Unit,
     onPrevMonth: () -> Unit,
-    onNextMonth: () -> Unit
+    onNextMonth: () -> Unit,
+    onMonthClick: () -> Unit
 ) {
     SumoryTheme { colors, typography ->
         Column(
@@ -169,6 +171,8 @@ fun CalendarScreen(
                         tint = colors.black
                     )
                     Text(
+                        modifier = modifier
+                            .clickable { onMonthClick() },
                         text = "${currentMonth.year}년 ${currentMonth.monthValue}월",
                         color = colors.black,
                         style = typography.titleBold2
@@ -378,5 +382,6 @@ private fun CalendarScreenPreview() {
         onWriteClick = {},
         onPrevMonth = {},
         onNextMonth = {},
+        onMonthClick = {}
     )
 }

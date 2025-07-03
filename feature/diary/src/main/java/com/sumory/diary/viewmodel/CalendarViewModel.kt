@@ -47,6 +47,10 @@ class CalendarViewModel @Inject constructor(
         _currentMonth.value = _currentMonth.value.minusMonths(1)
     }
 
+    fun todayMonth() {
+        _currentMonth.value = YearMonth.now()
+    }
+
     fun onDateSelected(date: LocalDate, forceRefresh: Boolean = false) {
         _selectedDate.value = date
         loadDateDiaries(date, forceRefresh)
