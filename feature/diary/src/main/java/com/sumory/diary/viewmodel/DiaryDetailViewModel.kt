@@ -10,6 +10,9 @@ import com.sumory.model.param.diary.DiaryDeleteRequestParam
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -67,5 +70,22 @@ class DiaryDetailViewModel @Inject constructor(
 
     fun resetState() {
         _diaryDetailState.value = DiaryDetailUiState.Idle
+    }
+
+    fun formatDateWithDayOfWeek(dateString: String): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.KOREA)
+        val date = LocalDate.parse(dateString, formatter)
+
+        val dayOfWeekKorean = when (date.dayOfWeek) {
+            java.time.DayOfWeek.MONDAY -> "월요일"
+            java.time.DayOfWeek.TUESDAY -> "화요일"
+            java.time.DayOfWeek.WEDNESDAY -> "수요일"
+            java.time.DayOfWeek.THURSDAY -> "목요일"
+            java.time.DayOfWeek.FRIDAY -> "금요일"
+            java.time.DayOfWeek.SATURDAY -> "토요일"
+            java.time.DayOfWeek.SUNDAY -> "일요일"
+        }
+
+        return "${date.year}년 ${date.monthValue}월 ${date.dayOfMonth}일 $dayOfWeekKorean"
     }
 }

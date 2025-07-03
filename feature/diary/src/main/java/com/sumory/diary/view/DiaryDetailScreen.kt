@@ -90,7 +90,7 @@ fun DiaryDetailRoute(
 
         diaryDetail != null -> {
             DiaryDetailScreen(
-                date = diaryDetail!!.date,
+                date = viewModel.formatDateWithDayOfWeek(diaryDetail!!.date),
                 emotion = diaryDetail!!.feeling,
                 weather = diaryDetail!!.weather,
                 title = diaryDetail!!.title,
