@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
+import com.sumory.design_system.icon.DeleteIcon
 import com.sumory.design_system.icon.EditIcon
 import com.sumory.design_system.icon.LeftArrowIcon
 import com.sumory.design_system.theme.SumoryTheme
@@ -86,7 +87,8 @@ fun DiaryDetailRoute(
                 content = diaryDetail!!.content,
                 photoUrls = diaryDetail!!.pictures,
                 onBackClick = onBackClick,
-                onEditClick = onEditClick
+                onEditClick = onEditClick,
+                onDeleteClick = {}
             )
         }
 
@@ -109,7 +111,8 @@ fun DiaryDetailScreen(
     content: String,
     photoUrls: List<String> = emptyList(),
     onEditClick: () -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onDeleteClick: () -> Unit
 ) {
     var zoomedImageUrl by remember { mutableStateOf<String?>(null) }
 
@@ -130,6 +133,7 @@ fun DiaryDetailScreen(
                         .clickable { onBackClick() },
                     tint = colors.black
                 )
+                Spacer(modifier.width(29.dp))
                 Spacer(modifier.weight(1f))
                 Text(
                     text = date,
@@ -141,6 +145,12 @@ fun DiaryDetailScreen(
                     modifier = modifier
                         .clickable { onEditClick() },
                     tint = colors.black
+                )
+                Spacer(modifier.width(5.dp))
+                DeleteIcon(
+                    modifier = modifier
+                        .clickable { onDeleteClick() },
+                    tint = colors.error
                 )
             }
 
@@ -223,7 +233,7 @@ fun DiaryDetailScreen(
                 }
             }
 
-            Spacer(modifier.height(12.dp))
+            Spacer(modifier.height(20.dp))
 
             Text(text = content, style = typography.bodyRegular2, color = colors.black)
         }
@@ -245,6 +255,7 @@ private fun DiaryDetailScreenPreview() {
             "https://picsum.photos/202/300"
         ),
         onEditClick = {},
-        onBackClick = {}
+        onBackClick = {},
+        onDeleteClick = {}
     )
 }
