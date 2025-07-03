@@ -54,7 +54,7 @@ fun DiaryScreenRoute(
 
         else -> {
             DiaryScreen(
-                diaryItems = diaryList,
+                diaryItems = diaryList.reversed(),
                 onDiaryClick = onDiaryClick
             )
         }
