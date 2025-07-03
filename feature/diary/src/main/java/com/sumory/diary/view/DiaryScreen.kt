@@ -1,6 +1,7 @@
 package com.sumory.diary.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.sumory.design_system.icon.FilterIcon
+import com.sumory.design_system.icon.EditIcon
 import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.diary.view.component.DiaryItem
 import com.sumory.diary.viewmodel.DiaryViewModel
@@ -32,7 +33,8 @@ import com.sumory.ui.DevicePreviews
 @Composable
 fun DiaryScreenRoute(
     viewModel: DiaryViewModel = hiltViewModel(),
-    onDiaryClick: (Int) -> Unit
+    onDiaryClick: (Int) -> Unit,
+    onWriteClick: () -> Unit
 ) {
     val diaryList by viewModel.diaryList.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -48,14 +50,16 @@ fun DiaryScreenRoute(
         errorMessage != null -> {
             DiaryScreen(
                 diaryItems = emptyList(),
-                onDiaryClick = onDiaryClick
+                onDiaryClick = onDiaryClick,
+                onWriteClick = onWriteClick
             )
         }
 
         else -> {
             DiaryScreen(
                 diaryItems = diaryList.reversed(),
-                onDiaryClick = onDiaryClick
+                onDiaryClick = onDiaryClick,
+                onWriteClick = onWriteClick
             )
         }
     }
@@ -65,7 +69,8 @@ fun DiaryScreenRoute(
 fun DiaryScreen(
     modifier: Modifier = Modifier,
     diaryItems: List<AllDiaryResponseModel>,
-    onDiaryClick: (Int) -> Unit
+    onDiaryClick: (Int) -> Unit,
+    onWriteClick: () -> Unit,
 ) {
     SumoryTheme { colors, typography ->
         Column(
@@ -84,8 +89,10 @@ fun DiaryScreen(
                     color = colors.black
                 )
                 Spacer(modifier = modifier.weight(1f))
-                FilterIcon(
-                    modifier = modifier.padding(start = 5.dp),
+                EditIcon(
+                    modifier = modifier
+                        .padding(start = 5.dp)
+                        .clickable { onWriteClick() },
                     tint = colors.black
                 )
             }
@@ -161,7 +168,8 @@ private fun DiaryScreenPreview() {
 
     DiaryScreen(
         diaryItems = dummyList,
-        onDiaryClick = {}
+        onDiaryClick = {},
+        onWriteClick = {}
     )
 }
 
@@ -170,6 +178,7 @@ private fun DiaryScreenPreview() {
 private fun DiaryScreenPreviewEmpty() {
     DiaryScreen(
         diaryItems = emptyList(),
-        onDiaryClick = {}
+        onDiaryClick = {},
+        onWriteClick = {}
     )
 }

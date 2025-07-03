@@ -5,7 +5,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import com.sumory.diary.calendarScreen
-import com.sumory.diary.diaryDetailRoute
 import com.sumory.diary.diaryDetailScreen
 import com.sumory.diary.diaryScreen
 import com.sumory.diary.diaryWriteRoute
@@ -88,6 +87,9 @@ fun SumoryNavHost(
         diaryScreen(
             onDiaryClick = { diaryId ->
                 navController.navigate("diaryDetailRoute/$diaryId")
+            },
+            onWriteClick = {
+                navController.navigate(diaryWriteRoute)
             }
         )
 

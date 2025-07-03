@@ -15,11 +15,13 @@ const val calendarRoute = "calendarRoute"
 const val diaryDetailRoute = "diaryDetailRoute/{diaryId}"
 
 fun NavGraphBuilder.diaryScreen(
-    onDiaryClick: (Int) -> Unit
+    onDiaryClick: (Int) -> Unit,
+    onWriteClick: () -> Unit,
 ) {
     composable(diaryRoute) {
         DiaryScreenRoute(
-            onDiaryClick = onDiaryClick
+            onDiaryClick = onDiaryClick,
+            onWriteClick = onWriteClick
         )
     }
 }
