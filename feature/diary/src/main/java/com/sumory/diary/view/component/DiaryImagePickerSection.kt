@@ -53,7 +53,8 @@ fun DiaryImagePickerSection(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp)
+                    .height(120.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 items(imageUris) { uri ->
                     Box(
