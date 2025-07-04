@@ -4,7 +4,9 @@ import com.sumory.model.model.diary.AllDiaryResponseModel
 import com.sumory.model.model.diary.DateDiaryResponseModel
 import com.sumory.model.model.diary.DiaryDeleteResponseModel
 import com.sumory.model.model.diary.DiaryDetailResponseModel
+import com.sumory.model.model.diary.DiaryUpdateResponseModel
 import com.sumory.model.model.diary.DiaryWriteResponseModel
+import com.sumory.model.param.diary.DiaryUpdateRequestParam
 import com.sumory.model.param.diary.DiaryWriteRequestParam
 import com.sumory.network.datasource.diary.DiaryDataSource
 import com.sumory.network.mapper.diary.request.toDto
@@ -65,6 +67,12 @@ class DiaryRepositoryImpl @Inject constructor(
         return diaryDataSource
             .deleteDiary(date, title)
             .map { it.toModel() }
+    }
+
+    override suspend fun updateDiary(body: DiaryUpdateRequestParam): Flow<DiaryUpdateResponseModel> {
+        cached.value = null
+        dateDiaryCache.clear()
+        return diaryDataSource.updateDiary(body.toDto()).map { it.toModel() }
     }
 
     // 캐시 수동 초기화 함수
