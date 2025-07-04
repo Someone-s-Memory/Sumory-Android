@@ -110,6 +110,7 @@ fun SumoryNavHost(
 
         diaryDetailScreen(
             onBackClick = {
+                navController.previousBackStackEntry?.savedStateHandle?.set("diary_changed", true)
                 navController.popBackStack()
             },
             onEditClick = {

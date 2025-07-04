@@ -112,11 +112,13 @@ fun CalendarRoute(
 
     val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
     val diarySavedResult = savedStateHandle?.getLiveData<Boolean>("diary_saved")?.observeAsState()
+    val diaryChangedResult = savedStateHandle?.getLiveData<Boolean>("diary_changed")?.observeAsState()
 
-    LaunchedEffect(diarySavedResult) {
-        if (diarySavedResult?.value == true) {
+    LaunchedEffect(diarySavedResult, diaryChangedResult) {
+        if (diarySavedResult?.value == true || diaryChangedResult?.value == true) {
             viewModel.resetSelectedDateToToday()
             savedStateHandle.remove<Boolean>("diary_saved")
+            savedStateHandle.remove<Boolean>("diary_changed")
         }
     }
     
