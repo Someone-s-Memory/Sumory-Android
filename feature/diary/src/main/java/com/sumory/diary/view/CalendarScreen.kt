@@ -102,7 +102,7 @@ fun CalendarRoute(
                 isToday = date == today,
                 hasDiary = hasDiary,
                 feeling = if (hasDiary) diaryMap[date]?.firstOrNull()?.feeling.orEmpty() else "",
-                imageUrl = diaryMap[date]?.firstOrNull()?.pictures?.firstOrNull()
+                imageUrl = diaryMap[date]?.firstOrNull { it.pictures.isNotEmpty() }?.pictures?.firstOrNull()
             )
         }
     }
