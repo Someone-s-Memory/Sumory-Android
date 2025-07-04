@@ -18,7 +18,7 @@ class TokenAuthenticator(
         val refresh = runBlocking { tokenDataStore.refreshToken.firstOrNull() } ?: return null
         val refreshResponse = runBlocking {
             runCatching {
-                authApiProvider.get().refresh("Bearer $refresh") // ✅ 지연 초기화
+                authApiProvider.get().refresh("Bearer $refresh")
             }.getOrNull()
         } ?: return null
 
