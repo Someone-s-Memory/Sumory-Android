@@ -27,14 +27,19 @@ fun NavGraphBuilder.diaryScreen(
 }
 
 fun NavGraphBuilder.diaryDetailScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onEditClick: (Int) -> Unit
 ) {
     composable(
         diaryDetailRoute,
         arguments = listOf(navArgument("diaryId") { type = NavType.IntType })
     ) { backStackEntry ->
         val diaryId = backStackEntry.arguments?.getInt("diaryId") ?: 0
-        DiaryDetailRoute(diaryId = diaryId, onBackClick = onBackClick)
+        DiaryDetailRoute(
+            diaryId = diaryId,
+            onBackClick = onBackClick,
+            onEditClick = { onEditClick(diaryId) }
+        )
     }
 }
 
@@ -42,8 +47,16 @@ fun NavGraphBuilder.diaryWriteScreen(
     onBackClick: () -> Unit,
     onDiarySavedSuccess: () -> Unit
 ) {
-    composable(diaryWriteRoute) {
+    composable(
+        route = "$diaryWriteRoute?diaryId={diaryId}",
+        arguments = listOf(navArgument("diaryId") {
+            type = NavType.IntType
+            defaultValue = -1
+        })
+    ) { backStackEntry ->
+        val diaryId = backStackEntry.arguments?.getInt("diaryId")
         DiaryWriteRoute(
+            diaryId = if (diaryId != -1) diaryId else null,
             onBackClick = onBackClick,
             onDiarySavedSuccess = onDiarySavedSuccess
         )

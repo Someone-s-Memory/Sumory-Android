@@ -64,7 +64,7 @@ fun DiaryDetailRoute(
     diaryId: Int,
     viewModel: DiaryDetailViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
-    onEditClick: () -> Unit = {}
+    onEditClick: () -> Unit
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current

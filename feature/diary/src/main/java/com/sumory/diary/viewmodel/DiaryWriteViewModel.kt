@@ -2,23 +2,38 @@ package com.sumory.diary.viewmodel
 
 import android.content.Context
 import android.net.Uri
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sumory.data.repository.diary.DiaryRepository
-import com.sumory.model.param.diary.DiaryWriteRequestParam
 import com.sumory.diary.viewmodel.uistate.DiaryWriteUiState
+import com.sumory.model.param.diary.DiaryUpdateRequestParam
+import com.sumory.model.param.diary.DiaryWriteRequestParam
 import com.sumory.model.type.DiaryFeeling
 import com.sumory.model.type.DiaryWeather
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.File
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
 class DiaryWriteViewModel @Inject constructor(
-    private val diaryRepository: DiaryRepository
+    private val diaryRepository: DiaryRepository,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+    private val diaryId: Int? = savedStateHandle.get<Int>("diaryId")
+
+    private val _originTitle = MutableStateFlow("")
+    val originTitle = _originTitle.asStateFlow()
 
     private val _title = MutableStateFlow("")
     val title = _title.asStateFlow()
@@ -40,6 +55,32 @@ class DiaryWriteViewModel @Inject constructor(
 
     private val _openGalleryEvent = MutableSharedFlow<Unit>()
     val openGalleryEvent = _openGalleryEvent.asSharedFlow()
+
+    private val _diaryDate = MutableStateFlow<LocalDate>(LocalDate.now())
+    val diaryDate: StateFlow<LocalDate> = _diaryDate.asStateFlow()
+
+    init {
+        if (diaryId != null && diaryId != -1) {
+            loadDiary(diaryId)
+        }
+    }
+
+    private fun loadDiary(id: Int) {
+        viewModelScope.launch {
+            try {
+                val diary = diaryRepository.getDiaryDetail(id)
+                _originTitle.value = diary.title
+                _title.value = diary.title
+                _content.value = diary.content
+                _selectedEmotion.value = DiaryFeeling.values().find { it.value == diary.feeling }
+                _selectedWeather.value = DiaryWeather.values().find { it.value == diary.weather }
+                _diaryDate.value = LocalDate.parse(diary.date, DateTimeFormatter.ISO_DATE)
+                _imageUris.value = diary.pictures.map { Uri.parse(it) }
+            } catch (e: Exception) {
+                _diaryWriteState.value = DiaryWriteUiState.Error("일기를 불러오는데 실패했습니다.")
+            }
+        }
+    }
 
     fun updateTitle(value: String) {
         _title.value = value
@@ -92,7 +133,7 @@ class DiaryWriteViewModel @Inject constructor(
         }
     }
 
-    fun postDiary(date: String, context: Context) {
+    fun postDiary(context: Context) {
         // 1. 유효성 검사
         when {
             _title.value.isBlank() -> {
@@ -115,8 +156,14 @@ class DiaryWriteViewModel @Inject constructor(
 
         // 2. 이미지 Uri → 내부 저장소로 복사 후 경로 추출
         val picturePaths = _imageUris.value.mapNotNull { uri ->
-            copyUriToInternalStorage(context, uri)
+            if (uri.scheme?.startsWith("http") == true) {
+                uri.toString()
+            } else {
+                copyUriToInternalStorage(context, uri)
+            }
         }
+
+        val date = _diaryDate.value.format(DateTimeFormatter.ISO_DATE)
 
         // 3. 요청 파라미터 생성
         val param = DiaryWriteRequestParam(
@@ -131,8 +178,23 @@ class DiaryWriteViewModel @Inject constructor(
         // 4. 업로드 요청
         viewModelScope.launch {
             try {
-                diaryRepository.diaryWrite(param).collect {
-                    _diaryWriteState.value = DiaryWriteUiState.Success
+                if (diaryId != null && diaryId != -1) {
+                    val updateParam = DiaryUpdateRequestParam(
+                        title = _originTitle.value,
+                        content = _content.value,
+                        feeling = _selectedEmotion.value?.value ?: "",
+                        weather = _selectedWeather.value?.value ?: "",
+                        date = date,
+                        pictures = picturePaths,
+                        change = _title.value
+                    )
+                    diaryRepository.updateDiary(updateParam).collect {
+                        _diaryWriteState.value = DiaryWriteUiState.Success
+                    }
+                } else {
+                    diaryRepository.diaryWrite(param).collect {
+                        _diaryWriteState.value = DiaryWriteUiState.Success
+                    }
                 }
             } catch (e: Exception) {
                 _diaryWriteState.value = DiaryWriteUiState.Error("동일한 제목이 있습니다. 다른 제목을 사용해주세요.")

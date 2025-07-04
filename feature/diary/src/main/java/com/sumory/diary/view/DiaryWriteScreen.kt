@@ -66,6 +66,7 @@ import java.util.Locale
 
 @Composable
 fun DiaryWriteRoute(
+    diaryId: Int?,
     onBackClick: () -> Unit = {},
     onDiarySavedSuccess: () -> Unit = {},
     viewModel: DiaryWriteViewModel = hiltViewModel()
@@ -77,9 +78,8 @@ fun DiaryWriteRoute(
     val viewModelStoreOwner = LocalViewModelStoreOwner.current
     val savedStateRegistryOwner = LocalSavedStateRegistryOwner.current
 
-    val today = LocalDate.now()
-    val apiDate = today.format(DateTimeFormatter.ISO_DATE) // "yyyy-MM-dd"
-    val displayDate = today.format(
+    val diaryDate by viewModel.diaryDate.collectAsState()
+    val displayDate = diaryDate.format(
         DateTimeFormatter.ofPattern("yyyy년 M월 d일 E요일", Locale.KOREAN)
     )
 
@@ -99,10 +99,7 @@ fun DiaryWriteRoute(
             message = "일기를 저장하시겠습니까?",
             onConfirm = {
                 showSaveDialog = false
-                viewModel.postDiary(
-                    date = apiDate,
-                    context = context
-                )
+                viewModel.postDiary(context = context)
             },
             onDismiss = {
                 showSaveDialog = false

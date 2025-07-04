@@ -36,7 +36,8 @@ fun SumoryApp(
     val currentRoute = currentBackStackEntry?.destination?.route
     Log.d("SumoryApp", "Current route: $currentRoute")
 
-    val shouldShowBars = currentRoute !in listOf(signInRoute, signUpRoute, splashRoute, diaryDetailRoute, diaryWriteRoute)
+    val shouldShowBars = currentRoute?.startsWith(diaryWriteRoute) == false &&
+                         currentRoute !in listOf(signInRoute, signUpRoute, splashRoute, diaryDetailRoute)
     val shouldHandleBack = currentRoute != homeRoute &&
             currentRoute !in listOf(signInRoute, signUpRoute, splashRoute)
 

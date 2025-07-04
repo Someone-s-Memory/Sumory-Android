@@ -110,6 +110,9 @@ fun SumoryNavHost(
         diaryDetailScreen(
             onBackClick = {
                 navController.popBackStack()
+            },
+            onEditClick = {
+                navController.navigate("$diaryWriteRoute?diaryId=$it")
             }
         )
 
