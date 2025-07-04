@@ -1,16 +1,19 @@
 package com.sumory.network.api
 
+import com.sumory.network.dto.diary.request.DiaryUpdateRequest
 import com.sumory.network.dto.diary.request.DiaryWriteRequest
 import com.sumory.network.dto.diary.response.AllDiaryResponse
 import com.sumory.network.dto.diary.response.DateDiaryResponse
 import com.sumory.network.dto.diary.response.DiaryDeleteResponse
 import com.sumory.network.dto.diary.response.DiaryDetailResponse
+import com.sumory.network.dto.diary.response.DiaryUpdateResponse
 import com.sumory.network.dto.diary.response.DiaryWriteResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Query
 
 interface DiaryApi {
@@ -45,4 +48,10 @@ interface DiaryApi {
         @Query("date") date: String,
         @Query("title") title: String
     ): DiaryDeleteResponse
+
+    @PUT("diary/update")
+    suspend fun updateDiary(
+        @Header("Authorization") token: String,
+        @Body body: DiaryUpdateRequest
+    ): DiaryUpdateResponse
 }
