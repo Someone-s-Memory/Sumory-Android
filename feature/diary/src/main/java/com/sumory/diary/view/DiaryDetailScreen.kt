@@ -20,7 +20,9 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -195,7 +197,7 @@ fun DiaryDetailScreen(
                         .clickable { onBackClick() },
                     tint = colors.black
                 )
-                Spacer(modifier.width(29.dp))
+                Spacer(modifier.width(5.dp))
                 Spacer(modifier.weight(1f))
                 Text(
                     text = date,
@@ -218,86 +220,95 @@ fun DiaryDetailScreen(
 
             Spacer(modifier.height(16.dp))
 
-            Row(
+            Column (
                 modifier = modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                    .verticalScroll(rememberScrollState())
             ) {
-                Surface(
-                    shape = RoundedCornerShape(20.dp),
-                    color = colors.gray50,
-                    modifier = Modifier.padding(vertical = 4.dp)
+                Row(
+                    modifier = modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    val feelingIcon = emotion.toDiaryFeeling()
-                    Icon(
-                        painter = painterResource(feelingIcon.iconRes()),
-                        contentDescription = "기분 아이콘",
-                        modifier = Modifier.size(24.dp),
-                    )
-                }
-                Spacer(modifier.width(15.dp))
-                Surface(
-                    shape = RoundedCornerShape(20.dp),
-                    color = colors.gray50,
-                    modifier = Modifier.padding(vertical = 4.dp)
-                ) {
-                    val weatherIcon = weather.toDiaryFeeling()
-                    Icon(
-                        painter = painterResource(weatherIcon.iconRes()),
-                        contentDescription = "기분 아이콘",
-                        modifier = Modifier.size(24.dp),
-                    )
-                }
-            }
-
-            Spacer(modifier.height(24.dp))
-
-            Text(text = title, style = typography.titleBold2, color = colors.black)
-            Divider(modifier = modifier.padding(vertical = 12.dp), thickness = 1.dp, color = colors.gray200)
-
-            if (photoUrls.isNotEmpty()) {
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    items(photoUrls) { url ->
-                        Image(
-                            painter = rememberAsyncImagePainter(url),
-                            contentDescription = "Diary photo",
-                            modifier = modifier
-                                .size(120.dp)
-                                .clip(RoundedCornerShape(8.dp))
-                                .clickable { zoomedImageUrl = url },
-                            contentScale = ContentScale.Crop,
+                    Surface(
+                        shape = RoundedCornerShape(20.dp),
+                        color = colors.gray50,
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    ) {
+                        val feelingIcon = emotion.toDiaryFeeling()
+                        Icon(
+                            painter = painterResource(feelingIcon.iconRes()),
+                            contentDescription = "기분 아이콘",
+                            modifier = Modifier.size(24.dp),
+                        )
+                    }
+                    Spacer(modifier.width(15.dp))
+                    Surface(
+                        shape = RoundedCornerShape(20.dp),
+                        color = colors.gray50,
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    ) {
+                        val weatherIcon = weather.toDiaryFeeling()
+                        Icon(
+                            painter = painterResource(weatherIcon.iconRes()),
+                            contentDescription = "기분 아이콘",
+                            modifier = Modifier.size(24.dp),
                         )
                     }
                 }
-            }
 
-            zoomedImageUrl?.let { url ->
-                Dialog(onDismissRequest = { zoomedImageUrl = null }) {
-                    Box(
-                        modifier = modifier
-                            .fillMaxSize()
-                            .background(colors.black.copy(alpha = 0.8f))
-                            .pointerInput(Unit) {
-                                detectTapGestures(onTap = { zoomedImageUrl = null })
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Image(
-                            painter = rememberAsyncImagePainter(url),
-                            contentDescription = "Zoomed Image",
+                Spacer(modifier.height(24.dp))
+
+                Text(text = title, style = typography.titleBold2, color = colors.black)
+                Divider(
+                    modifier = modifier.padding(vertical = 12.dp),
+                    thickness = 1.dp,
+                    color = colors.gray200
+                )
+
+                if (photoUrls.isNotEmpty()) {
+                    LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        items(photoUrls) { url ->
+                            Image(
+                                painter = rememberAsyncImagePainter(url),
+                                contentDescription = "Diary photo",
+                                modifier = modifier
+                                    .size(120.dp)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .clickable { zoomedImageUrl = url },
+                                contentScale = ContentScale.Crop,
+                            )
+                        }
+                    }
+                }
+
+                zoomedImageUrl?.let { url ->
+                    Dialog(onDismissRequest = { zoomedImageUrl = null }) {
+                        Box(
                             modifier = modifier
                                 .fillMaxSize()
-                                .clip(RoundedCornerShape(12.dp)),
-                            contentScale = ContentScale.Fit
-                        )
+                                .background(colors.black.copy(alpha = 0.8f))
+                                .pointerInput(Unit) {
+                                    detectTapGestures(onTap = { zoomedImageUrl = null })
+                                },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Image(
+                                painter = rememberAsyncImagePainter(url),
+                                contentDescription = "Zoomed Image",
+                                modifier = modifier
+                                    .fillMaxSize()
+                                    .clip(RoundedCornerShape(12.dp)),
+                                contentScale = ContentScale.Fit
+                            )
+                        }
                     }
                 }
+
+                Spacer(modifier.height(20.dp))
+
+                Text(text = content, style = typography.bodyRegular2, color = colors.black)
             }
-
-            Spacer(modifier.height(20.dp))
-
-            Text(text = content, style = typography.bodyRegular2, color = colors.black)
         }
     }
 }
