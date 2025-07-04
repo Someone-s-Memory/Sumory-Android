@@ -41,6 +41,9 @@ class DiaryWriteViewModel @Inject constructor(
     private val _content = MutableStateFlow("")
     val content = _content.asStateFlow()
 
+    private val _contentLength = MutableStateFlow(0)
+    val contentLength = _contentLength.asStateFlow()
+
     private val _selectedEmotion = MutableStateFlow<DiaryFeeling?>(null)
     val selectedEmotion = _selectedEmotion.asStateFlow()
 
@@ -87,7 +90,10 @@ class DiaryWriteViewModel @Inject constructor(
     }
 
     fun updateContent(value: String) {
-        _content.value = value
+        if (value.length <= 1000) {
+            _content.value = value
+            _contentLength.value = value.length
+        }
     }
 
     fun selectEmotion(feeling: DiaryFeeling) {
@@ -142,6 +148,10 @@ class DiaryWriteViewModel @Inject constructor(
             }
             _content.value.isBlank() -> {
                 _diaryWriteState.value = DiaryWriteUiState.Error("내용을 입력해주세요.")
+                return
+            }
+            _content.value.length > 1000 -> {
+                _diaryWriteState.value = DiaryWriteUiState.Error("내용은 1000자를 초과할 수 없습니다.")
                 return
             }
             _selectedEmotion.value == null -> {

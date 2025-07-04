@@ -42,6 +42,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSavedStateRegistryOwner
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -85,6 +86,7 @@ fun DiaryWriteRoute(
 
     val title by viewModel.title.collectAsState()
     val content by viewModel.content.collectAsState()
+    val contentLength by viewModel.contentLength.collectAsState()
     val selectedEmotion by viewModel.selectedEmotion.collectAsState()
     val selectedWeather by viewModel.selectedWeather.collectAsState()
     val writeState by viewModel.diaryWriteState.collectAsState()
@@ -219,7 +221,8 @@ fun DiaryWriteRoute(
         onSaveClick = { showSaveDialog = true },
         imageUris = imageUris,
         onAddImageClick = viewModel::onImageAddClick,
-        onRemoveImageClick = viewModel::removeImage
+        onRemoveImageClick = viewModel::removeImage,
+        contentLength = contentLength
     )
 }
 
@@ -240,6 +243,7 @@ fun DiaryWriteScreen(
     imageUris: List<Uri>,
     onAddImageClick: () -> Unit,
     onRemoveImageClick: (Uri) -> Unit,
+    contentLength: Int
 ) {
     SumoryTheme { colors, typography ->
         Column(
@@ -359,6 +363,18 @@ fun DiaryWriteScreen(
 
             Spacer(modifier = modifier.height(12.dp))
 
+            Text(
+                text = "$contentLength/1000",
+                style = typography.bodyRegular2,
+                color = colors.gray700,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                textAlign = TextAlign.End
+            )
+
+            Spacer(modifier = modifier.height(5.dp))
+
+
             SumoryTextField(
                 modifier = modifier.fillMaxHeight(),
                 textState = content,
@@ -391,6 +407,7 @@ private fun DiaryWriteScreenPreview() {
         onSaveClick = {},
         imageUris = emptyList(),
         onAddImageClick = {},
-        onRemoveImageClick = {}
+        onRemoveImageClick = {},
+        contentLength = 720
     )
 }
