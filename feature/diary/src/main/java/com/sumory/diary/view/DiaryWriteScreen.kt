@@ -86,7 +86,7 @@ fun DiaryWriteRoute(
 
     val title by viewModel.title.collectAsState()
     val content by viewModel.content.collectAsState()
-    val contentLength by viewModel.contentLength.collectAsState()
+    //val contentLength by viewModel.contentLength.collectAsState()
     val selectedEmotion by viewModel.selectedEmotion.collectAsState()
     val selectedWeather by viewModel.selectedWeather.collectAsState()
     val writeState by viewModel.diaryWriteState.collectAsState()
@@ -222,7 +222,7 @@ fun DiaryWriteRoute(
         imageUris = imageUris,
         onAddImageClick = viewModel::onImageAddClick,
         onRemoveImageClick = viewModel::removeImage,
-        contentLength = contentLength
+        //contentLength = contentLength
     )
 }
 
@@ -243,7 +243,7 @@ fun DiaryWriteScreen(
     imageUris: List<Uri>,
     onAddImageClick: () -> Unit,
     onRemoveImageClick: (Uri) -> Unit,
-    contentLength: Int
+    //contentLength: Int
 ) {
     SumoryTheme { colors, typography ->
         Column(
@@ -363,16 +363,16 @@ fun DiaryWriteScreen(
 
             Spacer(modifier = modifier.height(12.dp))
 
-            Text(
-                text = "$contentLength/1000",
-                style = typography.bodyRegular2,
-                color = colors.gray700,
-                modifier = Modifier
-                    .fillMaxWidth(),
-                textAlign = TextAlign.End
-            )
-
-            Spacer(modifier = modifier.height(5.dp))
+//            Text(
+//                text = "$contentLength/1000",
+//                style = typography.bodyRegular2,
+//                color = colors.gray700,
+//                modifier = Modifier
+//                    .fillMaxWidth(),
+//                textAlign = TextAlign.End
+//            )
+//
+//            Spacer(modifier = modifier.height(5.dp))
 
 
             SumoryTextField(
@@ -408,6 +408,6 @@ private fun DiaryWriteScreenPreview() {
         imageUris = emptyList(),
         onAddImageClick = {},
         onRemoveImageClick = {},
-        contentLength = 720
+        //contentLength = 720
     )
 }
