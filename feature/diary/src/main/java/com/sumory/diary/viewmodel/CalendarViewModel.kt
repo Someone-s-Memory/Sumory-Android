@@ -62,6 +62,11 @@ class CalendarViewModel @Inject constructor(
         loadAllDiaries(forceRefresh = true)
     }
 
+    fun loadDataForCurrentSelection() {
+        loadDateDiaries(_selectedDate.value, forceRefresh = true)
+        loadAllDiaries(forceRefresh = true)
+    }
+
     private fun loadAllDiaries(forceRefresh: Boolean = false) {
         viewModelScope.launch {
             try {

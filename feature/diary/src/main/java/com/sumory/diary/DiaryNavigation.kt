@@ -64,11 +64,13 @@ fun NavGraphBuilder.diaryWriteScreen(
 }
 
 fun NavGraphBuilder.calendarScreen(
+    navController: androidx.navigation.NavController,
     onWriteClick: () -> Unit,
     onDiaryClick: (Int) -> Unit
 ) {
     composable(calendarRoute) {
         CalendarRoute (
+            navController = navController,
             onDiaryClick = onDiaryClick,
             onWriteClick = onWriteClick
         )

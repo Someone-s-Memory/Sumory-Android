@@ -23,8 +23,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -70,6 +72,7 @@ data class CalendarDateState(
 @Composable
 fun CalendarRoute(
     viewModel: CalendarViewModel = hiltViewModel(),
+    navController: androidx.navigation.NavController,
     onDiaryClick: (Int) -> Unit,
     onWriteClick: () -> Unit
 ) {
@@ -107,12 +110,23 @@ fun CalendarRoute(
         }
     }
 
+    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+    val diarySavedResult = savedStateHandle?.getLiveData<Boolean>("diary_saved")?.observeAsState()
+
+    LaunchedEffect(diarySavedResult) {
+        if (diarySavedResult?.value == true) {
+            viewModel.resetSelectedDateToToday()
+            savedStateHandle.remove<Boolean>("diary_saved")
+        }
+    }
+    
     val lifecycleOwner = LocalLifecycleOwner.current
 
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                viewModel.resetSelectedDateToToday()
+                // viewModel.resetSelectedDateToToday() // <- We will use the result from SavedStateHandle instead
+                viewModel.loadDataForCurrentSelection()
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)

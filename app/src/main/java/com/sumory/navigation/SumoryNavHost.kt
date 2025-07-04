@@ -76,6 +76,7 @@ fun SumoryNavHost(
         homeScreen()
 
         calendarScreen(
+            navController = navController,
             onDiaryClick = { diaryId ->
                 navController.navigate("diaryDetailRoute/$diaryId")
             },
@@ -121,6 +122,7 @@ fun SumoryNavHost(
                 navController.popBackStack()
             },
             onDiarySavedSuccess = {
+                navController.previousBackStackEntry?.savedStateHandle?.set("diary_saved", true)
                 navController.popBackStack()
             }
         )
