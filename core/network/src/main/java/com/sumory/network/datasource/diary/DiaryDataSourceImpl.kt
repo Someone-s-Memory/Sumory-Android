@@ -2,11 +2,13 @@ package com.sumory.network.datasource.diary
 
 import com.sumory.datastore.auth.TokenDataStore
 import com.sumory.network.api.DiaryApi
+import com.sumory.network.dto.diary.request.DiaryUpdateRequest
 import com.sumory.network.dto.diary.request.DiaryWriteRequest
 import com.sumory.network.dto.diary.response.AllDiaryResponse
 import com.sumory.network.dto.diary.response.DateDiaryResponse
 import com.sumory.network.dto.diary.response.DiaryDeleteResponse
 import com.sumory.network.dto.diary.response.DiaryDetailResponse
+import com.sumory.network.dto.diary.response.DiaryUpdateResponse
 import com.sumory.network.dto.diary.response.DiaryWriteResponse
 import com.sumory.network.util.performApiRequest
 import kotlinx.coroutines.flow.Flow
@@ -59,6 +61,15 @@ class DiaryDataSourceImpl @Inject constructor(
                 token = "Bearer $token",
                 date = date,
                 title = title
+            )
+        }
+
+    override fun updateDiary(body: DiaryUpdateRequest): Flow<DiaryUpdateResponse> =
+        performApiRequest {
+            val token = tokenDataStore.accessToken.firstOrNull() ?: ""
+            api.updateDiary(
+                token = "Bearer $token",
+                body = body
             )
         }
 }
