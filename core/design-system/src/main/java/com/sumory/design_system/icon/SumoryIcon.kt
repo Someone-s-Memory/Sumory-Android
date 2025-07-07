@@ -157,7 +157,7 @@ fun RightArrowIcon(
 ){
     Icon(
         painter = painterResource(id = R.drawable.ic_arrow_right),
-        contentDescription = stringResource(id =R.string.right_arrow_description),
+        contentDescription = stringResource(id = R.string.right_arrow_description),
         modifier = modifier,
         tint = tint
     )
@@ -169,8 +169,21 @@ fun DownArrowIcon(
     tint: Color = Color.Unspecified
 ){
     Icon(
-        painter = painterResource(id = R.drawable.arrow_down),
-        contentDescription = stringResource(id =R.string.down_arrow_description),
+        painter = painterResource(id = R.drawable.ic_arrow_down),
+        contentDescription = stringResource(id = R.string.down_arrow_description),
+        modifier = modifier,
+        tint = tint
+    )
+}
+
+@Composable
+fun DropdownIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+){
+    Icon(
+        painter = painterResource(id = R.drawable.ic_dropdown),
+        contentDescription = stringResource(id = R.string.dropdown_description),
         modifier = modifier,
         tint = tint
     )
@@ -183,7 +196,7 @@ fun AddIcon(
 ){
     Icon(
         painter = painterResource(id = R.drawable.ic_add),
-        contentDescription = stringResource(id =R.string.add_description),
+        contentDescription = stringResource(id = R.string.add_description),
         modifier = modifier,
         tint = tint
     )
@@ -196,7 +209,7 @@ fun EditIcon(
 ){
     Icon(
         painter = painterResource(id = R.drawable.ic_edit),
-        contentDescription = stringResource(id =R.string.edit_description),
+        contentDescription = stringResource(id = R.string.edit_description),
         modifier = modifier,
         tint = tint
     )
@@ -221,7 +234,7 @@ fun DeleteIcon(
     tint: Color = Color.Unspecified
 ){
     Icon(
-        painter = painterResource(id = R.drawable.delete),
+        painter = painterResource(id = R.drawable.ic_delete),
         contentDescription = stringResource(id = R.string.delete_description),
         modifier = modifier,
         tint = tint

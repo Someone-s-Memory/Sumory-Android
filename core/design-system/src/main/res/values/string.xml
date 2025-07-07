@@ -19,4 +19,5 @@
     <string name="save_description">저장 아이콘</string>
     <string name="delete_description">삭제 아이콘</string>
     <string name="down_arrow_description">아래 화살표 아이콘</string>
+    <string name="dropdown_description">드롭다운 화살표 아이콘</string>
 </resources>
