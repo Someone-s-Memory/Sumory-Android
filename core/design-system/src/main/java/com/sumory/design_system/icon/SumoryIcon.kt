@@ -164,6 +164,19 @@ fun RightArrowIcon(
 }
 
 @Composable
+fun DownArrowIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+){
+    Icon(
+        painter = painterResource(id = R.drawable.arrow_down),
+        contentDescription = stringResource(id =R.string.down_arrow_description),
+        modifier = modifier,
+        tint = tint
+    )
+}
+
+@Composable
 fun AddIcon(
     modifier: Modifier = Modifier,
     tint: Color = Color.Unspecified
