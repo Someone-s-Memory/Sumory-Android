@@ -11,26 +11,29 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
+import com.sumory.design_system.component.dropdownmenu.SumoryDropdownMenu
+import com.sumory.design_system.icon.DropdownIcon
 import com.sumory.design_system.icon.EditIcon
 import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.diary.view.component.DiaryItem
+import com.sumory.diary.viewmodel.DiarySortType
 import com.sumory.diary.viewmodel.DiaryViewModel
 import com.sumory.model.model.diary.AllDiaryResponseModel
 import com.sumory.ui.DevicePreviews
@@ -44,6 +47,7 @@ fun DiaryScreenRoute(
     val diaryList by viewModel.diaryList.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
+    val sortType by viewModel.sortType.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.fetchDiaries()
@@ -51,24 +55,29 @@ fun DiaryScreenRoute(
 
     when {
         isLoading -> {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
                 CircularProgressIndicator()
             }
         }
-
         errorMessage != null -> {
             DiaryScreen(
                 diaryItems = emptyList(),
                 onDiaryClick = onDiaryClick,
-                onWriteClick = onWriteClick
+                onWriteClick = onWriteClick,
+                sortType = sortType,
+                onChangeSortType = viewModel::changeSortType
             )
         }
-
         else -> {
             DiaryScreen(
-                diaryItems = diaryList.reversed(),
+                diaryItems = diaryList,
                 onDiaryClick = onDiaryClick,
-                onWriteClick = onWriteClick
+                onWriteClick = onWriteClick,
+                sortType = sortType,
+                onChangeSortType = viewModel::changeSortType
             )
         }
     }
@@ -80,10 +89,16 @@ fun DiaryScreen(
     diaryItems: List<AllDiaryResponseModel>,
     onDiaryClick: (Int) -> Unit,
     onWriteClick: () -> Unit,
+    sortType: DiarySortType,
+    onChangeSortType: (DiarySortType) -> Unit
 ) {
+    var expanded by remember { mutableStateOf(false) }
+    val sortOptions = listOf("최신순", "오래된순")
+    val selectedIndex = if (sortType == DiarySortType.LATEST) 0 else 1
+
     SumoryTheme { colors, typography ->
         Column(
-            modifier
+            modifier = modifier
                 .fillMaxSize()
                 .background(colors.white)
                 .padding(start = 16.dp, end = 16.dp, top = 16.dp),
@@ -98,6 +113,39 @@ fun DiaryScreen(
                     color = colors.black
                 )
                 Spacer(modifier = modifier.weight(1f))
+                Box(
+                    modifier = Modifier
+                        .clickable { expanded = !expanded }
+                        .padding(horizontal = 8.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = sortOptions[selectedIndex],
+                            color = colors.black,
+                            style = typography.bodyRegular2
+                        )
+                        DropdownIcon(
+                            modifier
+                                .size(20.dp),
+                            tint = colors.black
+                        )
+                    }
+
+                    SumoryDropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false },
+                        items = sortOptions,
+                        selectedIndex = selectedIndex,
+                        onItemSelected = { index ->
+                            expanded = false
+                            onChangeSortType(
+                                if (index == 0) DiarySortType.LATEST else DiarySortType.OLDEST
+                            )
+                        },
+                        modifier.padding(end = 15.dp)
+                    )
+                }
+
                 EditIcon(
                     modifier = modifier
                         .padding(start = 5.dp)
@@ -106,7 +154,7 @@ fun DiaryScreen(
                 )
             }
 
-            Spacer(modifier = modifier.height(16.dp))
+            Spacer(modifier = modifier.height(12.dp))
 
             if (diaryItems.isEmpty()) {
                 Column(
@@ -119,7 +167,7 @@ fun DiaryScreen(
                         style = typography.bodyRegular2,
                         color = colors.gray700,
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = modifier.fillMaxWidth()
                     )
                 }
             } else {
@@ -141,53 +189,12 @@ fun DiaryScreen(
 
 @DevicePreviews
 @Composable
-private fun DiaryScreenPreview() {
-    val dummyList = listOf(
-        AllDiaryResponseModel(
-            id = 1,
-            title = "즐거운 하루",
-            content = "오늘은 정말 행복했어요",
-            feeling = "행복",
-            weather = "맑음",
-            date = "2025. 6. 10.",
-            pictures = listOf("sample1"),
-            userID = "user1"
-        ),
-        AllDiaryResponseModel(
-            id = 2,
-            title = "비 오는 날",
-            content = "조금 우울했지만 괜찮았어요",
-            feeling = "슬픔",
-            weather = "비",
-            date = "2025. 6. 8.",
-            pictures = listOf("sample2"),
-            userID = "user1"
-        ),
-        AllDiaryResponseModel(
-            id = 3,
-            title = "행복한 순간",
-            content = "가족과 함께한 시간",
-            feeling = "행복",
-            weather = "맑음",
-            date = "2025. 6. 5.",
-            pictures = listOf("sample3"),
-            userID = "user1"
-        ),
-    )
-
-    DiaryScreen(
-        diaryItems = dummyList,
-        onDiaryClick = {},
-        onWriteClick = {}
-    )
-}
-
-@DevicePreviews
-@Composable
 private fun DiaryScreenPreviewEmpty() {
     DiaryScreen(
         diaryItems = emptyList(),
         onDiaryClick = {},
-        onWriteClick = {}
+        onWriteClick = {},
+        sortType = DiarySortType.LATEST,
+        onChangeSortType = {}
     )
 }
