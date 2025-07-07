@@ -2,6 +2,7 @@ package com.sumory.diary.viewmodel
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -125,10 +126,12 @@ class DiaryWriteViewModel @Inject constructor(
         }
     }
 
-    // ✅ Uri → 내부 캐시에 복사하여 파일 경로 반환
     private fun copyUriToInternalStorage(context: Context, uri: Uri): String? {
         return try {
-            val inputStream = context.contentResolver.openInputStream(uri) ?: return null
+            val inputStream = context.contentResolver.openInputStream(uri) ?: run {
+                Log.e("DiaryWrite", "inputStream null for uri: $uri")
+                return null
+            }
             val fileName = "image_${System.currentTimeMillis()}.jpg"
             val file = File(context.cacheDir, fileName)
             file.outputStream().use { output ->
@@ -136,9 +139,11 @@ class DiaryWriteViewModel @Inject constructor(
             }
             file.absolutePath
         } catch (e: Exception) {
+            Log.e("DiaryWrite", "copyUriToInternalStorage() failed", e)
             null
         }
     }
+
 
     fun postDiary(context: Context) {
         // 1. 유효성 검사
@@ -167,10 +172,11 @@ class DiaryWriteViewModel @Inject constructor(
 
         // 2. 이미지 Uri → 내부 저장소로 복사 후 경로 추출
         val picturePaths = _imageUris.value.mapNotNull { uri ->
-            if (uri.scheme?.startsWith("http") == true) {
-                uri.toString()
-            } else {
-                copyUriToInternalStorage(context, uri)
+            when {
+                uri.toString().startsWith("http") -> uri.toString()
+                uri.scheme == "content" -> copyUriToInternalStorage(context, uri)
+                uri.scheme == "file" || uri.path?.startsWith("/data") == true -> uri.path // file:// or direct path
+                else -> null
             }
         }
 
