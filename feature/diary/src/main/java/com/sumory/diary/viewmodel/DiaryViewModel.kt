@@ -24,9 +24,9 @@ class DiaryViewModel @Inject constructor(
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage
 
-    init {
-        fetchDiaries()
-    }
+//    init {
+//        fetchDiaries()
+//    }
 
     fun fetchDiaries(forceRefresh: Boolean = false) {
         viewModelScope.launch {

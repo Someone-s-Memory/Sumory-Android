@@ -37,8 +37,8 @@ class CalendarViewModel @Inject constructor(
 
     init {
         _selectedDate.value = LocalDate.now()
-        loadAllDiaries(forceRefresh = false)
-        loadDateDiaries(_selectedDate.value, forceRefresh = false)
+//        loadAllDiaries(forceRefresh = false)
+//        loadDateDiaries(_selectedDate.value, forceRefresh = false)
     }
 
     fun incrementMonth() {
@@ -57,13 +57,19 @@ class CalendarViewModel @Inject constructor(
     }
 
     fun onDateSelected(date: LocalDate, forceRefresh: Boolean = false) {
+        if (_selectedDate.value == date && !forceRefresh) return
         _selectedDate.value = date
         loadDateDiaries(date, forceRefresh)
     }
 
     fun resetSelectedDateToToday() {
-        _selectedDate.value = LocalDate.now()
-        loadDateDiaries(_selectedDate.value, forceRefresh = true)
+        val today = LocalDate.now()
+        if (_selectedDate.value != today) {
+            _selectedDate.value = today
+            loadDateDiaries(today, forceRefresh = true)
+        } else {
+            loadDateDiaries(today, forceRefresh = true)
+        }
         loadAllDiaries(forceRefresh = true)
     }
 

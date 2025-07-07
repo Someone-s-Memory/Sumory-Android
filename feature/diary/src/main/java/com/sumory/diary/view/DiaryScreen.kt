@@ -17,6 +17,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -44,19 +45,8 @@ fun DiaryScreenRoute(
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
 
-    val lifecycleOwner = LocalLifecycleOwner.current
-
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
-                viewModel.fetchDiaries()
-            }
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
+    LaunchedEffect(Unit) {
+        viewModel.fetchDiaries()
     }
 
     when {

@@ -110,32 +110,8 @@ fun CalendarRoute(
         }
     }
 
-    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
-    val diarySavedResult = savedStateHandle?.getLiveData<Boolean>("diary_saved")?.observeAsState()
-    val diaryChangedResult = savedStateHandle?.getLiveData<Boolean>("diary_changed")?.observeAsState()
-
-    LaunchedEffect(diarySavedResult, diaryChangedResult) {
-        if (diarySavedResult?.value == true || diaryChangedResult?.value == true) {
-            viewModel.resetSelectedDateToToday()
-            savedStateHandle.remove<Boolean>("diary_saved")
-            savedStateHandle.remove<Boolean>("diary_changed")
-        }
-    }
-    
-    val lifecycleOwner = LocalLifecycleOwner.current
-
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
-                // viewModel.resetSelectedDateToToday() // <- We will use the result from SavedStateHandle instead
-                viewModel.loadDataForCurrentSelection()
-            }
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
+    LaunchedEffect(Unit) {
+        viewModel.loadDataForCurrentSelection()
     }
 
     CalendarScreen(
