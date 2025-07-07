@@ -118,7 +118,7 @@ fun CalendarRoute(
         currentMonth = currentMonth,
         selectedDate = selectedDate,
         weeks = weeks,
-        diariesOfSelectedDate = dateDiaries,
+        diariesOfSelectedDate = dateDiaries.reversed(),
         consecutiveDays = consecutiveDays,
         onDateSelected = viewModel::onDateSelected,
         onDiaryClick = onDiaryClick,
