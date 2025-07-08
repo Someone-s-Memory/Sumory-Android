@@ -35,10 +35,19 @@ object NetworkModule {
     fun provideHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
         tokenDataStore: TokenDataStore,
-        authApiProvider: Provider<AuthApi>
+        @AuthApiProvider authApiProvider: Provider<AuthApi>
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
         .authenticator(TokenAuthenticator(tokenDataStore, authApiProvider))
+        .build()
+
+    @Provides
+    @Singleton
+    @AuthOkHttpClient
+    fun provideAuthHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
+    ): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(loggingInterceptor)
         .build()
 
     @Provides
@@ -53,8 +62,26 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    @AuthRetrofit
+    fun provideAuthRetrofit(
+        @AuthOkHttpClient client: OkHttpClient
+    ): Retrofit = Retrofit.Builder()
+        .baseUrl(BuildConfig.BASE_URL)
+        .client(client)
+        .addConverterFactory(MoshiConverterFactory.create())
+        .build()
+
+    @Provides
+    @Singleton
     fun provideAuthAPI(retrofit: Retrofit): AuthApi =
         retrofit.create(AuthApi::class.java)
+
+    @Provides
+    @Singleton
+    @AuthApiProvider
+    fun provideAuthApiForAuthenticator(
+        @AuthRetrofit retrofit: Retrofit
+    ): AuthApi = retrofit.create(AuthApi::class.java)
 
     @Provides
     @Singleton
