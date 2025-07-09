@@ -19,7 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sumory.design_system.icon.InventoryIcon
 import com.sumory.design_system.icon.SettingIcon
+import com.sumory.design_system.icon.StoreIcon
 import com.sumory.design_system.theme.SumoryTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,13 +44,28 @@ fun SumoryTopBar(
                         Text(
                             text = "💰 $coinCount",
                             modifier = modifier
-                                .padding(start = 4.dp, end = 8.dp)
+                                .padding(horizontal = 7.dp)
                                 .clickable { onNavigateTo("storeRoute") },
                             style = typography.captionRegular1
                         )
-                        IconButton(onClick = { onNavigateTo("settingRoute") }) {
-                            SettingIcon(tint = colors.black)
-                        }
+                        StoreIcon(
+                            modifier = modifier
+                                .clickable { onNavigateTo("storeRoute") }
+                                .padding(horizontal = 7.dp),
+                            tint = colors.black
+                        )
+                        InventoryIcon(
+                            modifier = modifier
+                                .clickable { onNavigateTo("storeRoute") }
+                                .padding(horizontal = 7.dp),
+                            tint = colors.black
+                        )
+                        SettingIcon(
+                            modifier = modifier
+                                .clickable { onNavigateTo("settingRoute") }
+                                .padding(horizontal = 7.dp),
+                            tint = colors.black
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
