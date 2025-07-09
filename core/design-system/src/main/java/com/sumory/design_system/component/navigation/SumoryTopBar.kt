@@ -44,26 +44,26 @@ fun SumoryTopBar(
                         Text(
                             text = "💰 $coinCount",
                             modifier = modifier
-                                .padding(horizontal = 7.dp)
+                                .padding(horizontal = 8.dp)
                                 .clickable { onNavigateTo("storeRoute") },
                             style = typography.captionRegular1
                         )
                         StoreIcon(
                             modifier = modifier
                                 .clickable { onNavigateTo("storeRoute") }
-                                .padding(horizontal = 7.dp),
+                                .padding(horizontal = 5.dp),
                             tint = colors.black
                         )
                         InventoryIcon(
                             modifier = modifier
                                 .clickable { onNavigateTo("storeRoute") }
-                                .padding(horizontal = 7.dp),
+                                .padding(horizontal = 5.dp),
                             tint = colors.black
                         )
                         SettingIcon(
                             modifier = modifier
                                 .clickable { onNavigateTo("settingRoute") }
-                                .padding(horizontal = 7.dp),
+                                .padding(start = 5.dp, end = 10.dp),
                             tint = colors.black
                         )
                     }
