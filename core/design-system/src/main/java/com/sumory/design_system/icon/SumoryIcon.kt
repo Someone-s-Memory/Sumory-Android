@@ -99,6 +99,19 @@ fun StoreIcon(
 }
 
 @Composable
+fun InventoryIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+){
+    Icon(
+        painter = painterResource(id = R.drawable.ic_inventory),
+        contentDescription = stringResource(id = R.string.inventory_description),
+        modifier = modifier,
+        tint = tint
+    )
+}
+
+@Composable
 fun CoinIcon(
     modifier: Modifier = Modifier,
     tint: Color = Color.Unspecified
