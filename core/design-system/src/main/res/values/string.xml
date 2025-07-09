@@ -6,6 +6,7 @@
     <string name="profile_description">프로필 아이콘</string>
     <string name="setting_description">설정 아이콘</string>
     <string name="stat_description">통계 아이콘</string>
+    <string name="store_description">상점 아이콘</string>
     <string name="coin_description">코인 아이콘</string>
     <string name="search_description">검색 아이콘</string>
     <string name="filter_description">필터 아이콘</string>
