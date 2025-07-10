@@ -50,7 +50,7 @@ import com.sumory.design_system.icon.RightArrowIcon
 import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.diary.view.component.CalendarDiaryItem
 import com.sumory.diary.viewmodel.CalendarViewModel
-import com.sumory.diary.viewmodel.mapper.iconRes
+import com.sumory.ui.mapper.iconRes
 import com.sumory.model.mapper.diary.toCalendarDiaryListEntity
 import com.sumory.model.mapper.diary.toDiaryFeeling
 import com.sumory.model.model.diary.DateDiaryResponseModel

@@ -56,7 +56,7 @@ import com.sumory.design_system.icon.EditIcon
 import com.sumory.design_system.icon.LeftArrowIcon
 import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.diary.viewmodel.DiaryDetailViewModel
-import com.sumory.diary.viewmodel.mapper.iconRes
+import com.sumory.ui.mapper.iconRes
 import com.sumory.diary.viewmodel.uistate.DiaryDetailUiState
 import com.sumory.model.mapper.diary.toDiaryFeeling
 import com.sumory.ui.DevicePreviews

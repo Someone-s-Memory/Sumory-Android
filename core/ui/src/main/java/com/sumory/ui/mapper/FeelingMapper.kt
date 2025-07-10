@@ -1,4 +1,4 @@
-package com.sumory.diary.viewmodel.mapper
+package com.sumory.ui.mapper
 
 import androidx.annotation.DrawableRes
 import com.sumory.design_system.R

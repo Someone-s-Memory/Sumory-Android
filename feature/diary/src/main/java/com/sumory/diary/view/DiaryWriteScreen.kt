@@ -56,7 +56,7 @@ import com.sumory.design_system.icon.SaveIcon
 import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.diary.view.component.DiaryImagePickerSection
 import com.sumory.diary.viewmodel.DiaryWriteViewModel
-import com.sumory.diary.viewmodel.mapper.iconRes
+import com.sumory.ui.mapper.iconRes
 import com.sumory.diary.viewmodel.uistate.DiaryWriteUiState
 import com.sumory.model.type.DiaryFeeling
 import com.sumory.model.type.DiaryWeather

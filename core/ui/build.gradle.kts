@@ -9,6 +9,8 @@ android {
 
 dependencies {
     // todo : Add Other Project Implementation -> ex) implementation(project(":core:___")) / (project(":feature:____"))
+    implementation(project(":core:model"))
+    implementation(project(":core:design-system"))
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.coil.kt)
