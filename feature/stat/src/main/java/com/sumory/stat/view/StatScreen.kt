@@ -51,8 +51,8 @@ fun StatScreen(
             // Title
             Text(
                 text = "감정 통계",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
+                color = colors.black,
+                style = typography.titleMedium1
             )
 
             Spacer(Modifier.height(24.dp))
@@ -68,8 +68,7 @@ fun StatScreen(
                     Text(
                         text = "이번 달 감정 분포",
                         color = colors.black,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
+                        style = typography.bodyBold1
                     )
 
                     Spacer(Modifier.height(16.dp))
@@ -120,13 +119,12 @@ fun EmotionBar(feeling: String, count: Int, total: Int) {
                     painter = painterResource(id = feeling.toDiaryFeeling().iconRes()),
                     contentDescription = feeling,
                     tint = colors.black,
-                    modifier = Modifier.size(24.dp)
                 )
                 Spacer(Modifier.width(8.dp))
                 Text(
                     text = feeling,
                     color = colors.black,
-                    fontSize = 16.sp
+                    style = typography.bodyRegular2
                 )
             }
 
@@ -144,7 +142,7 @@ fun EmotionBar(feeling: String, count: Int, total: Int) {
                 Text(
                     text = "${count}일",
                     color = colors.black,
-                    fontSize = 14.sp
+                    style = typography.captionRegular1
                 )
             }
         }
@@ -158,10 +156,13 @@ fun StatisticItem(title: String, value: Int) {
             Text(
                 text = value.toString(),
                 color = colors.darkPink,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
+                style = typography.titleBold2
             )
-            Text(text = title, fontSize = 14.sp)
+            Text(
+                text = title,
+                color = colors.black,
+                style = typography.captionRegular1
+            )
         }
     }
 }
