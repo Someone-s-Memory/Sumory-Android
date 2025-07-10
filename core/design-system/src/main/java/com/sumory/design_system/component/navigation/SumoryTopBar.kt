@@ -2,6 +2,8 @@ package com.sumory.design_system.component.navigation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,8 +16,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,25 +50,52 @@ fun SumoryTopBar(
                             text = "💰 $coinCount",
                             modifier = modifier
                                 .padding(horizontal = 8.dp)
-                                .clickable { onNavigateTo("storeRoute") },
+                                .clickable(
+                                    indication = null,
+                                    interactionSource = remember { MutableInteractionSource() }
+                                ) { onNavigateTo("storeRoute") },
                             style = typography.captionRegular1
                         )
+
+                        // StoreIcon with pressed alpha
+                        val storeSource = remember { MutableInteractionSource() }
+                        val storePressed by storeSource.collectIsPressedAsState()
                         StoreIcon(
                             modifier = modifier
-                                .clickable { onNavigateTo("storeRoute") }
-                                .padding(horizontal = 5.dp),
+                                .clickable(
+                                    indication = null,
+                                    interactionSource = storeSource
+                                ) { onNavigateTo("storeRoute") }
+                                .padding(horizontal = 5.dp)
+                                .alpha(if (storePressed) 0.6f else 1f),
                             tint = colors.black
                         )
+
+                        // InventoryIcon with pressed alpha
+                        val inventorySource = remember { MutableInteractionSource() }
+                        val inventoryPressed by inventorySource.collectIsPressedAsState()
                         InventoryIcon(
                             modifier = modifier
-                                .clickable { onNavigateTo("storeRoute") }
-                                .padding(horizontal = 5.dp),
+                                .clickable(
+                                    indication = null,
+                                    interactionSource = inventorySource
+                                ) { onNavigateTo("storeRoute") }
+                                .padding(horizontal = 5.dp)
+                                .alpha(if (inventoryPressed) 0.6f else 1f),
                             tint = colors.black
                         )
+
+                        // SettingIcon with pressed alpha
+                        val settingSource = remember { MutableInteractionSource() }
+                        val settingPressed by settingSource.collectIsPressedAsState()
                         SettingIcon(
                             modifier = modifier
-                                .clickable { onNavigateTo("settingRoute") }
-                                .padding(start = 5.dp, end = 10.dp),
+                                .clickable(
+                                    indication = null,
+                                    interactionSource = settingSource
+                                ) { onNavigateTo("settingRoute") }
+                                .padding(start = 5.dp, end = 10.dp)
+                                .alpha(if (settingPressed) 0.6f else 1f),
                             tint = colors.black
                         )
                     }
@@ -79,7 +111,6 @@ fun SumoryTopBar(
         }
     }
 }
-
 
 @Preview
 @Composable
