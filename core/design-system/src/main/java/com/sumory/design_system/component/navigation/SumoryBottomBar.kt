@@ -1,5 +1,7 @@
 package com.sumory.design_system.component.navigation
 
+import androidx.compose.foundation.interaction.Interaction
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.Divider
@@ -15,7 +17,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sumory.design_system.R
 import com.sumory.design_system.theme.SumoryTheme
-import com.sumory.design_system.theme.color.SumoryColor
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
+
+internal object NoRippleInteractionSource : MutableInteractionSource {
+    override val interactions: Flow<Interaction> = emptyFlow()
+
+    override suspend fun emit(interaction: Interaction) = Unit
+
+    override fun tryEmit(interaction: Interaction): Boolean = true
+}
 
 @Composable
 fun RowScope.SumoryNavigationBarItem(
@@ -26,21 +37,24 @@ fun RowScope.SumoryNavigationBarItem(
     selectedIcon: @Composable () -> Unit = icon,
     label: @Composable () -> Unit,
 ) {
-    NavigationBarItem(
-        modifier = modifier,
-        selected = selected,
-        onClick = onClick,
-        icon = if (selected) selectedIcon else icon,
-        label = label,
-        alwaysShowLabel = true,
-        colors = NavigationBarItemDefaults.colors(
-            selectedIconColor = SumoryColor.main,
-            unselectedIconColor = SumoryColor.gray500,
-            selectedTextColor = SumoryColor.main,
-            unselectedTextColor = SumoryColor.gray500,
-            indicatorColor = SumoryColor.gray50
+    SumoryTheme { colors, _ ->
+        NavigationBarItem(
+            modifier = modifier,
+            selected = selected,
+            onClick = onClick,
+            icon = if (selected) selectedIcon else icon,
+            label = label,
+            alwaysShowLabel = false,
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = colors.main,
+                unselectedIconColor = colors.gray500,
+                selectedTextColor = colors.main,
+                unselectedTextColor = colors.gray500,
+                indicatorColor = colors.gray50
+            ),
+            interactionSource = NoRippleInteractionSource
         )
-    )
+    }
 }
 
 @Composable
