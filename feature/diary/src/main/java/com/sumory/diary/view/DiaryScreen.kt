@@ -100,7 +100,7 @@ fun DiaryScreen(
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .background(colors.white)
+                .background(colors.gray50)
                 .padding(start = 16.dp, end = 16.dp, top = 16.dp),
         ) {
             Row(

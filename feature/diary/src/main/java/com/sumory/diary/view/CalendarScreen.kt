@@ -146,7 +146,7 @@ fun CalendarScreen(
 ) {
     SumoryTheme { colors, typography ->
         Column(
-            modifier.fillMaxSize().background(colors.white)
+            modifier.fillMaxSize().background(colors.gray50)
         ) {
             Row(
                 modifier = modifier
@@ -248,7 +248,7 @@ fun CalendarScreen(
                                     Box(
                                         modifier = Modifier
                                             .matchParentSize()
-                                            .background(if (dayState.isSelected) colors.pinkSoftBackground else colors.white)
+                                            .background(if (dayState.isSelected) colors.pinkSoftBackground else colors.gray50)
                                     )
                                 }
 

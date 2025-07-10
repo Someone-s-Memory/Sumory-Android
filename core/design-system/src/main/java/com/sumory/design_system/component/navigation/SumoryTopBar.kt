@@ -69,7 +69,7 @@ fun SumoryTopBar(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = colors.white
+                    containerColor = colors.gray50
                 )
             )
             Divider(

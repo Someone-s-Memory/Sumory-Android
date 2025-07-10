@@ -249,7 +249,7 @@ fun DiaryWriteScreen(
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .background(colors.white)
+                .background(colors.gray50)
                 .padding(16.dp)
                 .padding(WindowInsets.systemBars.asPaddingValues())
         ) {

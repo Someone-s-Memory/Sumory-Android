@@ -68,7 +68,7 @@ fun HomeScreen(
     SumoryTheme { colors, typography ->
         Column(
             modifier.fillMaxSize()
-                .background(color = colors.white),
+                .background(color = colors.gray50),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(

@@ -38,7 +38,7 @@ fun RowScope.SumoryNavigationBarItem(
             unselectedIconColor = SumoryColor.gray500,
             selectedTextColor = SumoryColor.main,
             unselectedTextColor = SumoryColor.gray500,
-            indicatorColor = SumoryColor.white
+            indicatorColor = SumoryColor.gray50
         )
     )
 }
@@ -56,7 +56,7 @@ fun SumoryNavigationBar(
             )
             NavigationBar(
                 modifier = modifier,
-                containerColor = colors.white,
+                containerColor = colors.gray50,
                 contentColor = colors.gray500,
                 tonalElevation = 0.dp,
                 content = content

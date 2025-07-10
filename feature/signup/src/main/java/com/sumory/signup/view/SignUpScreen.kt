@@ -130,7 +130,7 @@ fun SignUpScreen(
         Box(
             modifier = modifier
                 .fillMaxSize()
-                .background(colors.white)
+                .background(colors.gray50)
         ) {
             LeftArrowIcon(
                 modifier = modifier

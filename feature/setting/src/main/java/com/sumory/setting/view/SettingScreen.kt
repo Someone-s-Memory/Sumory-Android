@@ -91,7 +91,7 @@ fun SettingScreen(
         Column(
             modifier
                 .fillMaxSize()
-                .background(colors.white)
+                .background(colors.gray50)
                 .padding(start = 20.dp, end = 20.dp, top = 24.dp),
         ) {
             Text(
