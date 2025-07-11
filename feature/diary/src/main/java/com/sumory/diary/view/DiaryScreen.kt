@@ -2,6 +2,8 @@ package com.sumory.diary.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -113,10 +116,17 @@ fun DiaryScreen(
                     color = colors.black
                 )
                 Spacer(modifier = modifier.weight(1f))
+
+                val sortInteractionSource = remember { MutableInteractionSource() }
+                val sortPressed by sortInteractionSource.collectIsPressedAsState()
                 Box(
                     modifier = Modifier
-                        .clickable { expanded = !expanded }
+                        .clickable(
+                            indication = null,
+                            interactionSource = sortInteractionSource
+                        ) { expanded = !expanded }
                         .padding(horizontal = 8.dp)
+                        .alpha(if (sortPressed) 0.6f else 1.0f)
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
@@ -146,10 +156,16 @@ fun DiaryScreen(
                     )
                 }
 
+                val editInteractionSource = remember { MutableInteractionSource() }
+                val editPressed by editInteractionSource.collectIsPressedAsState()
                 EditIcon(
                     modifier = modifier
                         .padding(start = 5.dp)
-                        .clickable { onWriteClick() },
+                        .clickable(
+                            indication = null,
+                            interactionSource = editInteractionSource
+                        ) { onWriteClick() }
+                        .alpha(if (editPressed) 0.6f else 1.0f),
                     tint = colors.black
                 )
             }
