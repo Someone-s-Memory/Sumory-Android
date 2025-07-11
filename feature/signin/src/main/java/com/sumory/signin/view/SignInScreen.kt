@@ -2,6 +2,8 @@ package com.sumory.signin.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,7 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -23,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -135,6 +137,8 @@ fun SignInScreen(
                 isError = isError
             )
 
+            val eyeInteractionSource = remember { MutableInteractionSource() }
+            val eyePressed by eyeInteractionSource.collectIsPressedAsState()
             SumoryTextField(
                 textState = password,
                 placeHolder = "비밀번호",
@@ -142,7 +146,11 @@ fun SignInScreen(
                 icon = {
                     EyeIcon(
                         isSelected = passwordVisible,
-                        modifier = modifier.clickable { onPasswordVisibilityToggle() },
+                        modifier = modifier.clickable(
+                            indication = null,
+                            interactionSource = eyeInteractionSource
+                        ) { onPasswordVisibilityToggle() }
+                            .alpha(if (eyePressed) 0.6f else 1.0f),
                         tint = colors.black
                     )
                 },
@@ -169,9 +177,18 @@ fun SignInScreen(
 
             Spacer(modifier = modifier.height(10.dp))
 
-            TextButton(onClick = onSignUpClick) {
-                Text("회원가입", color = colors.main)
-            }
+            val signUpInteractionSource = remember { MutableInteractionSource() }
+            val signUpPressed by signUpInteractionSource.collectIsPressedAsState()
+            Text(
+                text = "회원가입",
+                color = colors.main,
+                modifier = Modifier
+                    .clickable(
+                        indication = null,
+                        interactionSource = signUpInteractionSource
+                    ) { onSignUpClick() }
+                    .alpha(if (signUpPressed) 0.6f else 1f)
+            )
         }
     }
 }
