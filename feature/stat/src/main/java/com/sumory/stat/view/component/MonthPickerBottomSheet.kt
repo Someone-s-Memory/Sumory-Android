@@ -2,6 +2,7 @@ package com.sumory.stat.view.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.ui.DevicePreviews
@@ -46,14 +48,17 @@ fun MonthPickerBottomSheet(
 
     SumoryTheme { colors, typography ->
         Column(modifier = modifier) {
+            val monthSelectInteractionSource = remember { MutableInteractionSource() }
+            val monthSelectPressed by monthSelectInteractionSource.collectIsPressedAsState()
             Text(
                 text = current?.let { "${it.year}년 ${it.monthValue}월" } ?: "전체 기간",
                 modifier = Modifier
                     .clickable(
                         indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
+                        interactionSource = monthSelectInteractionSource
                     ) { show = true }
-                    .padding(12.dp),
+                    .padding(12.dp)
+                    .alpha(if (monthSelectPressed) 0.6f else 1.0f),
                 color = colors.black,
                 style = typography.bodyBold2
             )
@@ -66,16 +71,22 @@ fun MonthPickerBottomSheet(
                 ) {
                     LazyColumn(modifier = Modifier.padding(16.dp)) {
                         item {
+                            val allSelectInteractionSource = remember { MutableInteractionSource() }
+                            val allSelectPressed by allSelectInteractionSource.collectIsPressedAsState()
                             val isSelected = current == null
                             Text(
                                 text = "전체 기간",
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .clickable {
+                                    .clickable(
+                                        indication = null,
+                                        interactionSource = allSelectInteractionSource
+                                    ) {
                                         onSelect(null)
                                         show = false
                                     }
-                                    .padding(12.dp),
+                                    .padding(12.dp)
+                                    .alpha(if (allSelectPressed) 0.6f else 1.0f),
                                 color = if (isSelected) colors.darkPink else colors.black,
                                 style = if (isSelected) typography.bodyBold2 else typography.bodyRegular2
                             )
@@ -83,15 +94,21 @@ fun MonthPickerBottomSheet(
                         }
                         items(months) { ym ->
                             val isSelected = ym == current
+                            val ymSelectInteractionSource = remember { MutableInteractionSource() }
+                            val ymSelectPressed by ymSelectInteractionSource.collectIsPressedAsState()
                             Text(
                                 text = "${ym.year}년 ${ym.monthValue}월",
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .clickable {
+                                    .clickable(
+                                        indication = null,
+                                        interactionSource = ymSelectInteractionSource
+                                    ) {
                                         onSelect(ym)
                                         show = false
                                     }
-                                    .padding(12.dp),
+                                    .padding(12.dp)
+                                    .alpha(if (ymSelectPressed) 0.6f else 1.0f),
                                 color = if (isSelected) colors.darkPink else colors.black,
                                 style = if (isSelected) typography.bodyBold2 else typography.bodyRegular2
                             )
