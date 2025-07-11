@@ -56,7 +56,6 @@ fun SumoryTopBar(
                             style = typography.captionRegular1
                         )
 
-                        // StoreIcon with pressed alpha
                         val storeSource = remember { MutableInteractionSource() }
                         val storePressed by storeSource.collectIsPressedAsState()
                         StoreIcon(
@@ -70,7 +69,6 @@ fun SumoryTopBar(
                             tint = colors.black
                         )
 
-                        // InventoryIcon with pressed alpha
                         val inventorySource = remember { MutableInteractionSource() }
                         val inventoryPressed by inventorySource.collectIsPressedAsState()
                         InventoryIcon(
@@ -84,7 +82,6 @@ fun SumoryTopBar(
                             tint = colors.black
                         )
 
-                        // SettingIcon with pressed alpha
                         val settingSource = remember { MutableInteractionSource() }
                         val settingPressed by settingSource.collectIsPressedAsState()
                         SettingIcon(
