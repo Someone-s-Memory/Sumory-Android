@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -45,7 +46,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSavedStateRegistryOwner
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -59,12 +59,11 @@ import com.sumory.design_system.icon.SaveIcon
 import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.diary.view.component.DiaryImagePickerSection
 import com.sumory.diary.viewmodel.DiaryWriteViewModel
-import com.sumory.ui.mapper.iconRes
 import com.sumory.diary.viewmodel.uistate.DiaryWriteUiState
 import com.sumory.model.type.DiaryFeeling
 import com.sumory.model.type.DiaryWeather
 import com.sumory.ui.DevicePreviews
-import java.time.LocalDate
+import com.sumory.ui.mapper.iconRes
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
@@ -90,7 +89,7 @@ fun DiaryWriteRoute(
     val title by viewModel.title.collectAsState()
     val content by viewModel.content.collectAsState()
     //val contentLength by viewModel.contentLength.collectAsState()
-    val selectedEmotion by viewModel.selectedEmotion.collectAsState()
+    val selectedFeeling by viewModel.selectedFeeling.collectAsState()
     val selectedWeather by viewModel.selectedWeather.collectAsState()
     val writeState by viewModel.diaryWriteState.collectAsState()
     val imageUris by viewModel.imageUris.collectAsState()
@@ -210,6 +209,14 @@ fun DiaryWriteRoute(
         }
     }
 
+    LaunchedEffect(selectedFeeling) {
+        Log.d("DiaryWrite", "선택된 감정: $selectedFeeling")
+    }
+
+    LaunchedEffect(selectedWeather) {
+        Log.d("DiaryWrite", "선택된 날씨: $selectedWeather")
+    }
+
     DiaryWriteScreen(
         date = displayDate,
         title = title,
@@ -217,8 +224,8 @@ fun DiaryWriteRoute(
         content = content,
         onContentChange = viewModel::updateContent,
         onBackClick = { showExitDialog = true },
-        selectedEmotion = selectedEmotion,
-        onEmotionSelected = viewModel::selectEmotion,
+        selectedFeeling = selectedFeeling,
+        onFeelingSelected = viewModel::selectFeeling,
         selectedWeather = selectedWeather,
         onWeatherSelected = viewModel::selectWeather,
         onSaveClick = { showSaveDialog = true },
@@ -238,8 +245,8 @@ fun DiaryWriteScreen(
     content: String,
     onContentChange: (String) -> Unit,
     onBackClick: () -> Unit,
-    selectedEmotion: DiaryFeeling?,
-    onEmotionSelected: (DiaryFeeling) -> Unit,
+    selectedFeeling: DiaryFeeling?,
+    onFeelingSelected: (DiaryFeeling) -> Unit,
     selectedWeather: DiaryWeather?,
     onWeatherSelected: (DiaryWeather) -> Unit,
     onSaveClick: () -> Unit,
@@ -260,13 +267,13 @@ fun DiaryWriteScreen(
                 modifier = modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                val leftArrowSource = remember { MutableInteractionSource() }
-                val leftArrowPressed by leftArrowSource.collectIsPressedAsState()
+                val leftArrowInteractionSource = remember { MutableInteractionSource() }
+                val leftArrowPressed by leftArrowInteractionSource.collectIsPressedAsState()
                 LeftArrowIcon(
                     modifier = modifier
                         .clickable(
                             indication = null,
-                            interactionSource = leftArrowSource
+                            interactionSource = leftArrowInteractionSource
                     ) { onBackClick() }
                     .alpha(if (leftArrowPressed) 0.6f else 1f),
                     tint = colors.black
@@ -279,8 +286,8 @@ fun DiaryWriteScreen(
                 )
                 Spacer(modifier = modifier.weight(1f))
 
-                val saveSource = remember { MutableInteractionSource() }
-                val savePressed by saveSource.collectIsPressedAsState()
+                val saveInteractionSource = remember { MutableInteractionSource() }
+                val savePressed by saveInteractionSource.collectIsPressedAsState()
                 Box(
                     modifier = modifier
                         .size(24.dp)
@@ -288,7 +295,7 @@ fun DiaryWriteScreen(
                         .background(colors.darkPink)
                         .clickable(
                             indication = null,
-                            interactionSource = saveSource
+                            interactionSource = saveInteractionSource
                         ) { onSaveClick() }
                         .alpha(if (savePressed) 0.6f else 1f),
                     contentAlignment = Alignment.Center
@@ -316,19 +323,38 @@ fun DiaryWriteScreen(
             Spacer(modifier = modifier.height(8.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 DiaryFeeling.values().forEach { feeling ->
+                    val isSelected = selectedFeeling == feeling
+                    val feelingInteractionSource = remember { MutableInteractionSource() }
+                    val feelingPressed by feelingInteractionSource.collectIsPressedAsState()
                     Box(
                         modifier = modifier
                             .size(48.dp)
                             .clip(RoundedCornerShape(12.dp))
                             .background(
-                                if (selectedEmotion == feeling) colors.pinkSoftBackground else colors.white
+                                if (isSelected) {
+                                    if (feelingPressed) colors.pinkSoftBackground.copy(alpha = 0.6f)
+                                    else colors.pinkSoftBackground
+                                } else {
+                                    if (feelingPressed) colors.gray50.copy(alpha = 0.6f)
+                                    else colors.gray50
+                                }
                             )
                             .border(
                                 1.dp,
-                                if (selectedEmotion == feeling) colors.main else colors.white,
+                                if (isSelected) {
+                                    if (feelingPressed) colors.main.copy(alpha = 0.6f)
+                                    else colors.main
+                                } else {
+                                    if (feelingPressed) colors.gray500.copy(alpha = 0.6f)
+                                    else colors.gray500
+                                },
                                 RoundedCornerShape(12.dp)
                             )
-                            .clickable { onEmotionSelected(feeling) },
+                            .clickable(
+                                indication = null,
+                                interactionSource = feelingInteractionSource
+                            ) { onFeelingSelected(feeling) },
+                            //.alpha(if (feelingPressed) 0.6f else 1.0f),
                         contentAlignment = Alignment.Center
                     ) {
                         Image(
@@ -346,19 +372,26 @@ fun DiaryWriteScreen(
             Spacer(modifier = modifier.height(8.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 DiaryWeather.values().forEach { weather ->
+                    val isSelected = selectedWeather == weather
+                    val weatherInteractionSource = remember { MutableInteractionSource() }
+                    val weatherPressed by weatherInteractionSource.collectIsPressedAsState()
                     Box(
                         modifier = modifier
                             .size(48.dp)
                             .clip(RoundedCornerShape(12.dp))
                             .background(
-                                if (selectedWeather == weather) colors.pinkSoftBackground else colors.white
+                                if (isSelected) colors.pinkSoftBackground else colors.gray50
                             )
                             .border(
                                 1.dp,
-                                if (selectedWeather == weather) colors.main else colors.white,
+                                if (isSelected) colors.main else colors.gray500,
                                 RoundedCornerShape(12.dp)
                             )
-                            .clickable { onWeatherSelected(weather) },
+                            .clickable(
+                                indication = null,
+                                interactionSource = weatherInteractionSource
+                            ) { onWeatherSelected(weather) },
+                            //.alpha(if (weatherPressed) 0.6f else 1.0f),
                         contentAlignment = Alignment.Center
                     ) {
                         Image(
@@ -417,8 +450,8 @@ private fun DiaryWriteScreenPreview() {
         onTitleChange = {},
         onContentChange = {},
         onBackClick = {},
-        selectedEmotion = null,
-        onEmotionSelected = {},
+        selectedFeeling = null,
+        onFeelingSelected = {},
         selectedWeather = null,
         onWeatherSelected = {},
         onSaveClick = {},
