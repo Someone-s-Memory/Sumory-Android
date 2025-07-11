@@ -5,6 +5,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,8 +26,11 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -86,12 +91,18 @@ fun DiaryImagePickerSection(
                 }
 
                 item {
+                    val addImageInteractionSource = remember { MutableInteractionSource() }
+                    val addImagePressed by addImageInteractionSource.collectIsPressedAsState()
                     Box(
                         modifier = Modifier
                             .size(100.dp)
                             .clip(RoundedCornerShape(12.dp))
                             .border(1.dp, colors.main, RoundedCornerShape(12.dp))
-                            .clickable { onAddImageClick() },
+                            .clickable(
+                                indication = null,
+                                interactionSource = addImageInteractionSource
+                            ) { onAddImageClick() }
+                            .alpha(if (addImagePressed) 0.6f else 1.0f),
                         contentAlignment = Alignment.Center
                     ) {
                         Column(
