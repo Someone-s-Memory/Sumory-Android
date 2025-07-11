@@ -12,6 +12,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,6 +39,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -257,8 +260,15 @@ fun DiaryWriteScreen(
                 modifier = modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                val leftArrowSource = remember { MutableInteractionSource() }
+                val leftArrowPressed by leftArrowSource.collectIsPressedAsState()
                 LeftArrowIcon(
-                    modifier = modifier.clickable { onBackClick() },
+                    modifier = modifier
+                        .clickable(
+                            indication = null,
+                            interactionSource = leftArrowSource
+                    ) { onBackClick() }
+                    .alpha(if (leftArrowPressed) 0.6f else 1f),
                     tint = colors.black
                 )
                 Spacer(modifier = modifier.weight(1f))
@@ -268,12 +278,19 @@ fun DiaryWriteScreen(
                     color = colors.black
                 )
                 Spacer(modifier = modifier.weight(1f))
+
+                val saveSource = remember { MutableInteractionSource() }
+                val savePressed by saveSource.collectIsPressedAsState()
                 Box(
                     modifier = modifier
                         .size(24.dp)
                         .clip(RoundedCornerShape(5.dp))
                         .background(colors.darkPink)
-                        .clickable { onSaveClick() },
+                        .clickable(
+                            indication = null,
+                            interactionSource = saveSource
+                        ) { onSaveClick() }
+                        .alpha(if (savePressed) 0.6f else 1f),
                     contentAlignment = Alignment.Center
                 ) {
                     SaveIcon(
