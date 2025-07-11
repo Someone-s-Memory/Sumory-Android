@@ -45,8 +45,8 @@ class DiaryWriteViewModel @Inject constructor(
 //    private val _contentLength = MutableStateFlow(0)
 //    val contentLength = _contentLength.asStateFlow()
 
-    private val _selectedEmotion = MutableStateFlow<DiaryFeeling?>(null)
-    val selectedEmotion = _selectedEmotion.asStateFlow()
+    private val _selectedFeeling = MutableStateFlow<DiaryFeeling?>(null)
+    val selectedFeeling = _selectedFeeling.asStateFlow()
 
     private val _selectedWeather = MutableStateFlow<DiaryWeather?>(null)
     val selectedWeather = _selectedWeather.asStateFlow()
@@ -76,7 +76,7 @@ class DiaryWriteViewModel @Inject constructor(
                 _originTitle.value = diary.title
                 _title.value = diary.title
                 _content.value = diary.content
-                _selectedEmotion.value = DiaryFeeling.values().find { it.value == diary.feeling }
+                _selectedFeeling.value = DiaryFeeling.values().find { it.value == diary.feeling }
                 _selectedWeather.value = DiaryWeather.values().find { it.value == diary.weather }
                 _diaryDate.value = LocalDate.parse(diary.date, DateTimeFormatter.ISO_DATE)
                 _imageUris.value = diary.pictures.map { Uri.parse(it) }
@@ -98,8 +98,8 @@ class DiaryWriteViewModel @Inject constructor(
 //        }
     }
 
-    fun selectEmotion(feeling: DiaryFeeling) {
-        _selectedEmotion.value = feeling
+    fun selectFeeling(feeling: DiaryFeeling) {
+        _selectedFeeling.value = feeling
     }
 
     fun selectWeather(weather: DiaryWeather) {
@@ -160,7 +160,7 @@ class DiaryWriteViewModel @Inject constructor(
 //                _diaryWriteState.value = DiaryWriteUiState.Error("내용은 1000자를 초과할 수 없습니다.")
 //                return
 //            }
-            _selectedEmotion.value == null -> {
+            _selectedFeeling.value == null -> {
                 _diaryWriteState.value = DiaryWriteUiState.Error("감정을 선택해주세요.")
                 return
             }
@@ -186,7 +186,7 @@ class DiaryWriteViewModel @Inject constructor(
         val param = DiaryWriteRequestParam(
             title = _title.value,
             content = _content.value,
-            feeling = _selectedEmotion.value?.value ?: "",
+            feeling = _selectedFeeling.value?.value ?: "",
             weather = _selectedWeather.value?.value ?: "",
             date = date,
             pictures = picturePaths
@@ -199,7 +199,7 @@ class DiaryWriteViewModel @Inject constructor(
                     val updateParam = DiaryUpdateRequestParam(
                         title = _originTitle.value,
                         content = _content.value,
-                        feeling = _selectedEmotion.value?.value ?: "",
+                        feeling = _selectedFeeling.value?.value ?: "",
                         weather = _selectedWeather.value?.value ?: "",
                         date = date,
                         pictures = picturePaths,
