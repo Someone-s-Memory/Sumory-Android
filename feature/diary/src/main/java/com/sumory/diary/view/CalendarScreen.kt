@@ -5,6 +5,8 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -32,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -146,7 +149,9 @@ fun CalendarScreen(
 ) {
     SumoryTheme { colors, typography ->
         Column(
-            modifier.fillMaxSize().background(colors.gray50)
+            modifier
+                .fillMaxSize()
+                .background(colors.gray50)
         ) {
             Row(
                 modifier = modifier
@@ -156,23 +161,41 @@ fun CalendarScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
+                    val prevMonthInteractionSource = remember { MutableInteractionSource() }
+                    val prevMonthPressed by prevMonthInteractionSource.collectIsPressedAsState()
                     LeftArrowIcon(
                         modifier = modifier
-                            .clickable { onPrevMonth() }
-                            .padding(horizontal = 8.dp),
+                            .clickable(
+                                indication = null,
+                                interactionSource = prevMonthInteractionSource
+                            ) { onPrevMonth() }
+                            .padding(horizontal = 8.dp)
+                            .alpha(if (prevMonthPressed) 0.6f else 1.0f),
                         tint = colors.black
                     )
+                    val currentMonthInteractionSource = remember { MutableInteractionSource() }
+                    val currentMonthPressed by currentMonthInteractionSource.collectIsPressedAsState()
                     Text(
                         modifier = modifier
-                            .clickable { onMonthClick() },
+                            .clickable(
+                                indication = null,
+                                interactionSource = currentMonthInteractionSource
+                            ) { onMonthClick() }
+                            .alpha(if (currentMonthPressed) 0.6f else 1.0f),
                         text = "${currentMonth.year}년 ${currentMonth.monthValue}월",
                         color = colors.black,
                         style = typography.titleBold2
                     )
+                    val nextMonthInteractionSource = remember { MutableInteractionSource() }
+                    val nextMonthPressed by nextMonthInteractionSource.collectIsPressedAsState()
                     RightArrowIcon(
                         modifier = modifier
-                            .clickable { onNextMonth() }
-                            .padding(horizontal = 8.dp),
+                            .clickable(
+                                indication = null,
+                                interactionSource = nextMonthInteractionSource
+                            ){ onNextMonth() }
+                            .padding(horizontal = 8.dp)
+                            .alpha(if (nextMonthPressed) 0.6f else 1.0f),
                         tint = colors.black
                     )
                 }
@@ -192,7 +215,9 @@ fun CalendarScreen(
             }
 
             Row(
-                modifier = modifier.fillMaxWidth().padding(horizontal = 8.dp)
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)
             ) {
                 listOf("일", "월", "화", "수", "목", "금", "토").forEach {
                     Text(
@@ -208,7 +233,11 @@ fun CalendarScreen(
             Spacer(modifier.height(10.dp))
 
             weeks.forEach { week ->
-                Row(modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+                Row(
+                    modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp)
+                ) {
                     week.forEach { dayState ->
                         val date = dayState.date
                         val border = when {
@@ -223,12 +252,19 @@ fun CalendarScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             val size = maxWidth.coerceAtMost(90.dp)
+                            val dateInteractionSource = remember { MutableInteractionSource() }
+                            val datePressed by dateInteractionSource.collectIsPressedAsState()
                             Box(
                                 modifier = modifier
                                     .size(size)
                                     .clip(RoundedCornerShape(12.dp))
-                                    .clickable(enabled = date != null) { date?.let { onDateSelected(it) } }
-                                    .then(if (border != null) modifier.border(border, RoundedCornerShape(12.dp)) else modifier),
+                                    .clickable(
+                                        enabled = date != null,
+                                        indication = null,
+                                        interactionSource = dateInteractionSource
+                                    ) { date?.let { onDateSelected(it) } }
+                                    .then(if (border != null) modifier.border(border, RoundedCornerShape(12.dp)) else modifier)
+                                    .alpha(if (datePressed) 0.6f else 1.0f),
                                 contentAlignment = Alignment.Center
                             ) {
                                 if (!dayState.imageUrl.isNullOrEmpty()) {
@@ -279,15 +315,27 @@ fun CalendarScreen(
                 modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Box(modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+                Box(
+                    modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                ) {
                     Text(
                         text = "${selectedDate.year}. ${selectedDate.monthValue}. ${selectedDate.dayOfMonth}",
                         style = typography.titleBold2,
                         color = colors.black,
                         modifier = modifier.align(Alignment.Center)
                     )
+                    val writeInteractionSource = remember { MutableInteractionSource() }
+                    val writePressed by writeInteractionSource.collectIsPressedAsState()
                     EditIcon(
-                        modifier = modifier.align(Alignment.CenterEnd).clickable { onWriteClick() },
+                        modifier = modifier
+                            .align(Alignment.CenterEnd)
+                            .clickable(
+                                indication = null,
+                                interactionSource = writeInteractionSource
+                            ) { onWriteClick() }
+                            .alpha(if (writePressed) 0.6f else 1.0f),
                         tint = colors.black
                     )
                 }
