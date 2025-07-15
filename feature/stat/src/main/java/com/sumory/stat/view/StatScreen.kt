@@ -33,8 +33,8 @@ sealed class StatRange {
 
     val title: String
         get() = when (this) {
-            is Monthly -> "${month}월의 감정 분포"
-            is Total -> "전체 감정 분포"
+            is Monthly -> "${month}월의 통계"
+            is Total -> "전체 통계"
         }
 }
 
