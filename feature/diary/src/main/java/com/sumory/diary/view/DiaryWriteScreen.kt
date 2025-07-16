@@ -354,7 +354,6 @@ fun DiaryWriteScreen(
                                 indication = null,
                                 interactionSource = feelingInteractionSource
                             ) { onFeelingSelected(feeling) },
-                            //.alpha(if (feelingPressed) 0.6f else 1.0f),
                         contentAlignment = Alignment.Center
                     ) {
                         Image(
@@ -380,18 +379,29 @@ fun DiaryWriteScreen(
                             .size(48.dp)
                             .clip(RoundedCornerShape(12.dp))
                             .background(
-                                if (isSelected) colors.pinkSoftBackground else colors.gray50
+                                if (isSelected) {
+                                    if (weatherPressed) colors.pinkSoftBackground.copy(alpha = 0.6f)
+                                    else colors.pinkSoftBackground
+                                } else {
+                                    if (weatherPressed) colors.gray50.copy(alpha = 0.6f)
+                                    else colors.gray50
+                                }
                             )
                             .border(
                                 1.dp,
-                                if (isSelected) colors.main else colors.gray500,
+                                if (isSelected) {
+                                    if (weatherPressed) colors.main.copy(alpha = 0.6f)
+                                    else colors.main
+                                } else {
+                                    if (weatherPressed) colors.gray500.copy(alpha = 0.6f)
+                                    else colors.gray500
+                                },
                                 RoundedCornerShape(12.dp)
                             )
                             .clickable(
                                 indication = null,
                                 interactionSource = weatherInteractionSource
                             ) { onWeatherSelected(weather) },
-                            //.alpha(if (weatherPressed) 0.6f else 1.0f),
                         contentAlignment = Alignment.Center
                     ) {
                         Image(
