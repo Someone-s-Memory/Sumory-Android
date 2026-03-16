@@ -22,7 +22,6 @@ import com.sumory.design_system.theme.SumoryTheme
 import com.sumory.home.viewmodel.HomeViewModel
 import com.sumory.ui.DevicePreviews
 
-
 @Composable
 fun HomeScreenRoute(
     viewModel: HomeViewModel = hiltViewModel()
